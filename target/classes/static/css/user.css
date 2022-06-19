@@ -1,0 +1,430 @@
+/*************************************************公共样式*************************************************/
+.layui-card {
+    box-shadow: none;
+}
+
+.common_card {
+    /*height: 800px;*/
+}
+
+.common_card span.common_card_span {
+    padding: 0 25px;
+    font-size: 24px;
+}
+
+.common_line {
+    display: inline-block;
+    margin-top: 12px;
+    width: 100%;
+    height: 3px;
+    background: #ccc;
+}
+
+.common_line i {
+    display: inline-block;
+    position: absolute;
+    padding-left: 50px;
+    width: 96px;
+    height: 3px;
+    background: #007DDB;
+}
+
+.bottom_card_img {
+    width: 200px;
+    height: 200px;
+    padding: 127px 0 0 120px;
+}
+
+.bottom_card_img img {
+    width: 200px;
+    height: 200px;
+}
+
+.bottom_card_span {
+    display: inline-block;
+    margin: -30px 0 0 320px;
+}
+
+.coin_top_card {
+    background: #f7f7f7;
+}
+
+.coin_top_card p {
+    display: inline-block;
+    width: 120px;
+    height: 50px;
+    font-size: 16px;
+    padding-left: 20px;
+}
+
+.coin_top_card p:nth-child(2) {
+    font-size: 24px;
+    font-weight: bold;
+    color: red;
+}
+
+.center_card {
+    height: 45px;
+    background: #f1f1f1;
+}
+
+.center_card_span span {
+    padding-left: 20px;
+    margin-right: 252px;
+}
+
+/*************************************************个人中心页面*************************************************/
+.top_card {
+    height: 200px;
+}
+
+.user_img {
+    width: 180px;
+    height: 180px;
+    border-radius: 200px;
+}
+
+.user_img img {
+    width: 180px;
+    height: 160px;
+    border-radius: 200px;
+    padding: 10px 0;
+}
+
+.top_card span {
+    display: inline-block;
+    padding-left: 230px;
+    margin-top: -110px;
+    font-size: 16px;
+}
+
+.my_account i {
+    display: inline-block;
+    margin: 24px 0;
+    width: 1px;
+    height: 150px;
+    background: #ccc;
+}
+
+.my_account p {
+    display: inline-block;
+    font-size: 16px;
+    width: 225px;
+    height: 25px;
+}
+
+.account {
+    text-align: center;
+    width: 100px;
+    height: 100px;
+    margin: -150px 0 0 35px;
+}
+
+.account p:last-child {
+    padding-top: 4px;
+}
+
+
+.bottom_card {
+    height: 540px;
+}
+
+.bottom_card button {
+    float: right;
+    border: none;
+    background: white;
+}
+
+.bottom_card button:hover {
+    color: #007DDB;
+}
+
+.bottom_card .black_line {
+    margin-top: 7px;
+    width: 100%;
+    height: 3px;
+    background: #ccc;
+}
+
+.black_line i {
+    display: inline-block;
+    width: 96px;
+    height: 3px;
+    background: #007DDB;
+}
+
+
+/*************************************************我的订单页面*************************************************/
+.btn_operate {
+    width: 70px;
+    height: 25px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.step1 {
+    background: skyblue;
+}
+
+.step2 {
+    background: deepskyblue;
+}
+
+.step3 {
+    background: dodgerblue;
+}
+
+#evaluation {
+    width: 480px;
+    height: 170px;
+    margin: 10px 10px;
+}
+
+#btn_submit_evaluation {
+    width: 70px;
+    height: 35px;
+    color: white;
+    border: none;
+    background: #007DDB;
+    border-radius: 4px;
+    margin: 10px 10px 10px 420px;
+}
+
+/*************************************************账户余额页面*************************************************/
+#withdrawal {
+    width: 75px;
+    height: 35px;
+    background: deepskyblue;
+    color: white;
+    border: none;
+    border-radius: 7px;
+}
+
+#fill_up {
+    margin-left: 20px;
+    width: 75px;
+    height: 35px;
+    background: deepskyblue;
+    color: white;
+    border: none;
+    border-radius: 7px;
+}
+
+.classify li {
+    font-size: 16px;
+    float: left;
+    margin-left: 60px;
+}
+
+.time li {
+    font-size: 16px;
+    float: left;
+    margin-left: 60px;
+}
+
+li:hover {
+    color: #007DDB;
+    cursor: pointer;
+}
+
+#fill_up_tan {
+    font-size: 16px;
+    padding: 30px 0 0 20px;
+}
+
+.fill_up_kuang p {
+    /*display: inline-block;*/
+    /*width: 90px;*/
+    margin: 10px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    border-radius: 7px;
+    /*border: 1px #ccc solid;*/
+    border: none;
+    background: #ccc;
+    color: white;
+    cursor: pointer;
+}
+
+#btn_sure {
+    margin-right: 50px;
+    margin-top: 20px;
+}
+
+/*************************************************我的金币页面*************************************************/
+#getCoin {
+    color: #007DDB;
+    cursor: pointer;
+    margin-left: -105px;
+}
+
+#exchange_balance {
+    width: 75px;
+    height: 35px;
+    background: deepskyblue;
+    color: white;
+    border: none;
+    border-radius: 7px;
+}
+
+.eBalance {
+    width: 240px;
+    text-align: center;
+    margin: 15px;
+    height: 65px;
+    border: 1px #ddd solid;
+    border-radius: 7px;
+    color: white;
+    background: #ccc;
+}
+
+/*************************************************个人资料页面*************************************************/
+.userForm {
+    height: 80%;
+    padding: 10px 60px;
+}
+
+.userForm img {
+    margin-left: 60px;
+}
+
+.userForm div {
+    font-size: 18px;
+    padding: 15px;
+}
+
+.userForm label {
+    display: inline-block;
+    width: 1000px;
+}
+
+.userForm label > input {
+    float: right;
+    width: 900px;
+    border: none;
+    color: #007DDB;
+    background: white;
+}
+
+#oldTips {
+    margin-left: 10px;
+}
+
+#formEditPassword input {
+    margin-left: 20px;
+    height: 35px;
+    padding-left: 5px;
+    border-radius: 7px;
+    border: 1px #ccc solid;
+}
+
+.text-success {
+    color: green;
+}
+
+.text-danger {
+    color: red;
+}
+
+/*************************************************地址管理页面*************************************************/
+.myAddress {
+    width: 345px;
+    height: 134px;
+    cursor: pointer;
+    position: relative;
+}
+
+.myAddress:hover {
+    color: #007DDB;
+}
+
+.myAddress p {
+    margin: 7px 0;
+}
+
+.myAddress button {
+    border: none;
+    background: white;
+    color: #ccc;
+    cursor: pointer;
+    position: absolute;
+    left: 235px;
+}
+
+.myAddress button:hover {
+    color: #007DDB;
+}
+
+.myAddress button:last-child:hover {
+    color: red;
+}
+
+.myAddress button:last-child {
+    margin-left: 35px;
+    /*margin-right: 5px;*/
+}
+
+.btnInsert {
+    width: 345px;
+    height: 134px;
+    line-height: 134px;
+    text-align: center;
+    background: #fcfcfc;
+}
+
+/*************************************************我的会员页面*************************************************/
+
+.top_member_card {
+    margin-top: 15px;
+}
+
+.middle_card .layui-col-md4 div {
+    margin-top: 15px;
+}
+
+.top_member_card div {
+    display: inline-block;
+}
+
+.user_member form {
+    width: 90%;
+    margin: 15px auto;
+}
+
+.autoCode {
+    font-size: 20px;
+    padding-right: 8px;
+    margin-left: 10px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.user_member form label select,
+.user_member form label input {
+    height: 30px;
+    border: 1px #ccc solid;
+    border-radius: 7px;
+    padding-left: 6px;
+}
+
+.user_member form label select:focus,
+.user_member form label input:focus {
+    border: 1px #007DDB solid;
+}
+
+.btn_register_member {
+    margin-top: 25px;
+}
+
+.btn_register_member button {
+    width: 70px;
+    height: 30px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+
+

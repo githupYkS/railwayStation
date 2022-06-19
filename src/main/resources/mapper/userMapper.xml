@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.railwaystation.mapper.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.gx.railwaystation.po.SysUser">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="user_salt" jdbcType="VARCHAR" property="userSalt" />
+    <result column="user_sex" jdbcType="TINYINT" property="userSex" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_identification" jdbcType="VARCHAR" property="userIdentification" />
+    <result column="user_head" jdbcType="VARCHAR" property="userHead" />
+    <result column="is_cancel" jdbcType="TINYINT" property="isCancel" />
+  </resultMap>
+
+  <resultMap id="MoneyVo" type="com.gx.railwaystation.vo.MoneyVo" extends="BaseResultMap">
+    <id column="money_id" jdbcType="INTEGER" property="moneyId"></id>
+    <result column="money_sun" property="moneySun" jdbcType="DECIMAL"></result>
+  </resultMap>
+
+  <!--根据用户输入账号查询数据-->
+  <select id="userAccount" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      sys_user
+    WHERE user_account = #{userAccount,jdbcType=VARCHAR} and is_cancel=1
+  </select>
+  
+  <!--注册用户-->
+  <insert id="register" parameterType="com.gx.railwaystation.po.SysUser">
+    insert into sys_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userAccount != null">user_account,</if>
+      <if test="userPassword != null">user_password,</if>
+      <if test="userSalt != null">user_salt,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userAccount != null">#{userAccount,jdbcType=VARCHAR},</if>
+      <if test="userPassword != null">#{userPassword,jdbcType=VARCHAR},</if>
+      <if test="userSalt != null">#{userSalt,jdbcType=VARCHAR},</if>
+    </trim>
+  </insert>
+
+  <!--查询当前的用户金额-->
+  <select id="selectAllByUserId" resultMap="MoneyVo">
+     SELECT sys_user.*,sys_money.* FROM sys_user
+            LEFT JOIN sys_money ON sys_user.`user_id` = sys_money.`user_id`
+            where sys_user.user_id = #{userId,jdbcType=INTEGER} and is_cancel=1
+  </select>
+
+  <!--查询当前用户信息-->
+  <select id="selectUserById" resultMap="BaseResultMap">
+    select * from sys_user where user_id = #{userId,jdbcType=INTEGER} and is_cancel=1
+  </select>
+
+  <!--修改用户-->
+  <update id="updateUser" parameterType="com.gx.railwaystation.po.SysUser">
+    update sys_user
+    <set>
+      <if test="userAccount != null">user_account = #{userAccount,jdbcType=TIMESTAMP},</if>
+      <if test="userName != null">user_name = #{userName,jdbcType=VARCHAR},</if>
+      <if test="userSex != null">user_sex = #{userSex,jdbcType=INTEGER},</if>
+      <if test="userPhone != null">user_phone = #{userPhone,jdbcType=TINYINT},</if>
+      <if test="userIdentification != null">user_identification = #{userIdentification,jdbcType=VARCHAR},</if>
+      <if test="userHead != null">user_head = #{userHead,jdbcType=VARCHAR},</if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER} and is_cancel=1
+  </update>
+
+  <update id="deleteByUserId" parameterType="com.gx.railwaystation.po.SysUser">
+    UPDATE sys_user SET is_cancel=2 WHERE user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

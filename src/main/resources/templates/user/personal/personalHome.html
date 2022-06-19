@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/pintuer.css">
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <style>
+        .head-r{
+            float: right;
+            font-size: 13px;
+            color: white;
+        }
+        .hemo{
+            position: fixed;
+            line-height: 70px;
+            right: 150px;
+        }
+        .helo{
+            line-height: 70px;
+            padding-right: 70px;
+        }
+        ul {
+            margin-left: 45px;
+        }
+        ul li {
+            /*color: #8D8D8D;*/
+            color: black;
+            margin-left: 45px;
+            cursor: pointer;
+        }
+        ul li:hover {
+            color: #007DDB;
+        }
+        .layui-layer.layui-layer-page.layui-layer-white {
+            border-radius: 15px;
+        }
+        .lun{
+            border-right: 2px solid #2D93CA;
+            margin-top: 5px;
+            height: 1000px;
+        }
+        .logo img{
+            width: 57px;
+            height: 57px;
+            margin-top: -4px;
+        }
+    </style>
+</head>
+<body style="overflow: hidden">
+<!--顶部样式-->
+<div class="header bg-main">
+    <div class="logo margin-big-left fadein-top">
+        <!--用户头像-->
+        <h1>
+            <img src="" class="radius-circle" height="50" alt="" id="userPicture1"/>用户售票
+        </h1>
+    </div>
+    <div class="head-l">
+        <a class="button button-little bg-green" target="_blank"><span class="layui-icon-top"></span>返回首页</a>
+        <a class="button button-little bg-red" id="loginOut"><span class="layui-icon-return"></span>退出登录</a>
+    </div>
+    <p id="date"></p>
+    <div class="head-r">
+        <div class="hemo">
+            <span id="ticket">购票主页面</span>
+        </div>
+        <div class="helo">
+            <span>您 好: [[${user.getUserName()}]]</span>
+        </div>
+    </div>
+</div>
+<!--内容区-->
+<div class="layui-row layui-col-space10">
+    <!--左侧布局-->
+    <div class="layui-col-md2 lun">
+        <div class="left_nav">
+            <ul class="li_hover">
+                <i class="layui-icon layui-icon-home"></i>
+                <li class="liFirst li_hover li_yuan" id="personal_center">个人中心</li>
+            </ul>
+            <ul class="dd">
+                <i class="layui-icon layui-icon-file"></i>
+                <li id="all_order" class="li_yuan">最近购票</li>
+            </ul>
+            <ul class="zc">
+                <i class="layui-icon layui-icon-rmb"></i>
+                <li class="li_yuan" id="balance">账户余额</li>
+            </ul>
+            <ul class="zl">
+                <i class="layui-icon layui-icon-user"></i>
+                <li class="li_yuan" id="personal_data">个人资料</li>
+            </ul>
+        </div>
+    </div>
+
+    <!--右侧布局-->
+    <div class="layui-col-md10">
+        <div class="right_nav">
+            <iframe frameborder="0" scrolling="yes"></iframe>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/js/jquery.js" type="text/javascript"></script>
+<script src="/lib/layui/layui.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/myJs.js"></script>
+<script type="text/javascript">
+
+    layui.use(()=>{
+        layer = layui.layer;
+
+        //开始页面回填图片
+        $.post('/profile/selectUserById',(jsonMsg)=>{
+            //数据正常
+            if (jsonMsg.state){
+                if (jsonMsg.data.userHead!=undefined && jsonMsg.data.userHead!=null && jsonMsg.data.userHead!=""){
+                    $("#userPicture1").prop("src",'/home/getPortraitImage/'+jsonMsg.data.userHead);
+                }else {
+                    $("#userPicture1").prop("src",'/images/uploadImg.png');
+                }
+            }else{
+                layer.msg(jsonMsg.msg,{icon:5});
+            }
+        });
+
+        //点击添加高亮效果（li元素）
+        $("li").click(function () {
+            //给当前元素添加高亮效果
+            for (var x in $("li")) {
+                $("li").eq(x).removeClass("li_hover");
+            }
+            $(this).addClass("li_hover");
+        })
+
+        //返回购票主页面
+        $("#ticket").click(()=>{
+            window.location.replace("/home/user")
+        })
+
+        //退出登录
+        $("#loginOut").click(()=>{
+            $.post('/home/loginOut',()=>{
+                window.location.replace("/login");
+            });
+        });
+
+        //个人中心
+        $("#personal_center").click(()=>{
+            $("iframe").attr("src","/home/personalCenter");
+        })
+
+        //账户管理
+        $("#balance").click(()=>{
+            $("iframe").attr("src","/home/accountBalance");
+        });
+
+        //个人资料
+        $("#personal_data").click(()=>{
+            $("iframe").attr("src","/home/personalProfile");
+        });
+    });
+
+
+    //导航栏时间
+    let spanTime = document.getElementById("date");
+    // setspanTime();
+    let timer = setInterval(setspanTime, 1000);
+
+</script>
+</html>

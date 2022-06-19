@@ -1,0 +1,363 @@
+/*
+* @Author: Xiao
+* @Date:   2021/5/18
+*/
+/*************************************************公共样式*************************************************/
+/******************************顶部黑色条形******************************/
+#top_line {
+    width: 100%;
+    height: 40px;
+    background: black;
+    color: white;
+    line-height: 40px;
+    padding-left: 60px;
+}
+
+#top_line div {
+    display: inline-block;
+}
+
+#right_news {
+    float: right;
+    padding-right: 120px;
+}
+
+#right_news button {
+    margin-right: 25px;
+    border: none;
+    color: white;
+    background-color: black;
+}
+
+#right_news button:hover {
+    color: #FF5722;
+}
+
+#date {
+    display: inline-block;
+    position: absolute;
+    right: 85px;
+    margin-left: 20px;
+    color: skyblue;
+}
+
+/******************************顶部白色条形******************************/
+.whiteLine {
+    width: 100%;
+    height: 50px;
+    background-color: white;
+}
+
+.whiteLine img {
+    width: 50px;
+    height: 50px;
+    padding-left: 50px;
+}
+
+.whiteLine span {
+    color: black;
+    padding-left: 10px;
+}
+
+.whiteLine p {
+    display: inline-block;
+    color: red;
+}
+
+/******************************顶部红色条形******************************/
+.redLine {
+    width: 100%;
+    height: 3px;
+    background-color: red;
+}
+
+/******************************切换用户样式******************************/
+.addUser {
+    font-size: 36px;
+    position: absolute;
+    top: 10px;
+    right: 30px;
+}
+
+.addUser:hover {
+    color: #007DDB;
+}
+
+.cancelRelateUser {
+    font-size: 36px;
+
+}
+
+.cancelRelateUser:hover {
+    color: red;
+}
+
+.relateUser {
+    display: inline-block;
+    background: skyblue;
+    width: 235px;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 7px;
+    margin: 10px;
+}
+
+.relateUser:hover {
+    background: #007DDB;
+}
+
+.relateUser p {
+    margin-left: 10px;
+}
+
+.inUserDiv {
+    display: inline-block;
+    width: 300px;
+    text-align: right;
+    margin-top: 20px;
+}
+
+.inUserDiv input {
+    height: 30px;
+    border: 1px #ccc solid;
+    border-radius: 7px;
+    padding-left: 5px;
+}
+
+.inUserDiv input:focus {
+    border: 1px #007DDB solid;
+}
+
+#inUser_tan button {
+    border: none;
+    border-radius: 4px;
+    width: 60px;
+    height: 30px;
+    color: white;
+    background: #007DDB;
+    margin-left: 20px;
+}
+
+/*************************************************菜品详情样式*************************************************/
+/******************************菜单样式******************************/
+.menu_box {
+    width: 296px;
+    height: 224px;
+    margin: 30px 0 0 65px;
+    display: inline-block;
+}
+
+.menu_box:last-child {
+    margin-bottom: 35px;
+}
+
+.menu_box img {
+    width: 100%;
+    height: 176px;
+    border-radius: 10px;
+    background: white;
+}
+
+.menu_news {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-color: black;
+    opacity: 0.5;
+}
+
+.menu_news:hover {
+    opacity: 0.7;
+}
+
+.menu_box span {
+    color: white;
+    padding-left: 40px;
+}
+
+.icon {
+    margin-right: 20px;
+    float: right;
+    display: inline-block;
+}
+
+.icon img {
+    border-radius: 50px;
+    border: 2px black solid;
+    width: 30px;
+    height: 30px;
+}
+
+.icon img:hover {
+    border: 2px red solid;
+}
+
+/******************************左边图片显示******************************/
+.left_side {
+    display: inline-block;;
+    width: 700px;
+    height: 500px;
+    margin-left: 200px;
+}
+
+.left_side img {
+    width: 700px;
+    height: 500px;
+}
+
+/******************************右边信息及按钮******************************/
+.right_side {
+    float: right;
+    width: 700px;
+    height: 350px;
+    margin-right: 170px;
+    margin-top: 100px;
+    font-size: 16px;
+}
+
+.right_side div {
+    margin: 45px auto;
+}
+
+.an_niu_zu button {
+    width: 170px;
+    height: 45px;
+    font-size: 18px;
+    margin-right: 15px;
+}
+
+.btn_zu button {
+    width: 20px;
+    height: 20px;
+    border: none;
+}
+
+.btn_zu input {
+    width: 45px;
+    height: 20px;
+    text-align: center;
+    border: none;
+}
+
+.an_niu_zu button {
+    border: none;
+    color: white;
+}
+
+#btn_buy {
+    background: #dd4545;
+}
+
+#btn_shopping {
+    background: #ff5802;
+}
+
+#btn_back {
+    background: #1e9fff;
+}
+
+/*************************************************购物车页面样式*************************************************/
+#address_check {
+    width: 99%;
+    height: 150px;
+}
+
+.address {
+    width: 200px;
+    height: 150px;
+    border: 3px #ccc dashed;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+.address input {
+    float: right;
+    margin-top: 15px;
+}
+
+.border_hover {
+    border-color: #1e9fff;
+}
+
+.layui-layer-white {
+    color: black;
+    background: white;
+}
+
+.layui-card-header button {
+    float: right;
+    width: 100px;
+    margin-top: 2px;
+    margin-left: 2px;
+    border-radius: 4px;
+}
+
+.card_href {
+    display: inline-block;
+    color: red;
+    padding-left: 20px;
+    cursor: pointer;
+}
+
+#sNumberChange .btn_zu {
+    padding: 20px 20px;
+}
+
+#sNumberChange #btn_confirm {
+    margin-left: 230px;
+    margin-top: 120px;
+}
+
+#payWindow p {
+    display: inline-block;
+    /*width: 145px;*/
+    height: 35px;
+    line-height: 35px;
+    text-align: left;
+    padding-left: 20px;
+}
+
+#payWindow cite {
+    font-size: 18px;
+    color: red;
+}
+
+.payWay {
+    margin-left: 20px;
+}
+
+.payWay div {
+    margin-top: 10px;
+    color: #FFB800;
+}
+
+/*************************************************用户页面样式*************************************************/
+.left_nav {
+    margin-top: 30px;
+    width: 300px;
+    height: 80%;
+}
+
+.li_hover {
+    color: #007DDB;
+}
+
+.liFirst {
+    margin: -25px 0 0 35px;
+    /*color: black;*/
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.right_nav {
+    margin-top: 20px;
+    width: 1585px;
+    height: 800px;
+    /*background: white;*/
+}
+
+.right_nav iframe {
+    width: 95%;
+    height: 95%;
+    background: white;
+}

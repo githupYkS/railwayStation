@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>CSS3登录注册切换动画模板 - 站长素材</title>
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/font-awesome-4.7.0/css/font-awesome.min.css">
+	<style>
+		.shape{
+			background-color: brown;
+			border-radius: 50%;
+			width: 50px;
+			height: 50px;
+		}
+		.alt{
+			background-color:brown;
+			width: 50px;
+			height: 50px;
+			position: absolute;
+			right: -15px;
+			top: -10px;
+		}
+		body{
+			font-size: 12px;
+		}
+		.button button{
+			height: 48px;
+			line-height: 48px;
+			font-size: 12px;
+		}
+		.button.login button, .button button{
+			line-height: 44px;
+			font-size: 18px;
+		}
+		.material-button{
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+		}
+	</style>
+	<script>
+		if (window.top.location.href !== window.location.href) {
+			window.top.location.href = window.location.href;
+		}
+	</script>
+</head>
+<body>
+<div class="materialContainer">
+	<div class="box">
+		<div class="title">登录</div>
+		<div class="input">
+			<label for="name" style="font-size: 18px">用户账号</label>
+			<input type="text" name="userAccount" id="name" >
+			<span class="spin"></span>
+		</div>
+		<div class="input">
+			<label for="pass" style="font-size: 18px">密码</label>
+			<input type="password" name="pass" id="pass">
+			<span class="spin"></span>
+		</div>
+		<div class="button login">
+			<button id="btnEd">
+				<span >登录</span>
+				<i class="fa fa-check"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="overbox">
+		<div class="material-button alt-2 alt">
+			<span class="shape"></span>
+		</div>
+		<div class="title">注册</div>
+		<div class="input">
+			<label for="regname" style="font-size: 18px">用户账号</label>
+			<input type="text" name="userAccount" id="regname">
+			<span class="spin"></span>
+		</div>
+		<div class="input">
+			<label for="regpass" style="font-size: 18px">用户密码</label>
+			<input type="password" name="userPassword" id="regpass">
+			<span class="spin"></span>
+		</div>
+		<div class="input">
+			<label for="reregpass" style="font-size: 18px">确认密码</label>
+			<input type="password" id="reregpass">
+			<span class="spin"></span>
+		</div>
+		<div class="button" style="margin-top: 35px">
+			<button id="btnSubmit">
+				<span>注册</span>
+			</button>
+		</div>
+	</div>
+</div>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script src="/lib/layui/layui.js"></script>
+<script>
+	layui.use(()=>{
+		layer = layui.layer;
+
+		//登录按钮
+		$("#btnEd").click(() => {
+			//获取用户登录的数据
+			let userAccount = $("#name").val();
+			let userPassword = $("#pass").val();
+			if (userAccount == "" || userAccount == null || userAccount == undefined) {
+				layer.msg("请输入用户名");
+				return false;
+			}
+			if (userPassword == "" || userPassword == null || userPassword == undefined) {
+				layer.msg("请输入用户密码");
+				return false;
+			}
+
+			//打开加载层
+			let layerIndex = layer.load();
+			$.post('/doLogin', {
+				userAccount: userAccount,
+				userPassword: userPassword
+			}, (jsonMsg) => {
+				//关闭加载层
+				layer.close(layerIndex);
+				//如何code==1,就跳转到员工页面
+				if (jsonMsg.code==1){
+					//数据正常
+					if (jsonMsg.state) {
+						layer.msg(jsonMsg.msg, {icon: 6});
+						window.location.replace("/home/staff");
+					} else {
+						layer.msg(jsonMsg.msg, {icon: 5});
+					}
+				}
+				//如何code==2,就跳转到用户页面
+				if (jsonMsg.code==2){
+					//数据正常
+					if (jsonMsg.state) {
+						layer.msg(jsonMsg.msg, {icon: 6});
+						window.location.replace("/home/user");
+					} else {
+						layer.msg(jsonMsg.msg, {icon: 5});
+					}
+				}
+			})
+		});
+
+		//注册按钮
+		$("#btnSubmit").click(()=>{
+
+			//获取用户名
+			let userAccount = $("#regname").val();
+			//获取用户密码
+			let userPassword = $("#regpass").val();
+			//获取确认密码
+			let resetPassword = $("#reregpass").val();
+
+			if (userAccount==""||userAccount==null||userAccount==undefined){
+				layer.msg("请输入用户名",{icon:5});
+				return false;
+			}
+			if (userPassword==""||userPassword==null||userPassword==undefined){
+				layer.msg("请输入用户密码",{icon:5});
+				return false;
+			}
+			if (userPassword!=resetPassword){
+				layer.msg("确认密码和用户密码不相同",{icon:5});
+				return false;
+			}
+
+			//打开加载层
+			let layerIndex = layer.load();
+
+			$.post('/register',{
+				userAccount:userAccount,
+				userPassword:userPassword
+			},(jsonMsg)=>{
+				//关闭加载层
+				layer.close(layerIndex);
+				if (jsonMsg.state){
+					layer.msg(jsonMsg.msg,{icon:6});
+					$(".alt-2").click();//新增后按钮
+				}else {
+					layer.msg(jsonMsg.msg,{icon:5});
+					$("#regname").val("");//用户账号为空
+					$("#regpass").val("");//密码框为空
+					$("#reregpass").val("");//确认密码为空
+				}
+			})
+		});
+
+		//登录快捷键--enter == 13
+		$("body").keyup(function (e){
+			if (e.keyCode==13){
+				$("#btnEd").click();
+			}
+		});
+	});
+</script>
+</body>
+</html>

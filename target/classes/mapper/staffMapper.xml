@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.railwaystation.mapper.SysStaffMapper">
+  <resultMap id="BaseResultMap" type="com.gx.railwaystation.po.SysStaff">
+    <id column="staff_id" jdbcType="INTEGER" property="staffId" />
+    <result column="position_id" jdbcType="INTEGER" property="positionId" />
+    <result column="staff_account" jdbcType="VARCHAR" property="staffAccount" />
+    <result column="staff_password" jdbcType="VARCHAR" property="staffPassword" />
+    <result column="staff_salt" jdbcType="VARCHAR" property="staffSalt" />
+    <result column="staff_sex" jdbcType="TINYINT" property="staffSex" />
+    <result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+    <result column="staff_phone" jdbcType="VARCHAR" property="staffPhone" />
+    <result column="staff_identification" jdbcType="VARCHAR" property="staffIdentification" />
+    <result column="staff_head" jdbcType="VARCHAR" property="staffHead" />
+  </resultMap>
+
+  <!--根据页面输入账号查询数据-->
+  <select id="StaffAccount" resultMap="BaseResultMap">
+    SELECT
+      sys_staff.staff_id,
+      sys_staff.position_id,
+      sys_staff.staff_account,
+      sys_staff.staff_password,
+      sys_staff.staff_salt,
+      sys_staff.staff_sex,
+      sys_staff.staff_name,
+      sys_staff.staff_phone,
+      sys_staff.staff_identification,
+      sys_staff.staff_head
+    FROM sys_staff
+    WHERE sys_staff.staff_account = #{staffAccount,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

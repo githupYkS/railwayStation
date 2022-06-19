@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>账户金额</title>
+  <link rel="stylesheet" href="/css/user.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/lib/layui/css/layui.css">
+  <style>
+  </style>
+</head>
+<body>
+<div class="layui-card">
+  <div class="layui-card-body common_card">
+    <!--顶部-->
+    <div style="margin: 10px">
+      <span class="common_card_span">账户余额</span>
+      <div class="common_line"><i></i></div>
+    </div>
+    <!--内容区-->
+    <div>
+      <!--上部分-->
+      <div class="layui-card coin_top_card">
+        <div class="layui-card-body ">
+          <p>当前账户余额：
+          <p id="balance1">[[${moneyVo.moneySun}]]</p>元</p>
+
+          <!--存放资产id-->
+          <input type="text" id="moneyId" th:value="${moneyVo.moneyId}" alt="" hidden>
+          <input type="text" id="userId" th:value="${moneyVo.userId}" alt="" hidden>
+
+          <button id="withdrawal">提现</button>
+          <button id="fill_up">充值</button>
+        </div>
+      </div>
+
+      <!--下部分-->
+      <div>
+        <p style="font-size: 16px;font-weight: bold;padding: 20px 0 20px 35px;">账户资产明细</p>
+        <div>
+          <ul class="classify" id="searchStatus">
+            <li style="margin-left: 35px;color: #ccc">分类</li>
+            <li value="" class="li_hover">全部</li>
+            <li value="1">充值</li>
+            <li value="2">提现</li>
+            <li value="3">订单退款</li>
+            <li value="4">订单退款</li>
+          </ul>
+        </div>
+
+        <div>
+          <ul class="time" style="padding-top: 55px;" id="limitDays">
+            <li value="0" style="margin-left: 35px;color: #ccc" aria-disabled="true">时间</li>
+            <li value="" class="li_hover">全部</li>
+            <li value="1">今天</li>
+            <li value="7">近7天</li>
+            <li value="15">近15天</li>
+            <li value="30">近1个月</li>
+          </ul>
+        </div>
+        <div style="margin-top: 60px">
+          <table class="layui-hide" id="tableAssetsDetails" lay-filter="tableAssetsDetails"
+                 style="margin-top: 60px"></table>
+        </div>
+      </div>
+      <!--充值、提现弹出层-->
+      <form method="post" class="layui-form" id="formUserMoney" lay-filter="formUserMoney" autocomplete="off" style="display: none">
+        <div id="fill_up_tan">
+          <!--标识符，判断是充值还是提现-->
+          <input type="text" id="consumerType" value="1" alt="" hidden>
+          <!--金额的大小-->
+          <div class="fill_up_kuang">
+            <div class="layui-row layui-col-space10" style="width: 450px">
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="30">30</p>
+              </div>
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="50">50</p>
+              </div>
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="100">100</p>
+              </div>
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="150">150</p>
+              </div>
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="200">200</p>
+              </div>
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="300">300</p>
+              </div>
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="400">400</p>
+              </div>
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="500">500</p>
+              </div>
+              <div class="layui-col-md4">
+                <p class="fillMoney" aria-valuetext="600">600</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="layui-btn-container" style="text-align: end">
+          <button type="button" class="layui-btn layui-btn-normal" id="btn_sure">确认</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--跟新页面数据按钮-->
+  <button id="btn_reload" style="display: none"></button>
+</div>
+</body>
+<script src="/lib/layui/layui.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/myJs.js"></script>
+<script type="text/javascript">
+  let layuiIndexForm;layer;
+  layui.use(()=>{
+    layer = layui.layer;
+    form = layui.form;
+    table = layui.table;
+
+    let tableAssetsDetails = table.render({
+      elem:'#tableAssetsDetails',
+      id:'tableAssetsDetails',
+      url:'/profile/selectPageList',
+      page:true,
+      cols:[ [
+        {type:"numbers"},
+        {
+          field: "consumerTime",
+          title: "创建时间",
+          templet: function (rowData) {
+            var dt = new Date(rowData.consumerTime);
+            return tableTime(dt);
+          }
+        },
+        {
+          field: "consumerType",
+          title: "交易类型",
+          templet: function (rowData) {
+            return consumerType(rowData.consumerType);
+          }
+        },
+        {field: "ammountChange", title: "消费金额(元)"}
+      ] ],
+      limit:5,
+      limits:[5,10,15,20,25,30],
+    });
+
+    /*根据消费类型拆查询数据*/
+    $("#searchStatus li").click(function(){
+      //消费时间
+      var limitDays = $("#limitDays li.li_hover").val();
+      console.log("type = " + $(this).val() + ", limitDays = " + limitDays);
+      table.reload('tableAssetsDetails',{
+        where:{
+          limitDays: limitDays,
+          consumerType: $(this).val(),
+        }
+      })
+    });
+
+
+    /*根据消费时间查询数据*/
+    $("#limitDays li").click(function (){
+
+      //根据类型
+      var type = $("#searchStatus li.li_hover").val();
+      console.log("type = " + type + ", limitDays = " + $(this).val());
+      table.reload("tableAssetsDetails", {
+        where: {
+          limitDays: $(this).val(),
+          consumerType: type,
+        }
+      })
+    });
+
+    //跟新页面数据
+    $("#btn_reload").click(()=>{
+      //获取用户的id
+      let userId = $("#userId").val();
+      $.post('/profile/selectByUserId',{userId:userId},(jsonMsg)=>{
+        //数据正常
+        if (jsonMsg.state){
+          $("#balance1").text(jsonMsg.data.moneySun);
+          $("#moneyId").attr("value",jsonMsg.data.moneyId);
+          $("#userId").text(jsonMsg.data.userId);
+          $("#withdrawal").removeAttr("disabled");
+          $("#withdrawal").css("background", "deepskyblue");
+        }else {
+          layer.msg(jsonMsg.msg,{icon:5});
+        }
+      })
+    });
+
+    //充值弹出层
+    $("#fill_up").click(()=>{
+      $("#consumerType").val(1);
+      $(".fillMoney").attr("style","display:block");
+      $(".fillMoney").css({background: "#ccc"});//去掉高亮效果
+      fillId = 0;
+      layuiIndexForm = layer.open({
+        type: 1,
+        skin: "layui-layer-white",
+        offset: ['20px','380px'],//弹出垂直水平居中
+        anim:4,
+        area: ["500px", "383px"],
+        offset: ["163px", "495px"],
+        title: "在线充值",
+        content: $("#formUserMoney"),
+        cancel:()=>{
+          layer.closeAll();
+          $(".fillMoney").attr("style","display:none");
+        },
+        /*end:(res)=>{
+          $(".fillMoney").css("display",'none');
+        }*/
+      })
+    });
+
+    //提现弹出层
+    $("#withdrawal").click(()=>{
+      $("#consumerType").val(2);
+      $(".fillMoney").attr("style","display:block");
+      $(".fillMoney").css({background: "#ccc"});//去掉高亮效果
+      fillId = 0;
+      layuiIndexForm = layer.open({
+          type: 1,
+          skin: "layui-layer-white",
+          offset: ['20px','380px'],//弹出垂直水平居中
+          anim:4,
+          area: ["500px", "383px"],
+          offset: ["163px", "495px"],
+          title: "在线提现",
+          content: $("#formUserMoney"),
+          //关闭弹出层
+          cancel:()=>{
+            layer.closeAll();
+            $(".fillMoney").attr("style","display:none");
+          }
+          /*end:(res)=>{
+            $(".fillMoney").css("display",'none');
+          }*/
+      })
+    });
+
+    //提交数据
+    $("#btn_sure").click(()=>{
+      let fillUpText="";
+      if ($("#consumerType").val()=="1"){
+        fillUpText="充值";
+      }else {
+        fillUpText="提现";
+      }
+      //判断有没有选择套餐
+      if (fillId!==0){
+        layer.confirm("确定要"+fillUpText+""+moneyText+"元吗？",function (index){
+          //标识符(0:新增,1:修改,2:订单退款)
+          var consumerType = $("#consumerType").val();
+          //金额id
+          let moneyId = $("#moneyId").val();
+          //用户id
+          let userId = $("#userId").val();
+          //打开加载层
+          layerIndex = layer.load();
+          $.post('/profile/insert',{
+            consumerType:consumerType,
+            moneyId:moneyId,
+            userId:userId,
+            fillId:fillId
+          },(jsonMsg)=>{
+            //关闭加载层
+            layer.close(layerIndex);
+            //数据正常
+            if (jsonMsg.state){
+              layer.msg(jsonMsg.msg,{icon:6});
+              //关闭弹出层
+              layer.close(layuiIndexForm);
+              //刷新页面
+              $("#btn_reload").click();
+              //关闭选择框
+              $(".fillMoney").attr("style","display:none");
+              //刷新表单数据
+              table.reload('tableAssetsDetails',{});
+            }else {
+              layer.msg(jsonMsg.msg,{icon:5});
+            }
+          });
+          //标识符
+          layer.close(index);//关闭询问框
+        });
+      }else {
+        layer.msg("请选择"+fillUpText+"的套餐",{icon:5});
+      }
+    });
+
+    //充值、提现金额高亮效果
+    var moneyText = "";
+    var fillId = 0;
+    $(".fillMoney").click(function () {
+      $(".fillMoney").css({background: "#ccc"});
+      $(this).css({background: "deepskyblue"});
+      fillId = $(this).attr("aria-valuetext");
+      moneyText = $(this).text();
+    })
+
+    //设置提现按钮金额为0是禁用，金额不为0时启用
+    var balance = $("#balance1").text();
+    if (balance == 0) {
+      $("#withdrawal").attr("disabled", "disabled");
+      $("#withdrawal").css("background", "#ccc");
+      $("#balance").text("0");
+    }
+
+    //分类高亮效果
+    $(".classify li").click(function () {
+      for (var x in $(".classify li")) {
+        $(".classify li").eq(x).removeClass("li_hover");
+      }
+      $(this).addClass("li_hover");
+    })
+
+    //时间高亮效果
+    $(".time li").click(function () {
+      for (var x in $(".time li")) {
+        $(".time li").eq(x).removeClass("li_hover");
+      }
+      $(this).addClass("li_hover");
+    })
+  });
+</script>
+</html>

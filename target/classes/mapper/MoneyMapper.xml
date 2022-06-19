@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.railwaystation.mapper.SysMoneyMapper">
+    <resultMap id="moneyMapper" type="com.gx.railwaystation.po.SysMoney">
+        <id column="money_id" property="moneyId" jdbcType="INTEGER"></id>
+        <result column="user_id" property="userId" jdbcType="INTEGER"></result>
+        <result column="money_sun" property="moneySun" jdbcType="DECIMAL"></result>
+    </resultMap>
+
+    <!--查询当前的用户金额-->
+    <select id="selectByUserId" resultMap="moneyMapper">
+        select * from sys_money where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <!--修改当前用户金额-->
+    <update id="updateMoney" parameterType="com.gx.railwaystation.po.SysMoney">
+        update sys_money
+        <set>
+            <if test="userId !=null">user_id=#{userId,jdbcType=INTEGER},</if>
+            <if test="moneySun != null">money_sun = #{moneySun,jdbcType=DECIMAL},</if>
+        </set>
+        where money_id = #{moneyId,jdbcType=INTEGER}
+    </update>
+
+    <!--新增用户金额-->
+    <insert id="insertMoney" parameterType="com.gx.railwaystation.po.SysMoney">
+        insert into sys_money
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="moneySun != null">money_sun,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+            <if test="moneySun != null">#{moneySun,jdbcType=DECIMAL},</if>
+        </trim>
+    </insert>
+</mapper>

@@ -1,0 +1,149 @@
+.header{
+    font-size: 14px;
+}
+.admin{
+    background:#fff;
+    position:fixed;
+    font-size: 14px;
+    border-left: 2px #8D8D8D solid;
+    right:0;
+    bottom:0;
+    top:93px;
+    left:182px;
+    padding-right:0px;
+    padding-bottom:0px;
+    border-top: 1px solid #8D8D8D;
+}
+.menu-list{
+    width: 180px;
+    height: 100%;
+    position: fixed;
+    background:#555555;
+    border: 2px #8D8D8D solid;
+}
+.menu-list-title{
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 2px #8D8D8D solid;
+
+}
+.on{
+    color: white;
+}
+.out{
+    position: relative;
+    top: -2px;
+}
+.bread{
+    border-radius:4px;
+    margin-bottom:15px;
+    font-size: 12px;
+    color:#999;
+    margin-left:190px;
+}
+.bread li{
+    display:inline-block;
+    float:left;
+}
+.bread li:after{
+    content:"\002f";
+    padding:0 8px;
+    color:#ddd;
+}
+.bread li:last-child:after{
+    content:"";
+}
+.top-link{
+ font-size: 13px;
+}
+body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, q, dl, dt, dd, ol, ul, li, fieldset, form, legend, caption, tbody, tfoot, thead, article, aside, dialog, figure, footer, header, hgroup, nav, section{margin:0;padding:0;border:0;font-size:14px;font:inherit;vertical-align:baseline;}
+.menu-list ul li.on{
+    color:white;
+}
+
+.black_line i{
+    position: absolute;
+}
+.bottom_card button{
+    margin-right: 230px;
+    margin-top: 5px;
+}
+#userName{
+    position: absolute;
+    font-size: 13px;
+}
+
+#phone{
+    position: absolute;
+    top: 180px;
+    font-size: 13px;
+    left: 32px;
+}
+.lun{
+    position: absolute;
+    top: 110px;
+    left: 40px;
+}
+.lun-bt{
+    position: absolute;
+    top: 84px;
+    left: -168px;
+}
+.top_card span{
+    font-size: 32px;
+}
+.lune{
+    background-color: ghostwhite;
+    width: 1247px;
+    height: 450px;
+}
+.cp{
+    width: 153px;
+    height: 130px;
+}
+.cp:first-child{
+    margin-left: 120px;
+    margin-top: 30px;
+}
+.wz{
+    font-size: 14px;
+    position: absolute;
+    left: 168px;
+    top: 130px;
+    color: #9F9F9F;
+}
+.wei{
+    width: 166px;
+    height: 165px;
+    color: #0C0C0C;
+}
+.tranMinFare    {
+    width: 300px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 10px;
+    border: 1px #8D8D8D solid;
+    margin-top: 10px;
+    font-size: 12px;
+    margin-left:20px;
+}
+.tranMaxFare{
+    width: 300px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+    border-radius: 10px;
+    border: 1px #8D8D8D solid;
+    font-size: 12px;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+.inline{
+    width:200px;
+    height: 1px;
+    background-color: #0C0C0C;
+    position: absolute;
+    top: 25px;
+    left: 395px;
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.railwaystation.mapper.SysAccountStatementMapper">
+    <!--资产明细表-->
+    <resultMap id="BaseResultMap" type="com.gx.railwaystation.po.SysAccountStatement">
+        <id column="detail_id" property="detailId" jdbcType="INTEGER"></id>
+        <result column="money_id" property="moneyId" jdbcType="INTEGER"></result>
+        <result column="consumer_type" property="consumerType" jdbcType="TINYINT"></result>
+        <result column="consumer_time" property="consumerTime" jdbcType="TIMESTAMP"></result>
+        <result column="ammount_change" property="ammountChange" jdbcType="DECIMAL"></result>
+    </resultMap>
+
+    <resultMap id="StatementVo" type="com.gx.railwaystation.vo.StatementVo" extends="BaseResultMap">
+        <result column="user_id" jdbcType="INTEGER" property="userId"></result>
+        <result column="moneySun" jdbcType="DECIMAL" property="moneySun"></result>
+    </resultMap>
+
+    <insert id="insertAccountStatement" parameterType="com.gx.railwaystation.po.SysAccountStatement">
+        insert into sys_account_statement
+        <trim prefix=" (" suffix=")" suffixOverrides=",">
+            <if test="moneyId!=null">money_id,</if>
+            <if test="consumerType!=null">consumer_type,</if>
+            consumer_time,
+            <if test="ammountChange!=null">ammount_change,</if>
+        </trim>
+        <trim prefix=" VALUES(" suffix=")" suffixOverrides=",">
+            <if test="moneyId!=null">#{moneyId,jdbcType=INTEGER},</if>
+            <if test="consumerType!=null">#{consumerType,jdbcType=TINYINT},</if>
+            NOW(),
+            <if test="ammountChange!=null">#{ammountChange,jdbcType=DECIMAL},</if>
+        </trim>
+    </insert>
+
+    <select id="selectStatement" resultMap="StatementVo">
+        SELECT sys_account_statement.*,sys_money.* FROM sys_account_statement
+               INNER JOIN sys_money ON sys_account_statement.`money_id` = sys_money.`money_id`
+        WHERE user_id=#{userId,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectByType" resultMap="BaseResultMap">
+        SELECT money_id,consumer_type,consumer_time,ammount_change from sys_account_statement
+        <where>
+            <if test="moneyId!=null">
+                money_id = #{moneyId,jdbcType=INTEGER}
+            </if>
+            <if test="consumerType!=null">
+                AND consumer_type=#{consumerType,jdbcType=INTEGER}
+            </if>
+            <if test="limitDays!=null">
+                AND  DATE_SUB(CURDATE(), INTERVAL #{limitDays,jdbcType=INTEGER} DAY) &lt;= DATE(consumer_time)
+            </if>
+        </where>
+    </select>
+</mapper>

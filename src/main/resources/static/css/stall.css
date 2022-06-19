@@ -1,0 +1,23 @@
+/*员工页面样式*/
+*{
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+}
+.header{
+    width: 100%;
+    height: 50px;
+    background: #0C0C0C;
+    line-height: 50px;
+}
+.funt{
+    position: absolute;
+    left: 10px;
+    text-align: center;
+    color: white;
+}
+.part{
+    background-color:#4E5465;
+    width: 100%;
+    height: 100%;
+}

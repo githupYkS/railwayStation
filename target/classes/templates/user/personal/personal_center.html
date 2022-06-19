@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+  <link rel="stylesheet" href="/lib/layui/css/layui.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/user.css">
+  <link rel="stylesheet" href="/css/myUtil.css">
+</head>
+<body>
+  <div>
+  <!--上部分-->
+  <div class="layui-card top_card">
+    <div class="layui-card-body" style="padding: 0 15px">
+      <div class="layui-row">
+        <div class="layui-col-md4">
+          <div class="user_img">
+            <img src="/images/uploadImg.png " height="200" width="221" name="userHead" id="userPicture"/>
+          </div>
+          <div class="labun">
+            <span id="userName">[[${user.getUserName()}]]，</span>
+            <span id="phone">[[${user.getUserPhone()}]]</span>
+          </div>
+          <!--姓名，用户电话号码-->
+        </div>
+        <div class="layui-col-md8" style="padding-left: 90px">
+          <div class="layui-row layui-col-space10">
+            <div class="layui-col-md4 my_account">
+              <i></i>
+              <div class="account">
+                <p>账户余额</p>
+                  <p class="lun" th:if="${moneyVo.moneySun} != null"  style="color: #FFB800">
+                    <cite>
+                      <span class="lun-bt" th:text="${moneyVo.moneySun}"></span>
+                    </cite>元
+                  </p>
+                  <p th:if="${moneyVo.moneySun} == null" style="color: #FFB800">
+                    <cite>0
+                    </cite>元
+                  </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!--下部分-->
+    <div class="layui-card bottom_card">
+    <div class="layui-card-body">
+      <span style="font-size: 24px">其它功能</span>
+      <button id="lookOrder">查看全部订单></button>
+      <div class="black_line"><i style="width: 133px"></i></div>
+      <div class="lune">
+        <div class="layui-col-md4">
+          <div class="wei">
+            <img src="/images/img.png" class="cp" id="fare_query"/>
+            <span class="wz">票价查询</span>
+          </div>
+        </div>
+        <div class="layui-col-md4">
+          <div class="wei">
+            <img src="" class="cp"/>
+            <span class="wz">票价查询</span>
+          </div>
+        </div>
+        <div class="layui-col-md4">
+          <div class="wei">
+            <img src="" class="cp"/>
+            <span class="wz">票价查询</span>
+          </div>
+        </div>
+        <div class="layui-col-md4">
+          <div class="wei">
+            <img src="" class="cp"/>
+            <span class="wz">票价查询</span>
+          </div>
+        </div>
+        <div class="layui-col-md4">
+          <div class="wei">
+            <img src="" class="cp"/>
+            <span class="wz">票价查询</span>
+          </div>
+        </div>
+        <div class="layui-col-md4">
+          <div class="wei">
+            <img src="" class="cp"/>
+            <span class="wz">票价查询</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!--票价弹出层-->
+    <form class="layui-form" method="post" lay-filter="formFrie" id="formFrie" style="display: none">
+      <!--上半部分查询-->
+      <div class="layui-form-item">
+        <input class="layui-input tranMinFare" name="tranFare" id="tranMinFare" placeholder="请输入最低票价">
+        <span class="inline"></span>
+        <input class="layui-input tranMaxFare" name="tranFare" id="tranMaxFare" placeholder="请输入最高票价">
+      </div>
+      <!--下半部分表格-->
+      <div style="margin-top: 20px">
+        <table class="layui-hide" id="tableTranFare" lay-filter="tableTranFare" style="margin-top: 60px"></table>
+      </div>
+      <div class="layui-form-item" style="text-align: end">
+        <button type="button" class="layui-btn layui-bg-red" id="btn_Search">查询</button>
+        <button type="button" class="layui-btn layui-bg-orange">重置</button>
+      </div>
+    </form>
+</div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<script src="/lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript">
+  var layuiIndexForm;
+  layui.use(()=>{
+    layer = layui.layer;
+    table = layui.table;
+    form = layui.form;
+
+    //开始页面回填图片
+    $.post('/profile/selectUserById',(jsonMsg)=>{
+      //数据正常
+      if (jsonMsg.state){
+        $("#userName").text(jsonMsg.data.userName);
+        $("#phone").text(jsonMsg.state.userPhone);
+        //回填数据
+        if (jsonMsg.data.userHead!=undefined && jsonMsg.data.userHead!=null && jsonMsg.data.userHead!=""){
+          $("#userPicture").prop("src",'/home/getPortraitImage/'+jsonMsg.data.userHead);
+        }else {
+          $("#userPicture").prop("src",'/images/uploadImg.png');
+        }
+      }else{
+        layer.msg(jsonMsg.msg,{icon:5});
+      }
+    });
+
+    //票价弹出层
+    $("#fare_query").click(()=>{
+      //重置表单
+      $('#formFrie [type="reset"]').click();
+      //弹出层表格数据
+      let tableTranFare = table.render({
+        elem:'#tableTranFare',
+        id:'tableTranFare',
+        url:'',
+        page:true,
+        cols:[ [
+          {type:'numbers'},
+          {field:'',title:'列车编号',align:'center',},
+          {field:'',title:'起点站',align:'center',},
+          {field:'',title:'终点站',align:'center',},
+          {field:'',title:'发车时间',align:'center',},
+          {field:'',title:'到达时间',align:'center',},
+          {field:'',title:'价格',align:'center',}
+        ] ],
+        limit:5,
+        limits:[5,10,15,20]
+      });
+
+      layuiIndexForm = layer.open({
+        type:1,
+        skin:"#fff",
+        offset: ["50px", "50px"],
+        area:['1000px','500px'],
+        title:"票价查询",
+        content:$("#formFrie"),
+        cancel:()=>{
+          layer.closeAll();
+        }
+      })
+    });
+    /*票价查询*/
+
+  });
+</script>
+</html>
