@@ -5,6 +5,7 @@ import com.gx.railwaystation.mapper.SysMoneyMapper;
 import com.gx.railwaystation.po.SysAccountStatement;
 import com.gx.railwaystation.po.SysMoney;
 import com.gx.railwaystation.service.SysAccountStatementService;
+import com.gx.railwaystation.vo.LayuiTableData;
 import com.gx.railwaystation.vo.StatementVo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,11 @@ public class SysAccountStatementServiceImpl implements SysAccountStatementServic
     }
 
     @Override
-    public List<SysAccountStatement> selectByType(Integer moneyId, Integer consumerType, Integer limitDays) {
-        return this.sysAccountStatementMapper.selectByType(moneyId, consumerType, limitDays);
+    public LayuiTableData<SysAccountStatement> selectByType(int limit, int page, Integer moneyId, Integer consumerType, Integer limitDays) {
+        List<SysAccountStatement> sysAccountStatements = this.sysAccountStatementMapper.selectByType(limit, page, moneyId, consumerType, limitDays);
+        Integer countAll = this.sysAccountStatementMapper.countAll(moneyId, consumerType, limitDays);
+        return new LayuiTableData<>(countAll,sysAccountStatements);
     }
+
+
 }

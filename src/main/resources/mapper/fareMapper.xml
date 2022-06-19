@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.railwaystation.mapper.SysUpdateFareMapper">
+  <resultMap id="BaseFareMapper" type="com.gx.railwaystation.po.SysTrain">
+    <id column="train_id" jdbcType="INTEGER" property="trainId" />
+    <result column="site_id" jdbcType="INTEGER" property="siteId" />
+    <result column="car_id" jdbcType="INTEGER" property="carId" />
+    <result column="moment_id" jdbcType="INTEGER" property="momentId" />
+    <result column="train_out_time" jdbcType="TIMESTAMP" property="trainOutTime" />
+    <result column="train_reach_time" jdbcType="TIMESTAMP" property="trainReachTime" />
+    <result column="train_seat" jdbcType="INTEGER" property="trainSeat" />
+    <result column="train_number" jdbcType="VARCHAR" property="trainNumber" />
+    <result column="train_type_id" jdbcType="INTEGER" property="trainTypeId" />
+    <result column="berth_id" jdbcType="INTEGER" property="berthId" />
+    <result column="reserve_id" jdbcType="INTEGER" property="reserveId" />
+    <result column="reserve_fares" jdbcType="NUMERIC" property="reserveFares" />
+  </resultMap>
+
+  <resultMap id="BaseFare" type="com.gx.railwaystation.vo.FareVo" extends="BaseFareMapper">
+    <id column="site_id" jdbcType="INTEGER" property="siteId" />
+    <result column="site_name" jdbcType="VARCHAR" property="siteName" />
+    <result column="berth_id" jdbcType="INTEGER" property="berthId" />
+    <result column="berth_place" jdbcType="VARCHAR" property="berthPlace" />
+    <result column="reserve_number" jdbcType="VARCHAR" property="reserveNumber" />
+    <result column="reserve_time" jdbcType="TIMESTAMP" property="reserveTime" />
+    <result column="saddie_id" jdbcType="INTEGER" property="saddieId" />
+    <result column="saddie_name" jdbcType="VARCHAR" property="saddieName" />
+    <result column="saddie_count" jdbcType="INTEGER" property="saddieCount" />
+      <result column="saddie_money" jdbcType="NUMERIC" property="saddieMoney" />
+  </resultMap>
+
+  <!--查询分页数据-->
+  <select id="selectPageList" resultMap="BaseFare">
+    <!--MyBatis Bind计算分页开始索引-->
+    <bind name="startIndex" value="(page-1) * limit"/>
+    SELECT
+    sys_reserve.reserve_id,
+    sys_reserve.reserve_number,
+    sys_reserve.reserve_time,
+    sys_train.train_id,
+    sys_train.site_id,
+    sys_train.berth_id,
+    sys_train.train_number,
+    sys_train.reserve_id,
+    sys_train.train_out_time,
+    sys_train.reserve_fares,
+    sys_site.site_name,
+    sys_berth.berth_place,
+    sys_saddie.saddie_name,
+    sys_saddie.saddie_money
+    FROM
+    sys_reserve
+    INNER JOIN sys_train
+    ON sys_reserve.train_id = sys_train.train_id
+    INNER JOIN sys_site ON sys_train.site_id = sys_site.site_id
+    INNER JOIN sys_berth ON sys_train.berth_id = sys_berth.berth_id
+    INNER JOIN sys_saddie ON sys_reserve.saddie_id = sys_saddie.saddie_id
+    <where>
+      <if test="reserveNumber!=null">
+        sys_reserve.reserve_number LIKE CONCAT('%',CONCAT(#{reserveNumber,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="startDate!=null and endDate!=null and startDate!= '' and endDate!= '' ">
+        AND sys_reserve.reserve_time &gt;= CONCAT('',#{startDate})
+        AND sys_reserve.reserve_time &lt;= CONCAT('',#{endDate})
+      </if>
+    </where>
+    ORDER BY sys_train.train_id
+    LIMIT #{startIndex,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <!--查询分页总条数-->
+  <select id="countAll" resultType="java.lang.Integer">
+    SELECT
+    COUNT(sys_reserve.reserve_id)
+    FROM
+    sys_reserve
+    INNER JOIN sys_train
+    ON sys_reserve.train_id = sys_train.train_id
+    INNER JOIN sys_site ON sys_train.site_id = sys_site.site_id
+    INNER JOIN sys_berth ON sys_train.berth_id = sys_berth.berth_id
+    INNER JOIN sys_saddie ON sys_reserve.saddie_id = sys_saddie.saddie_id
+    <where>
+      <if test="reserveNumber!=null">
+        sys_reserve.reserve_number LIKE CONCAT('%',CONCAT(#{reserveNumber,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="startDate!=null and endDate!=null and startDate!= '' and endDate!= '' ">
+        AND sys_reserve.reserve_time &gt;= CONCAT('',#{startDate})
+        AND sys_reserve.reserve_time &lt;= CONCAT('',#{endDate})
+      </if>
+    </where>
+  </select>
+</mapper>

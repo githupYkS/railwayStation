@@ -61,89 +61,134 @@ body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, 
     color:white;
 }
 
+.leftDiv{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 50px;
+}
+
+.zhoCenter{
+    width: 100px;
+    height: 30px;
+    position: absolute;
+    left: 350px;
+}
+
+.rightDiv{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    right: 50px;
+}
+
+.inputa{
+    width: 80px;
+    height: 50px;
+    position: absolute;
+    left: 130px;
+    font-size: 25px;
+    border:none;
+}
+
+.inputb{
+    width: 80px;
+    height: 50px;
+    position: absolute;
+    right: 130px;
+    font-size: 25px;
+    border:none;
+}
+
+.spenbody{
+    position: absolute;
+    top: 5px;
+    left: 85px;
+}
+
+.spenzho{
+    position: absolute;
+    top: 5px;
+    right: 90px;
+}
+
+.imgs{
+    position: absolute;
+    top: 18px;
+    left: -26px;
+}
+
+.divOred{
+    width: 524px;
+    height: 185px;
+    position: absolute;
+    top: 140px;
+    left: 117px;
+}
+
+.buttonbig{
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    top: 320px;
+    right: 106px;
+}
+
+.formReserv{
+    width: 750px;
+    height: 300px;
+    position: absolute;
+    top: 25px;
+    left: 25px;
+}
+.buttontwo{
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    top: 250px;
+    left: 135px;
+}
+.labun{
+    position: absolute;
+    top: 78px;
+    left: 230px;
+}
+.lun-bt{
+    font-size: 16px;
+}
+.wei {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-left: 100px;
+}
+.cp{
+    width: 150px;
+    height: 150px;
+    margin-top:50px;
+}
+.wz{
+    position: absolute;
+    top: 177px;
+    left: 148px;
+    color: #9F9F9F;
+}
 .black_line i{
     position: absolute;
 }
-.bottom_card button{
-    margin-right: 230px;
-    margin-top: 5px;
-}
-#userName{
-    position: absolute;
-    font-size: 13px;
-}
-
-#phone{
-    position: absolute;
-    top: 180px;
-    font-size: 13px;
-    left: 32px;
-}
-.lun{
-    position: absolute;
-    top: 110px;
-    left: 40px;
-}
-.lun-bt{
-    position: absolute;
-    top: 84px;
-    left: -168px;
-}
-.top_card span{
-    font-size: 32px;
-}
-.lune{
-    background-color: ghostwhite;
-    width: 1247px;
-    height: 450px;
-}
-.cp{
-    width: 153px;
-    height: 130px;
-}
-.cp:first-child{
-    margin-left: 120px;
-    margin-top: 30px;
-}
-.wz{
+.tranMinFare{
+    width: 244px;
+    border-radius: 6px;
     font-size: 14px;
-    position: absolute;
-    left: 168px;
-    top: 130px;
-    color: #9F9F9F;
-}
-.wei{
-    width: 166px;
-    height: 165px;
-    color: #0C0C0C;
-}
-.tranMinFare    {
-    width: 300px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 10px;
-    border: 1px #8D8D8D solid;
     margin-top: 10px;
-    font-size: 12px;
-    margin-left:20px;
+    border: 1px #0C0C0C solid;
+    margin-left: 110px;
 }
 .tranMaxFare{
-    width: 300px;
-    height: 30px;
-    line-height: 30px;
-    font-size: 12px;
-    border-radius: 10px;
-    border: 1px #8D8D8D solid;
-    font-size: 12px;
     position: absolute;
+    border-radius: 6px;
+    width: 250px;
     top: 10px;
-    right: 20px;
-}
-.inline{
-    width:200px;
-    height: 1px;
-    background-color: #0C0C0C;
-    position: absolute;
-    top: 25px;
-    left: 395px;
+    font-size: 14px;
+    border: 1px #0C0C0C solid;
+    right: 110px;
 }

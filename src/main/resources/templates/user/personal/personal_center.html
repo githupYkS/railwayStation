@@ -50,7 +50,6 @@
     <div class="layui-card bottom_card">
     <div class="layui-card-body">
       <span style="font-size: 24px">其它功能</span>
-      <button id="lookOrder">查看全部订单></button>
       <div class="black_line"><i style="width: 133px"></i></div>
       <div class="lune">
         <div class="layui-col-md4">
@@ -145,21 +144,20 @@
       let tableTranFare = table.render({
         elem:'#tableTranFare',
         id:'tableTranFare',
-        url:'',
+        url:'/profile/selectPageListT',
         page:true,
         cols:[ [
           {type:'numbers'},
-          {field:'',title:'列车编号',align:'center',},
-          {field:'',title:'起点站',align:'center',},
-          {field:'',title:'终点站',align:'center',},
-          {field:'',title:'发车时间',align:'center',},
-          {field:'',title:'到达时间',align:'center',},
-          {field:'',title:'价格',align:'center',}
+          {field:'trainNumber',title:'列车编号',align:'center'},
+          {field:'siteName',title:'起点站',align:'center'},
+          {field:'berthPlace',title:'终点站',align:'center'},
+          {field:'trainoutTime',title:'发车时间',align:'center'},
+          {field:'trainReachTime',title:'到达时间',align:'center'},
+          {field:'reserveFares',title:'价格',align:'center'}
         ] ],
         limit:5,
         limits:[5,10,15,20]
       });
-
       layuiIndexForm = layer.open({
         type:1,
         skin:"#fff",
@@ -172,7 +170,22 @@
         }
       })
     });
+
     /*票价查询*/
+    $("#btn_Search").click(()=>{
+      //获取字段
+      let minMoney = $("#tranMinFare").val();
+      console.log(minMoney);
+      let maxMoney = $("#tranMaxFare").val();
+      console.log(maxMoney);
+      //重载表格
+      table.reload('tableTranFare',{
+        where:{
+          minMoney:minMoney,
+          maxMoney:maxMoney
+        },
+      });
+    });
 
   });
 </script>

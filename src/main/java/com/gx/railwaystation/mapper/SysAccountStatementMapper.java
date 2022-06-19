@@ -2,6 +2,7 @@ package com.gx.railwaystation.mapper;
 
 import com.gx.railwaystation.po.SysAccountStatement;
 import com.gx.railwaystation.vo.StatementVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,5 +23,18 @@ public interface SysAccountStatementMapper {
     /**
      * 查询当前的点击事件，分类
      */
-    List<SysAccountStatement> selectByType(Integer moneyId,Integer consumerType,Integer limitDays);
+    List<SysAccountStatement> selectByType(
+            @Param("limit") int limit,
+            @Param("page") int page,
+            @Param("moneyId") Integer moneyId,
+            @Param("consumerType") Integer consumerType,
+            @Param("limitDays") Integer limitDays
+    );
+
+    /*分页查询总数*/
+    Integer countAll(
+            @Param("moneyId") Integer moneyId,
+            @Param("consumerType") Integer consumerType,
+            @Param("limitDays") Integer limitDays
+    );
 }

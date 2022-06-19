@@ -40,10 +40,10 @@
         <div>
           <ul class="classify" id="searchStatus">
             <li style="margin-left: 35px;color: #ccc">分类</li>
-            <li value="" class="li_hover">全部</li>
+            <li value="0" class="li_hover">全部</li>
             <li value="1">充值</li>
             <li value="2">提现</li>
-            <li value="3">订单退款</li>
+            <li value="3">订单付款</li>
             <li value="4">订单退款</li>
           </ul>
         </div>
@@ -52,7 +52,7 @@
           <ul class="time" style="padding-top: 55px;" id="limitDays">
             <li value="0" style="margin-left: 35px;color: #ccc" aria-disabled="true">时间</li>
             <li value="" class="li_hover">全部</li>
-            <li value="1">今天</li>
+            <li value="0">今天</li>
             <li value="7">近7天</li>
             <li value="15">近15天</li>
             <li value="30">近1个月</li>
@@ -100,9 +100,9 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="layui-btn-container" style="text-align: end">
-          <button type="button" class="layui-btn layui-btn-normal" id="btn_sure">确认</button>
+          <div class="layui-form-item" style="text-align: end">
+            <button type="button" class="layui-btn layui-bg-orange" id="btn_sure">确认</button>
+          </div>
         </div>
       </form>
     </div>
@@ -125,7 +125,7 @@
       elem:'#tableAssetsDetails',
       id:'tableAssetsDetails',
       url:'/profile/selectPageList',
-      page:true,
+      page:true,//开启分页
       cols:[ [
         {type:"numbers"},
         {
@@ -145,8 +145,8 @@
         },
         {field: "ammountChange", title: "消费金额(元)"}
       ] ],
-      limit:5,
-      limits:[5,10,15,20,25,30],
+      limit: 5,//每页页数
+      limits: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]//定义每页页数选择下拉框
     });
 
     /*根据消费类型拆查询数据*/
@@ -198,7 +198,9 @@
     //充值弹出层
     $("#fill_up").click(()=>{
       $("#consumerType").val(1);
-      $(".fillMoney").attr("style","display:block");
+
+      $(".fillMoney").attr("style","display:block");//显示数据
+      $(".layui-form-item").attr("style","display:block");
       $(".fillMoney").css({background: "#ccc"});//去掉高亮效果
       fillId = 0;
       layuiIndexForm = layer.open({
@@ -213,6 +215,7 @@
         cancel:()=>{
           layer.closeAll();
           $(".fillMoney").attr("style","display:none");
+          $(".layui-form-item").attr("style","display:none");
         },
         /*end:(res)=>{
           $(".fillMoney").css("display",'none');
@@ -223,7 +226,8 @@
     //提现弹出层
     $("#withdrawal").click(()=>{
       $("#consumerType").val(2);
-      $(".fillMoney").attr("style","display:block");
+      $(".fillMoney").attr("style","display:block");//显示钱包
+      $(".layui-form-item").attr("style","display:block");//显示按钮按钮
       $(".fillMoney").css({background: "#ccc"});//去掉高亮效果
       fillId = 0;
       layuiIndexForm = layer.open({
@@ -238,7 +242,8 @@
           //关闭弹出层
           cancel:()=>{
             layer.closeAll();
-            $(".fillMoney").attr("style","display:none");
+            $(".fillMoney").attr("style","display:none");//影藏钱
+            $(".layui-form-item").attr("style","display:none");//隐藏按钮
           }
           /*end:(res)=>{
             $(".fillMoney").css("display",'none');
@@ -282,6 +287,8 @@
               $("#btn_reload").click();
               //关闭选择框
               $(".fillMoney").attr("style","display:none");
+              //关闭确认按钮
+              $(".layui-form-item").attr("style","display:none");
               //刷新表单数据
               table.reload('tableAssetsDetails',{});
             }else {

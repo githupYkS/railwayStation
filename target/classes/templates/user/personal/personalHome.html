@@ -29,6 +29,7 @@
             /*color: #8D8D8D;*/
             color: black;
             margin-left: 45px;
+            margin-top: 25px;
             cursor: pointer;
         }
         ul li:hover {
@@ -78,19 +79,15 @@
     <div class="layui-col-md2 lun">
         <div class="left_nav">
             <ul class="li_hover">
-                <i class="layui-icon layui-icon-home"></i>
                 <li class="liFirst li_hover li_yuan" id="personal_center">个人中心</li>
             </ul>
             <ul class="dd">
-                <i class="layui-icon layui-icon-file"></i>
                 <li id="all_order" class="li_yuan">最近购票</li>
             </ul>
             <ul class="zc">
-                <i class="layui-icon layui-icon-rmb"></i>
                 <li class="li_yuan" id="balance">账户余额</li>
             </ul>
             <ul class="zl">
-                <i class="layui-icon layui-icon-user"></i>
                 <li class="li_yuan" id="personal_data">个人资料</li>
             </ul>
         </div>
@@ -99,7 +96,7 @@
     <!--右侧布局-->
     <div class="layui-col-md10">
         <div class="right_nav">
-            <iframe frameborder="0" scrolling="yes"></iframe>
+            <iframe th:src="@{/home/personalCenter}" frameborder="0" scrolling="yes"></iframe>
         </div>
     </div>
 </div>

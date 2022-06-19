@@ -27,21 +27,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!--如果要使用JSON框架，需要排除WEB中排除jackson-->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>sprng-boot-starter-json</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-
-        <!--fastjson启动依赖-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.80</version>
         </dependency>
 
         <!--mybatis的依赖-->

@@ -37,9 +37,27 @@
         WHERE user_id=#{userId,jdbcType=INTEGER}
     </select>
 
-
     <select id="selectByType" resultMap="BaseResultMap">
+        <!--MyBatis Bind计算分页开始索引-->
+        <bind name="startIndex" value="(page-1) * limit"/>
         SELECT money_id,consumer_type,consumer_time,ammount_change from sys_account_statement
+        <where>
+            <if test="moneyId!=null">
+                money_id = #{moneyId,jdbcType=INTEGER}
+            </if>
+            <if test="consumerType!=null">
+                AND consumer_type=#{consumerType,jdbcType=INTEGER}
+            </if>
+            <if test="limitDays!=null">
+                AND  DATE_SUB(CURDATE(), INTERVAL #{limitDays,jdbcType=INTEGER} DAY) <![CDATA[<=]]> DATE(consumer_time)
+            </if>
+        </where>
+        order by sys_account_statement.money_id
+        LIMIT #{startIndex,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="countAll" resultType="java.lang.Integer">
+        select count(money_id) from sys_account_statement
         <where>
             <if test="moneyId!=null">
                 money_id = #{moneyId,jdbcType=INTEGER}

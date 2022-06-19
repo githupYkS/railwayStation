@@ -1,17 +1,19 @@
 package com.gx.railwaystation.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gx.railwaystation.po.SysAccountStatement;
 import com.gx.railwaystation.po.SysMoney;
 import com.gx.railwaystation.po.SysUser;
 import com.gx.railwaystation.service.SysAccountStatementService;
+import com.gx.railwaystation.service.SysTrainService;
 import com.gx.railwaystation.service.SysUserService;
 import com.gx.railwaystation.util.MD5Util;
 import com.gx.railwaystation.util.ProjectParameter;
 import com.gx.railwaystation.util.Tools;
 import com.gx.railwaystation.vo.JsonMsg;
+import com.gx.railwaystation.vo.LayuiTableData;
+import com.gx.railwaystation.vo.trainVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,10 +40,13 @@ public class PersonalProfileController {
 
     private SysAccountStatementService sysAccountStatementService;
 
+    private SysTrainService sysTrainService;
+
     @Autowired
-    public PersonalProfileController(SysUserService userService, SysAccountStatementService sysAccountStatementService) {
+    public PersonalProfileController(SysUserService userService, SysAccountStatementService sysAccountStatementService, SysTrainService sysTrainService) {
         this.userService = userService;
         this.sysAccountStatementService = sysAccountStatementService;
+        this.sysTrainService = sysTrainService;
     }
 
     /*
@@ -422,26 +427,14 @@ public class PersonalProfileController {
     */
     @RequestMapping(value = "/selectPageList",produces = "application/json;charset=utf-8")
     @ResponseBody
-    public JSONObject selectPageList(HttpSession session,int limit,int page,Integer moneyId,Integer consumerType,Integer limitDays){
-        JSONObject jsonObject = new JSONObject();
-        //查询之前调用
-        PageHelper.startPage(page,limit);
-        //获取当前登录的用户数据
-        SysUser user = (SysUser) session.getAttribute(ProjectParameter.SESSION_USER);
-        if (user!=null){
-            //查询当前的用户信息
-            SysMoney sysMoney = this.sysAccountStatementService.selectByUserId(Integer.valueOf(user.getUserId()));
-            //startPage后面紧跟的查询是分页查询
-            List<SysAccountStatement> sysAccountStatements = this.sysAccountStatementService.selectByType(sysMoney.getMoneyId(), consumerType, limitDays);
-            //用pageInfo对结果进行封装，传入连续显示的页数
-            PageInfo pageInfo = new PageInfo(sysAccountStatements,limit);
-            //new一个是历史fastjson对象
-            jsonObject.put("code",0);
-            jsonObject.put("msg","");
-            jsonObject.put("count",pageInfo.getTotal());
-            jsonObject.put("data",pageInfo.getList());
-        }
-        return jsonObject;
+    public LayuiTableData<SysAccountStatement> selectPageList(HttpSession session, int limit, int page, Integer moneyId, Integer consumerType, Integer limitDays){
+        return this.sysAccountStatementService.selectByType(limit, page, moneyId, consumerType, limitDays);
     }
 
+    /*查询票价*/
+    @RequestMapping(value = "/selectPageListT",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public LayuiTableData<trainVo> selectPageListT(int limit,int page,Integer minMoney,Integer maxMoney){
+        return this.sysTrainService.selectByreservFares(limit, page, minMoney, maxMoney);
+    }
 }

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询信息</title>
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <link rel="stylesheet" href="/css/myUtil.css">
+</head>
+<body>
+<!--主容器布局-->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md2">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    车站机构
+                    <button class="layui-btn layui-btn-xs layui-btn-primary" style="float:right;margin-top: 6px">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                    </button>
+                </div>
+                <div class="layui-card-body">
+                    <!--layuiTree占位-->
+                    <div id="treeSite"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md10">
+            <div class="layui-card">
+                <!--搜索栏-->
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5" id="formSearch" lay-filter="formSearch">
+                        <!--存放部门id-->
+                        <input type="hidden" name="siteId">
+                        <div class="layui-inline layui-show-xs-block">
+                            <label class="layui-form-label">车次查询:</label>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <input type="text" name="trainNumber" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <label class="layui-form-label">出发时间:</label>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <input type="text" id="trainOutTime" name="trainOutTime" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <label class="layui-form-label">状态:</label>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select lay-filter="filter"name="trainTypeId" id="trainTypeId"></select>
+                            </div>
+                        </div>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <button class="layui-btn" type="button" id="btnSearch">
+                                <i class="layui-icon layui-icon-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!--表格-->
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="tabQuery" lay-filter="tabQuery"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+<form class="layui-form" id="formSelect" lay-filter="formSelect" style="display: none;margin: 20px;"autocomplete="off">
+    <!--列车信息-->
+    <div class="leftDiv">
+        <span class="layui-bg-blue spenbody">始</span>
+        <input class="inputa" name="siteName">
+    </div>
+    <div class="zhoCenter">
+        <img src="/images/xyjt.PNG" height="21" width="150" class="imgs"/></div>
+    <div class="rightDiv">
+        <span class="layui-bg-red spenzho">终</span>
+        <input class="inputb" name="berthPlace">
+    </div>
+    <!--列车信息-->
+    <div class="divOred">
+        <div class="layui-inline layui-show-xs-block">
+            <label class="layui-form-label">出发时间:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="trainOutTime" class="layui-input" style="border: none" disabled =“disabled”>
+            </div>
+        </div>
+        <div class="layui-inline layui-show-xs-block" style="margin-top: 20px">
+            <label class="layui-form-label">预达时间:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="trainReachTime" class="layui-input" style="border: none" disabled =“disabled”>
+            </div>
+        </div>
+        <div class="layui-inline layui-show-xs-block" style="margin-top: 20px">
+            <label class="layui-form-label">票价:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="reserveFares" class="layui-input" style="border: none" disabled =“disabled”>
+            </div>
+        </div>
+    </div>
+    <!--操作栏-->
+    <div class="buttonbig">
+        <button type="button" class="layui-btn layui-btn-normal" id="btnReserve">订票</button>
+    </div>
+</form>
+<!--订票模态框-->
+<form class="layui-form" id="formReserve" lay-filter="formReserve" style="display: none"; autocomplete="off">
+    <!--确认信息-->
+    <div class="formReserv">
+        <!--隐藏ID-->
+        <input type="text" name="trainId" hidden><!--隐藏ID-->
+        <input type="text" name="userId" hidden><!--用户ID-->
+        <input type="text" name="reserveTime" id="reserveTime" hidden><!--订票时间-->
+        <div class="layui-inline layui-show-xs-block" style="margin-top: 25px">
+            <label class="layui-form-label">姓名:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="userName" class="layui-input" style="border: none" disabled =“disabled”>
+            </div>
+        </div>
+        <div class="layui-inline layui-show-xs-block" style="margin-top: 25px">
+            <label class="layui-form-label">列车:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="trainNumber" class="layui-input" style="border: none" disabled =“disabled”>
+            </div>
+        </div>
+        <div class="layui-inline layui-show-xs-block" style="position: absolute;top: 25px;right: -260px">
+            <label class="layui-form-label">编号:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="reserveNumber" class="layui-input" style="border: none" disabled =“disabled”>
+            </div>
+        </div>
+        <div class="layui-inline layui-show-xs-block" style="margin-top: 25px">
+            <label class="layui-form-label">票价:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="reserveFares" class="layui-input" style="border: none" disabled =“disabled”>
+            </div>
+        </div>
+        <div class="layui-inline layui-show-xs-block" style="margin-top: 25px">
+            <label class="layui-form-label">座位类型:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <select lay-filter="filter"  name="saddieName" id="saddieId"></select>
+            </div>
+        </div>
+        <div class="layui-inline layui-show-xs-block" style="position: absolute;top: 88px;right: -355px">
+            <label class="layui-form-label">支付方式:</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <select lay-filter="filter" name="reserveTypeName" id="reserveTypeId"></select>
+            </div>
+        </div>
+    </div>
+    <!--操作栏-->
+    <div class="buttontwo">
+        <button type="button" class="layui-btn layui-btn-normal" id="insertReserve">确认</button>
+    </div>
+</form>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/myUtils.js"></script>
+<script src="/lib/layui/layui.js"></script>
+<script>
+    var $,layerFormIndex,layer;
+    var getFullYear,getMonth,getDate;
+    layui.extend({
+        treeSelect:'/module/js/treeSelect', //下拉树
+    }).use(['treeSelect'],function (){
+        $ = layui.$;
+        layer = layui.layer;
+        var table = layui.table,
+            form = layui.form,
+            tree = layui.tree,
+            laydate = layui.laydate;
+
+        //表格渲染
+        tabQuery = table.render({
+            elem: '#tabQuery',//table元素
+            id: 'tabQuery',
+            url:'/home/selectPageList',
+            page:true,//开启分页
+            cols:[ [
+                {field: 'trainId',title: '排序',align: 'center',width:80},
+                {field: 'trainNumber',title: '车次',align: 'center',width:160},
+                {field: 'berthPlace',title: '起点站',align: 'center',width:160},
+                {field: 'siteName', title: '终点站',align: 'center',width:170},
+                {field: 'trainOutTime', title: '发车时间',width:180,align: 'center',templet:function (data){
+                    var st =new Date(data.trainOutTime);
+                    return st.getFullYear() + "-" + ((st.getMonth() + 1)<10?"0":"")+(st.getMonth() + 1) + "-" + (st.getDate()<10?"0":"")+st.getDate();
+                }},
+                {field: 'trainTypeName', title: '全部状态',align: 'center',width:180},
+                {field: 'carName', title: '列车类别',align: 'center',width:180},
+                {title: '查询列车',align: 'center',templet:function (data){
+                        return '<button class="layui-btn layui-btn-xs layui-btn-warm" onclick="queryTrain('+data.trainId+')">查询</button>';
+                }}
+            ] ],
+            limit: 10,//每页页数
+            limits: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]//定义每页页数选择下拉框
+        });
+
+        //查询按钮
+        $("#btnSearch").click(()=>{
+            //获取数据
+            let siteId = $('#formSearch [name="siteId"]').val();//车站ID
+            let trainNumber = $('#formSearch [name="trainNumber"]').val();//车次
+            let trainOutTime = $('#formSearch [name="trainOutTime"]').val();//出发时间
+            let trainTypeId = $('#formSearch [name="trainTypeId"]').val();//状态
+
+            //表格重置
+            table.reload('tabQuery',{
+                where:{
+                    siteId:siteId,
+                    trainNumber:trainNumber,
+                    trainOutTime:trainOutTime,
+                    trainTypeId:trainTypeId
+                }//设定异步数据接口的额外参数
+            });
+        });
+
+        //车站下拉框
+        $.post("/home/selectDepartmentForTree",function (jsonData){
+            tree.render({
+                elem:'#treeSite',  //绑定元素
+                id:'treeSite',
+                onlyIconControl: true,
+                data: jsonData,//数据
+                click: function (obj) {
+                    var id = obj.data.id;//部门id
+                    $('#treeDepartment .layui-tree-entry .layui-tree-main').css("background", "#ffffff");
+                    $('#treeDepartment [data-id="' + id + '"] .layui-tree-entry .layui-tree-main').css("background", "#dddddd");
+                    form.val('formSearch',{siteId:id});
+                    //触发搜索按钮
+                    $("#btnSearch").click();
+                }
+            });
+        });
+
+        //完工期限
+        laydate.render({
+            elem:"#trainOutTime",//指定元素
+            type:"date",
+            range:true
+        });
+
+        //状态下拉框
+        createH5Select("trainTypeId","/home/trainTypeId",{},function(data){
+            form.render('select');//刷新select选择渲染
+
+        });
+
+        //订票按钮
+        $("#btnReserve").click(()=>{
+            //获取ID
+            var trainId = $('#formReserve [name="trainId"]').val();
+            //发送请求
+            var layerIndex=layer.load();//打开加载层
+            $.post('/home/ReserveTrainId',{trainId:trainId},function (jsonMsg){
+                layer.close(layerIndex);//关闭加载层
+                if (jsonMsg.state){
+                    //打开模态框
+                    layerFormIndex = layer.open({
+                        type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                        skin:'layui-layer-molv',
+                        area:['1145px','450px'],
+                        title:'确认信息',
+                        content:$("#formReserve"),
+                        cancel:function (){
+                            layer.closeAll();
+                        }
+                    });
+                    //数据回填
+                    $('#formReserve [name="userId"]').val(jsonMsg.data.userId);//用户ID
+                    $('#formReserve [name="userName"]').val(jsonMsg.data.userName);//用户姓名
+                    $('#formReserve [name="trainId"]').val(jsonMsg.data.trainId);//列车ID
+                    $('#formReserve [name="trainNumber"]').val(jsonMsg.data.trainNumber);//列车编号
+                    $('#formReserve [name="reserveNumber"]').val(jsonMsg.msg);//票价编号
+                    $('#formReserve [name="reserveFares"]').val(jsonMsg.data.reserveFares);//票价
+                    //座位类型下拉框
+                    createH5Select("saddieId","/home/SysSaddieId",{},function(data){
+                        form.render('select');//刷新select选择渲染
+
+                    });
+                    //支付方式下拉框
+                    createH5Select("reserveTypeId","/home/SysReserveTypeId",{},function(data){
+                        form.render('select');//刷新select选择渲染
+
+                    });
+                } else {
+                    layer.msg(jsonMsg.msg,{icon:5});
+                }
+            });
+
+        });
+
+        //座位下拉框监听事件
+       form.on('select(filter)',function (data){
+           //获取选择的ID
+           let saddieId = data.value;
+           let trainId = $('#formReserve [name="trainId"]').val();
+           //提交数据
+           $.post('/home/SelectFilter',{saddieId:saddieId,trainId:trainId},function (jsonMsg){
+               if (jsonMsg.state){
+                   //获取票价
+                   $('#formReserve [name="reserveFares"]').val(jsonMsg.data);//票价
+               }
+           });
+       });
+
+        //确认信息---确认按钮
+        $("#insertReserve").click(()=>{
+            //获取数据
+            var trainId = $('#formReserve [name="trainId"]').val();//列车ID
+            var userId = $('#formReserve [name="userId"]').val();//用户ID
+            var reserveNumber = $('#formReserve [name="reserveNumber"]').val();//订票编号
+            var saddieId = $('#formReserve [name="saddieName"]').val();//座位类型
+            var reserveTypeId = $('#formReserve [name="reserveTypeName"]').val();//支付方式
+            var reserveFares = $('#formReserve [name="reserveFares"]').val();//支付方式
+            //获取当前订票时间
+            let jc = new Date();
+            var reserveTime=jc.getFullYear() + "-" + ((jc.getMonth() + 1)<10?"0":"")+(jc.getMonth() + 1) + "-" +
+                (jc.getDate()<10?"0":"")+jc.getDate()+" - "+jc.getHours()+":"+jc.getMinutes()+":"+jc.getSeconds();
+
+            //数据判断
+            if (saddieId===null || saddieId===undefined || saddieId===""){
+                layer.msg("请选择座位类型",{icon:5});
+                return;
+            }
+            if (reserveTypeId===null || reserveTypeId===undefined ||reserveTypeId===""){
+                layer.msg("请选择支付方式",{icon:5});
+                return;
+            }
+
+            //打开加载层
+            let layuiIndex = layer.load();
+            $.post('/home/inset',
+                {
+                    trainId:trainId,
+                    userId:userId,
+                    reserveNumber:reserveNumber,
+                    saddieId:saddieId,
+                    reserveTypeId:reserveTypeId,
+                    reserveTime:reserveTime,
+                    reserveFares:reserveFares
+                },
+                function (jsonMsg){
+                     //关闭加载层
+                    layer.close(layuiIndex);
+                    //返回数据
+                    if (jsonMsg.state){
+                        layer.msg(jsonMsg.msg,{icon:6});
+                        layer.closeAll();//关闭全部模态框
+                    }else{
+                        layer.msg(jsonMsg.msg,{icon:5});
+                    }
+            });
+        });
+    });
+
+    //打开查询按钮
+    function queryTrain(trainId){
+        // 发送请求
+        var layerIndex=layer.load();//打开加载层
+        $.post('/home/queryTrain',{trainId:trainId},function (jsonMsg){
+            layer.close(layerIndex);//关闭加载层
+            if (jsonMsg.state){
+                layerFormIndex = layer.open({
+                    type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                    skin:'layui-layer-molv',
+                    area:['800px','450px'],
+                    title:'列车信息',
+                    content:$("#formSelect"),
+                    cancel:function (){
+                        layer.closeAll();
+                    }
+                });
+                //回填数据
+                var st = new Date(jsonMsg.data.trainOutTime);
+                var jc = new Date(jsonMsg.data.trainReachTime);
+                var strDate=st.getFullYear() + "-" + ((st.getMonth() + 1)<10?"0":"")+(st.getMonth() + 1) + "-" +
+                    (st.getDate()<10?"0":"")+st.getDate()+" --- "+st.getHours()+":"+st.getMinutes();
+                var strDate1=jc.getFullYear() + "-" + ((jc.getMonth() + 1)<10?"0":"")+(jc.getMonth() + 1) + "-" +
+                    (jc.getDate()<10?"0":"")+jc.getDate()+" --- "+jc.getHours()+":"+jc.getMinutes();
+
+                $('#formReserve [name="trainId"]').val(jsonMsg.data.trainId);//起点
+                $('#formSelect [name="siteName"]').val(jsonMsg.data.siteName);//起点
+                $('#formSelect [name="berthPlace"]').val(jsonMsg.data.berthPlace);//终点
+                $('#formSelect [name="trainOutTime"]').val(strDate);//出发时间
+                $('#formSelect [name="trainReachTime"]').val(strDate1);//预计到达时间
+                $('#formSelect [name="reserveFares"]').val(jsonMsg.data.reserveFares);//票价
+            }else{
+                layer.msg(jsonMsg.msg,{icon:5});
+            }
+        });
+
+
+    }
+</script>
+</body>
+</html>

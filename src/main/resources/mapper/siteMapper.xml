@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.railwaystation.mapper.SysSiteMapper">
+  <resultMap id="BaseResultMap" type="com.gx.railwaystation.po.SysSite">
+    <id column="site_id" jdbcType="INTEGER" property="siteId"/>
+    <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+    <result column="site_name" jdbcType="VARCHAR" property="siteName"/>
+    <result column="site_sort" jdbcType="INTEGER" property="siteSort"/>
+  </resultMap>
+
+  <!--查询车站信息-->
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT * FROM sys_site ORDER BY site_sort
+  </select>
+</mapper>

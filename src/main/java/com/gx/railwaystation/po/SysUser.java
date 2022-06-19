@@ -48,10 +48,10 @@ public class SysUser implements Serializable {
      */
     private String userHead;
 
-    /*
-    *是否注销
-    */
-    private Integer  isCancel;
+    /**
+     * 是否注销
+     */
+    private Integer isCancel;
 
     private static final long serialVersionUID = 1L;
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.railwaystation.mapper.SysReserveMapper">
+  <resultMap id="BaseResultMap" type="com.gx.railwaystation.po.SysReserve">
+    <id column="reserve_id" jdbcType="INTEGER" property="reserveId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="train_id" jdbcType="INTEGER" property="trainId" />
+    <result column="reserve_type_id" jdbcType="INTEGER" property="reserveTypeId" />
+    <result column="reserve_number" jdbcType="VARCHAR" property="reserveNumber" />
+    <result column="reserve_time" jdbcType="TIMESTAMP" property="reserveTime" />
+    <result column="reserve_fares" jdbcType="DECIMAL" property="reserveFares" />
+    <result column="reserve_adidas" jdbcType="DECIMAL" property="reserveAdidas" />
+    <result column="reserve_ticket" jdbcType="BIT" property="reserveTicket" />
+    <result column="saddie_id" jdbcType="INTEGER" property="saddieId" />
+  </resultMap>
+
+  <resultMap id="BaseMap" type="com.gx.railwaystation.vo.reserveVo" extends="BaseResultMap">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <id column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="reserve_type_id" jdbcType="INTEGER" property="reserveTypeId" />
+    <result column="reserve_type_name" jdbcType="VARCHAR" property="reserveTypeName" />
+    <result column="saddie_id" jdbcType="INTEGER" property="saddieId" />
+    <result column="saddie_name" jdbcType="VARCHAR" property="saddieName" />
+    <result column="train_number" jdbcType="VARCHAR" property="trainNumber" />
+  </resultMap>
+
+  <!--查询下拉数据-->
+  <select id="SysSaddieId" resultMap="BaseMap" parameterType="com.gx.railwaystation.vo.reserveVo">
+    select saddie_id,saddie_name from sys_saddie
+  </select>
+
+  <!--查询支付类型数据-->
+  <select id="SysReserveTypeId" resultMap="BaseMap" parameterType="com.gx.railwaystation.vo.reserveVo">
+    SELECT reserve_type_id,reserve_type_name FROM sys_reserve_type
+  </select>
+
+  <!--新增数据-->
+  <insert id="inset" parameterType="com.gx.railwaystation.po.SysReserve">
+    insert into sys_reserve
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="trainId != null">train_id,</if>
+      <if test="userId != null">user_id,</if>
+      <if test="reserveNumber != null">reserve_number,</if>
+      <if test="saddieId != null">saddie_id,</if>
+      <if test="reserveTypeId != null">reserve_type_id,</if>
+      <if test="reserveTime != null">reserve_time,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="trainId != null">#{trainId,jdbcType=INTEGER},</if>
+      <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+      <if test="reserveNumber != null">#{reserveNumber,jdbcType=VARCHAR},</if>
+      <if test="saddieId != null">#{saddieId,jdbcType=INTEGER},</if>
+      <if test="reserveTypeId != null">#{reserveTypeId,jdbcType=INTEGER},</if>
+      <if test="reserveTime != null">#{reserveTime,jdbcType=TIMESTAMP},</if>
+    </trim>
+  </insert>
+</mapper>

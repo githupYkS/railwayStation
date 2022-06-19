@@ -51,7 +51,8 @@
 </div>
 <div class="leftnav">
     <div class="leftnav-title" id="home"><strong><span class="layui-icon-username"></span>用户主界面</strong></div>
-    <h2><span class="layui-icon-theme"></span>查询信息</h2>
+    <h2 id="userQuery"><span class="layui-icon-theme"></span>查询信息</h2>
+    <h2 id="updateFare"><span class="layui-icon-theme"></span>车票信息</h2>
 </div>
 <ul class="bread">
     <li><a target="right" class="icon-home"> 首页</a></li>
@@ -107,6 +108,15 @@
     //修改密码页面
     $("#passwd").click(()=>{
         $("#content").attr("src","/home/passwd");
+    });
+
+    //查询信息
+    $("#userQuery").click(()=>{
+        $("#content").attr("src","/home/userQuery");
+    });
+    //车票信息
+    $("#updateFare").click(()=>{
+        $("#content").attr("src","/amend/updateFare");
     });
 
     //个人中心

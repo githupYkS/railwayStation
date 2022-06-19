@@ -3,7 +3,9 @@ package com.gx.railwaystation.service;
 import com.gx.railwaystation.mapper.SysMoneyMapper;
 import com.gx.railwaystation.po.SysAccountStatement;
 import com.gx.railwaystation.po.SysMoney;
+import com.gx.railwaystation.vo.LayuiTableData;
 import com.gx.railwaystation.vo.StatementVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,8 +38,8 @@ public interface SysAccountStatementService {
      */
     List<StatementVo> selectStatement(Integer userId);
 
-    /**
-     * 查询当前的点击事件，分类
-     */
-    List<SysAccountStatement> selectByType(Integer moneyId,Integer consumerType,Integer limitDays);
+    /*
+    *分页查询数据
+    */
+    LayuiTableData<SysAccountStatement> selectByType(int limit, int page, Integer moneyId, Integer consumerType, Integer limitDays);
 }

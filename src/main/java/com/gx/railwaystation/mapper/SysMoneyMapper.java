@@ -3,6 +3,8 @@ package com.gx.railwaystation.mapper;
 import com.gx.railwaystation.po.SysMoney;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+
 @Repository
 public interface SysMoneyMapper {
 

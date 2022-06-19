@@ -90,14 +90,6 @@
     border-radius: 200px;
     padding: 10px 0;
 }
-
-.top_card span {
-    display: inline-block;
-    padding-left: 230px;
-    margin-top: -110px;
-    font-size: 16px;
-}
-
 .my_account i {
     display: inline-block;
     margin: 24px 0;

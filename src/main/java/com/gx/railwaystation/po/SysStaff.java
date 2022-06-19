@@ -1,6 +1,7 @@
 package com.gx.railwaystation.po;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class SysStaff implements Serializable {
     /**
@@ -53,7 +54,10 @@ public class SysStaff implements Serializable {
      */
     private String staffHead;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 员工余额
+     */
+    private BigDecimal staffWallet;
 
     public Integer getStaffId() {
         return staffId;
@@ -135,65 +139,28 @@ public class SysStaff implements Serializable {
         this.staffHead = staffHead;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        SysStaff other = (SysStaff) that;
-        return (this.getStaffId() == null ? other.getStaffId() == null : this.getStaffId().equals(other.getStaffId()))
-            && (this.getPositionId() == null ? other.getPositionId() == null : this.getPositionId().equals(other.getPositionId()))
-            && (this.getStaffAccount() == null ? other.getStaffAccount() == null : this.getStaffAccount().equals(other.getStaffAccount()))
-            && (this.getStaffPassword() == null ? other.getStaffPassword() == null : this.getStaffPassword().equals(other.getStaffPassword()))
-            && (this.getStaffSalt() == null ? other.getStaffSalt() == null : this.getStaffSalt().equals(other.getStaffSalt()))
-            && (this.getStaffSex() == null ? other.getStaffSex() == null : this.getStaffSex().equals(other.getStaffSex()))
-            && (this.getStaffName() == null ? other.getStaffName() == null : this.getStaffName().equals(other.getStaffName()))
-            && (this.getStaffPhone() == null ? other.getStaffPhone() == null : this.getStaffPhone().equals(other.getStaffPhone()))
-            && (this.getStaffIdentification() == null ? other.getStaffIdentification() == null : this.getStaffIdentification().equals(other.getStaffIdentification()))
-            && (this.getStaffHead() == null ? other.getStaffHead() == null : this.getStaffHead().equals(other.getStaffHead()));
+    public BigDecimal getStaffWallet() {
+        return staffWallet;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getStaffId() == null) ? 0 : getStaffId().hashCode());
-        result = prime * result + ((getPositionId() == null) ? 0 : getPositionId().hashCode());
-        result = prime * result + ((getStaffAccount() == null) ? 0 : getStaffAccount().hashCode());
-        result = prime * result + ((getStaffPassword() == null) ? 0 : getStaffPassword().hashCode());
-        result = prime * result + ((getStaffSalt() == null) ? 0 : getStaffSalt().hashCode());
-        result = prime * result + ((getStaffSex() == null) ? 0 : getStaffSex().hashCode());
-        result = prime * result + ((getStaffName() == null) ? 0 : getStaffName().hashCode());
-        result = prime * result + ((getStaffPhone() == null) ? 0 : getStaffPhone().hashCode());
-        result = prime * result + ((getStaffIdentification() == null) ? 0 : getStaffIdentification().hashCode());
-        result = prime * result + ((getStaffHead() == null) ? 0 : getStaffHead().hashCode());
-        return result;
+    public void setStaffWallet(BigDecimal staffWallet) {
+        this.staffWallet = staffWallet;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", staffId=").append(staffId);
-        sb.append(", positionId=").append(positionId);
-        sb.append(", staffAccount=").append(staffAccount);
-        sb.append(", staffPassword=").append(staffPassword);
-        sb.append(", staffSalt=").append(staffSalt);
-        sb.append(", staffSex=").append(staffSex);
-        sb.append(", staffName=").append(staffName);
-        sb.append(", staffPhone=").append(staffPhone);
-        sb.append(", staffIdentification=").append(staffIdentification);
-        sb.append(", staffHead=").append(staffHead);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "SysStaff{" +
+                "staffId=" + staffId +
+                ", positionId=" + positionId +
+                ", staffAccount='" + staffAccount + '\'' +
+                ", staffPassword='" + staffPassword + '\'' +
+                ", staffSalt='" + staffSalt + '\'' +
+                ", staffSex=" + staffSex +
+                ", staffName='" + staffName + '\'' +
+                ", staffPhone='" + staffPhone + '\'' +
+                ", staffIdentification='" + staffIdentification + '\'' +
+                ", staffHead='" + staffHead + '\'' +
+                ", staffWallet=" + staffWallet +
+                '}';
     }
 }
