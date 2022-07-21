@@ -66,14 +66,14 @@ public class HomeController {
     }
 
     /**
-     * 售票员页面
+     * 管理员页面
      */
     @RequestMapping("/staff")
     public String staff(Model model, HttpSession session){
         //查询当前登录账号的姓名
         SysStaff staff = (SysStaff) session.getAttribute(ProjectParameter.SESSION_staff);
         model.addAttribute("msg",staff.getStaffName());
-        return "conductor/staff";
+        return "administrator/staff";
     }
 
     /**
@@ -117,6 +117,75 @@ public class HomeController {
         model.addAttribute("msg",staff.getStaffName());
         return "conductor/index.html";
     }
+
+    /*
+    *售票员主页面
+    */
+    @RequestMapping("/conductorWelcome")
+    public String conductorWelcome(HttpSession session,Model model){
+        //从session中获取当前售票员的主页面信息
+        SysStaff sysStaff = (SysStaff) session.getAttribute(ProjectParameter.SESSION_staff);
+        if (sysStaff!=null){
+            model.addAttribute("user",sysStaff);
+        }else {
+            throw new RuntimeException("请登录后再访问");
+        }
+        return "conductor/welcome.html";
+    }
+
+    /*
+    *售票员查询信息页面
+    */
+    @RequestMapping("/searchinformation")
+    public String searchinformation(HttpSession session){
+        //从session中获取查询出来的数据
+        SysStaff sysStaff = (SysStaff) session.getAttribute(ProjectParameter.SESSION_staff);
+        if (sysStaff==null){
+            throw new RuntimeException("查看此页面请先登录");
+        }
+        return "conductor/searchinformation.html";
+    }
+
+    /**
+     * 售票员售票信息页面
+     */
+    @RequestMapping("/theticketmanagement")
+    public String theticketmanagement(HttpSession session){
+        //从session中获取查询出来的数据
+        SysStaff sysStaff = (SysStaff) session.getAttribute(ProjectParameter.SESSION_staff);
+        if (sysStaff==null){
+            throw new RuntimeException("查看此页面请先登录");
+        }
+        return "conductor/theticketmanagement.html";
+    }
+
+
+    /**
+     * 售票员统计信息页面
+     */
+    @RequestMapping("/statisticalinformation")
+    public String statisticalinformation(HttpSession session){
+        //从session中获取查询出来的数据
+        SysStaff sysStaff = (SysStaff) session.getAttribute(ProjectParameter.SESSION_staff);
+        if (sysStaff==null){
+            throw new RuntimeException("查看此页面请先登录");
+        }
+        return "conductor/statisticalinformation.html";
+    }
+
+    /*
+    *售票员退票管理页面
+    */
+    @RequestMapping("/Refund")
+    public String Refund(HttpSession session){
+        //从session中获取数据，判断是否已经登录
+        SysStaff sysStaff = (SysStaff) session.getAttribute(ProjectParameter.SESSION_staff);
+        if (sysStaff==null){
+            throw new RuntimeException("查看此页面请先登录");
+        }
+        return "conductor/Refund.html";
+    }
+
 
     /**
      *  分页查询数据

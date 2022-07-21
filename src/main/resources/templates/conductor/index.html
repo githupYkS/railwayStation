@@ -4,10 +4,65 @@
     <meta charset="UTF-8">
     <title>railwayStation</title>
     <link href="/css/adminStyle.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
     <link rel="stylesheet" href="/css/myUtil.css">
+    <link rel="stylesheet" href="/css/user.css">
+    <style>
+        .header{
+            background-image: linear-gradient(to right, black , green);
+        }
+        .conter{
+            width: 100%;
+            height: 50px;
+            background-color: #9F9F9F;
+        }
+        .cno{
+            float: left;
+            padding-left: 40px;
+            width: 100px;
+            height: 50px;
+            background-color: #9F9F9F;
+            border-right: 1px solid white;
+        }
+        .conter ul li span{
+            color: black;
+            font-size: smaller;
+            line-height: 50px;
+            text-align: center;
+            display: inline;
+        }
+        .header{
+            height: 40px;
+            line-height: 40px;
+        }
+        .top-link{
+            height: 40px;
+            line-height: 40px;
+        }
+        .logo img{
+            height: 40px;
+            line-height: 40px;
+            position: fixed;
+        }
+        .on{
+            background-color: white;
+        }
+
+        .right_nav {
+            margin-top: 5px;
+            height: 700px;
+            width: 1700px;
+        }
+        .right_nav iframe {
+            height: 100%;
+            width: 100%;
+            background: white;
+        }
+    </style>
 </head>
 <body>
-<div>
+<!--头部内容区-->
+<div class="header">
   <!--管理员头像-->
   <div class="logo">
     售票员头像
@@ -15,27 +70,167 @@
   </div>
   <div class="fr top-link">
     <a target="mainCont" title="DeathGhost"><i class="adminIcon"></i><span>您好！售票员：[[${msg}]]</span></a>
-    <a target="mainCont" title="修改密码"><i class="revisepwdIcon" id="updatePassword"></i><span>修改密码</span></a>
+    <a target="mainCont" title="修改密码" id="editpassword"><i class="revisepwdIcon"></i><span>修改密码</span></a>
     <a title="安全退出" style="background:rgb(60,60,60);" id="loginOut"><i class="quitIcon"></i><span class="out">安全退出</span></a>
   </div>
 </div>
-<div class="menu-list">
+<!--上层导航栏-->
+<div class="conter">
     <ul>
-        <li class="menu-list-title on" id="search_information"><span>查询信息</span></li>
-        <li class="menu-list-title" id="the_ticket_management"><span>售票管理</span></li>
-        <li class="menu-list-title" id="statistical_information"><span>统计信息</span></li>
-        <li class="menu-list-title" id="Refund"><span>退票管理</span></li>
+        <li class="cno on" id="home_page"><span>主页面</span></li>
+        <li class="cno" id="search_information"><span>查询信息</span></li>
+        <li class="cno" id="the_ticket_management"><span>售票管理</span></li>
+        <li class="cno" id="statistical_information"><span>统计信息</span></li>
+        <li class="cno" id="Refund"><span>退票管理</span></li>
     </ul>
 </div>
-<ul class="bread">
-    <li><a target="right" class="icon-home"> 首页</a></li>
-    <li><a id="a_leader_txt">订单管理</a></li>
-</ul>
-<div class="admin">
-    <iframe scrolling="auto" rameborder="0" name="right" width="100%" height="100%"></iframe>
+<!--下方内容区-->
+<div class="layui-col-md10">
+    <div class="right_nav">
+        <iframe th:src="@{/home/conductorWelcome}" frameborder="0" scrolling="yes"></iframe>
+    </div>
+</div>
+<!--修改密码弹出层-->
+<div>
+    <form class="layui-form" id="formEditPassword" style="display: none;margin: 20px;" autocomplete="off">
+
+        <input type="reset" hidden>
+        <div style="padding: 20px;">
+            <label>
+                输 入 原 密 码 ：
+                <input type="password" id="oldPassword">
+                <label id="oldTips"></label>
+            </label>
+        </div>
+        <div style="padding: 20px;">
+            <label>
+                输 入 新 密 码 ：
+                <input type="password" id="newPassword" disabled>
+            </label>
+        </div>
+        <div style="padding: 20px;">
+            <label>
+                确 认 新 密 码 ：
+                <input type="password" id="confirmPassword" disabled>
+            </label>
+        </div>
+
+        <div class="layui-btn-container" style="text-align: center">
+            <button type="button" class="layui-btn" id="btn_editPassword">确认</button>
+            <button type="reset" class="layui-btn layui-bg-red">重置</button>
+        </div>
+    </form>
 </div>
 </body>
 <script src="/js/jquery.js"></script>
+<script src="/js/myUtils.js"></script>
+<script src="/lib/layui/layui.js"></script>
 <script type="text/javascript">
+    //点击添加高亮效果（li元素）
+    $("li").click(function () {
+        //给当前元素添加高亮效果
+        for (var x in $("li")) {
+            $("li").eq(x).removeClass("on");
+        }
+        $(this).addClass("on");
+    })
+    //退出登录
+    $("#loginOut").click(()=>{
+        $.post('/home/loginOut',()=>{
+            window.location.replace("/login");
+        })
+    });
+
+    //售票员主页面
+    $("#home_page").click(()=>{
+        $("iframe").attr("src","/home/conductorWelcome");
+    });
+
+    //查询信息页面
+    $("#search_information").click(()=>{
+        $("iframe").attr("src","/home/searchinformation");
+    });
+
+    //售票员售票管理页面
+    $("#the_ticket_management").click(()=>{
+        $("iframe").attr("src","/home/theticketmanagement");
+    });
+
+    //售票员统计信息页面
+    $("#statistical_information").click(()=>{
+        $("iframe").attr("src","/home/theticketmanagement");
+    });
+
+    //售票员退票管理页面
+    $("#Refund").click(()=>{
+       $("iframe").attr("src","/home/Refund");
+    });
+
+    //声明layui的作用
+    layui.use(()=>{
+        layer = layui.layer;
+        form = layui.form;
+
+
+        //打开修改弹出层
+        $("#editpassword").click(()=>{
+            layerFormIndex = layer.open({
+                type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                skin:'layui-layer-molv',
+                area:['475px','400px'],
+                title:'修改密码',
+                content:$("#formEditPassword"),
+                cancel:function (){
+                    layer.closeAll();
+                }
+            });
+        });
+
+        //高亮效果（修改密码输入框）
+        $("#newPassword").focus(function () {
+            $(this).css("border", "1px deepskyblue solid");
+        })
+
+        //移除高亮效果（修改密码输入框）
+        $("#confirmPassword").blur(function () {
+            $(this).css("border", "1px #ccc solid");
+        })
+
+        //原密码失去焦点事件
+        $("#oldPassword").blur(()=>{
+            //获取输入的密码
+            let oldPassword=$("#oldPassword").val();
+            //判断现在的密码是否等于数据库的密码
+            $.post("/conductor/selectPassword",{oldPassword:oldPassword},(jsonMsg)=>{
+                if (jsonMsg.state){
+                    if (jsonMsg.code==0){
+                        //开启新密码输入框和确认密码输入框
+                        $("#newPassword").removeAttr("disable");
+                        $("#reregpass").removeAttr("disable");
+                        //成功显示绿色文字添加
+                        $("#oldTips").text("密码正确");
+                        $("#oldTips").removeClass("text-danger").addClass("text-success");
+                    }else if (jsonMsg.code==1){
+                        //禁用新密码和确认密码
+                        $("#newPassword").attr("disable");
+                        $("#reregpass").attr("disable");
+                        //失败显示红色文字添加
+                        $("#oldTips").text("密码错误");
+                        $("#oldTips").removeClass("text-success").addClass("text-danger");
+                    }
+                }else {
+                    layer.msg(jsonMsg.msg,{icon:5});
+                }
+            });
+        });
+
+        //提交修改后的数据
+        $("#btn_editPassword").click(()=>{
+            //获取旧密码
+
+            //获取确认密码
+        });
+    });
+
 </script>
 </html>

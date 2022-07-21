@@ -75,6 +75,7 @@ public class PersonalProfileController {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS_");
 
+        System.out.println(portraitFile);
         //判断文件存放目录是否存在
         File uploadDir = new File(UPLOAD_PATH);
         if (!uploadDir.exists()) {
@@ -159,7 +160,6 @@ public class PersonalProfileController {
         SysUser user = (SysUser) session.getAttribute(ProjectParameter.SESSION_USER);
         if (user!=null){
             String md5Pass = MD5Util.getMD5(oldPassword+user.getUserSalt());
-            jsonMsg.setState(true);
             if (user.getUserPassword().equals(md5Pass)){
                 jsonMsg.setState(true);
                 jsonMsg.setCode(0);

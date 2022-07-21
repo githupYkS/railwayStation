@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面</title>
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <blockquote class="layui-elem-quote">
+                        <span th:text="${'欢迎:'+user.staffAccount}"></span>
+                        <span class="x-red" th:text="${user.staffName}"></span>！
+                        当前时间:<span id="spanTime"></span>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">开发团队</div>
+                <div class="layui-card-body ">
+                    <table class="layui-table">
+                        <tbody>
+                        <tr>
+                            <th>开发者</th>
+                            <td>飒飒(2386912804@qq.com)</td>
+                            <td>一代名将，踏入IT行业</td>
+                        </tr>
+                        <tr>
+                            <th>开发者</th>
+                            <td>半城烟沙(2873717298@qq.com)</td>
+                            <td>为了一日三餐，拼了老命</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <style id="welcome_style"></style>
+    </div>
+</div>
+
+<script src="/js/jquery.js" type="text/javascript"></script>
+<script src="/lib/layui/layui.js" type="text/javascript"></script>
+<script>
+    var spanTime=document.getElementById("spanTime");
+    setspanTime();
+    var timer=setInterval(setspanTime,1000);
+    function setspanTime(){
+        var time=new Date();
+        spanTime.innerText=time.getFullYear() + "-" + (time.getMonth()+1) + "-" + time.getDate() + " " +
+            time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+    }
+
+    $.post('/home/information',function (jsonMsg){
+        if (jsonMsg.state){
+            if (jsonMsg.data.userName!=null){
+                if (jsonMsg.data.userHead===null){
+                    alert("请到个人中心完善信息");
+                }
+            }else{
+                alert('请到个人中心完善信息');
+            }
+        }
+    });
+
+</script>
+</body>
+</html>
