@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>railwayStation</title>
+    <link href="/css/adminStyle.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/css/myUtil.css">
+</head>
+<body>
+<div>
+  <!--管理员头像-->
+  <div class="logo">
+    售票员头像
+    <img/>
+  </div>
+  <div class="fr top-link">
+    <a target="mainCont" title="DeathGhost"><i class="adminIcon"></i><span>您好！售票员：[[${msg}]]</span></a>
+    <a target="mainCont" title="修改密码"><i class="revisepwdIcon" id="updatePassword"></i><span>修改密码</span></a>
+    <a title="安全退出" style="background:rgb(60,60,60);" id="loginOut"><i class="quitIcon"></i><span class="out">安全退出</span></a>
+  </div>
+</div>
+<div class="menu-list">
+    <ul>
+        <li class="menu-list-title on" id="search_information"><span>查询信息</span></li>
+        <li class="menu-list-title" id="the_ticket_management"><span>售票管理</span></li>
+        <li class="menu-list-title" id="statistical_information"><span>统计信息</span></li>
+        <li class="menu-list-title" id="Refund"><span>退票管理</span></li>
+    </ul>
+</div>
+<ul class="bread">
+    <li><a target="right" class="icon-home"> 首页</a></li>
+    <li><a id="a_leader_txt">订单管理</a></li>
+</ul>
+<div class="admin">
+    <iframe scrolling="auto" rameborder="0" name="right" width="100%" height="100%"></iframe>
+</div>
+</body>
+<script src="/js/jquery.js"></script>
+<script type="text/javascript">
+</script>
+</html>

@@ -142,6 +142,16 @@
 						layer.msg(jsonMsg.msg, {icon: 5});
 					}
 				}
+				//如何code==2,就跳转到用户页面
+				if (jsonMsg.code==3){
+					//数据正常
+					if (jsonMsg.state) {
+						layer.msg(jsonMsg.msg, {icon: 6});
+						window.location.replace("/home/conductor");
+					} else {
+						layer.msg(jsonMsg.msg, {icon: 5});
+					}
+				}
 			})
 		});
 
@@ -179,7 +189,7 @@
 				layer.close(layerIndex);
 				if (jsonMsg.state){
 					layer.msg(jsonMsg.msg,{icon:6});
-					$(".alt-2").click();//新增后按钮
+					$(".alt-2").click();//新增点击按钮
 				}else {
 					layer.msg(jsonMsg.msg,{icon:5});
 					$("#regname").val("");//用户账号为空

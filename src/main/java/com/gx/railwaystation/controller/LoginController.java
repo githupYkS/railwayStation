@@ -51,7 +51,7 @@ public class LoginController {
                 SysUser user = this.sysUserService.userAccount(userAccount);
                 //判断哪个查询获取到数据
                 if (staff!=null){
-                    //员工验证密码 md5(用户输入的密码+盐)
+                    /*//员工验证密码 md5(用户输入的密码+盐)
                     String md5Pass = MD5Util.getMD5(userPassword+staff.getStaffSalt());
                     if (staff.getStaffPassword().equals(md5Pass)){
                         //登录成功
@@ -62,6 +62,34 @@ public class LoginController {
                         jsonMsg.setMsg("登录成功");
                     }else{
                         jsonMsg.setMsg("密码错误");
+                    }*/
+
+                    if(staff.getPositionId()==1){
+                        //管理员密码登录验证
+                        String md5Pass = MD5Util.getMD5(userPassword+staff.getStaffSalt());
+                        if (staff.getStaffPassword().equals(md5Pass)){
+                            //登录成功
+                            //把staff保存到session中
+                            session.setAttribute(ProjectParameter.SESSION_staff,staff);
+                            jsonMsg.setState(true);//成功
+                            jsonMsg.setCode(1);
+                            jsonMsg.setMsg("登录成功");
+                        }else{
+                            jsonMsg.setMsg("密码错误");
+                        }
+                    }else if (staff.getPositionId()==2){
+                        //售票员密码登录验证
+                        String md5Pass = MD5Util.getMD5(userPassword+staff.getStaffSalt());
+                        if (staff.getStaffPassword().equals(md5Pass)){
+                            //登录成功
+                            //把staff保存到session中
+                            session.setAttribute(ProjectParameter.SESSION_staff,staff);
+                            jsonMsg.setState(true);//成功
+                            jsonMsg.setCode(3);
+                            jsonMsg.setMsg("登录成功");
+                        }else{
+                            jsonMsg.setMsg("密码错误");
+                        }
                     }
                 }
                 if (user!=null){

@@ -107,6 +107,17 @@ public class HomeController {
         return "user/user";
     }
 
+    /*
+    *售票员页面
+    */
+    @RequestMapping("/conductor")
+    public String conductor(HttpSession session,Model model){
+        //查询当前的售票员数据并直接返回页面
+        SysStaff staff = (SysStaff) session.getAttribute(ProjectParameter.SESSION_staff);
+        model.addAttribute("msg",staff.getStaffName());
+        return "conductor/index.html";
+    }
+
     /**
      *  分页查询数据
      */
