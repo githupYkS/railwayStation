@@ -60,7 +60,7 @@
         </h1>
     </div>
     <div class="head-l">
-        <a class="button button-little bg-green" target="_blank"><span class="layui-icon-top"></span>返回首页</a>
+        <a id="home" class="button button-little bg-green" target="_blank"><span class="layui-icon-top"></span>返回首页</a>
         <a class="button button-little bg-red" id="loginOut"><span class="layui-icon-return"></span>退出登录</a>
     </div>
     <p id="date"></p>
@@ -143,6 +143,11 @@
                 window.location.replace("/login");
             });
         });
+
+        //返回首页
+        $("#home").click(()=>{
+            $("iframe").attr("src","/home/personalCenter")
+        })
 
         //个人中心
         $("#personal_center").click(()=>{

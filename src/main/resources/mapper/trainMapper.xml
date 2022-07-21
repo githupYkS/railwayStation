@@ -21,6 +21,11 @@
     <result column="train_type_name" jdbcType="VARCHAR" property="trainTypeName" />
   </resultMap>
 
+   <resultMap id="AcceptMapper" type="com.gx.railwaystation.vo.MoneyPlace" extends="BaseResultMap">
+     <result column="site_name" property="siteName" jdbcType="VARCHAR"/>
+     <result column="berth_place" property="berthPlace" jdbcType="VARCHAR"/>
+   </resultMap>
+
   <resultMap id="BoasTypeId" type="com.gx.railwaystation.vo.trainVo" extends="BaseResultMap">
     <id column="car_id" jdbcType="INTEGER" property="carId" />
     <result column="car_name" jdbcType="VARCHAR" property="carName" />
@@ -31,6 +36,7 @@
     <result column="berth_id" jdbcType="INTEGER" property="berthId" />
     <result column="berth_place" jdbcType="VARCHAR" property="berthPlace" />
     <result column="reserve_id" jdbcType="INTEGER" property="reserveId" />
+    <result column="saddie_money" jdbcType="DECIMAL" property="saddieMoney" />
   </resultMap>
 
   <!--查询列车状态下拉框-->
@@ -158,57 +164,85 @@
     where train_id = #{trainId,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByreservFares" resultMap="BoasTypeId">
+  <!--票价查询-->
+  <select id="selectByMoney" resultMap="AcceptMapper">
+    <!--MyBatis Bind计算分页开始索引-->
+    <bind name="startIndex" value="(page-1) * limit"/>
+    SELECT sys_train.train_out_time,
+    sys_train.train_reach_time,
+    sys_train.train_number,sys_train.reserve_fares,
+    sys_site.site_name,sys_berth.berth_place
+    FROM sys_train
+    INNER JOIN sys_site ON sys_train.site_id = sys_site.site_id
+    INNER JOIN sys_berth ON sys_train.berth_id = sys_berth.berth_id
+    <where>
+        <if test="minMoney!=null and maxMoney!=null">
+          sys_train.reserve_fares &gt;= #{minMoney,jdbcType=DECIMAL}
+          AND sys_train.reserve_fares &lt;= #{minMoney,jdbcType=DECIMAL}
+        </if>
+    </where>
+    ORDER BY sys_train.train_id
+    LIMIT #{startIndex,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+  </select>
+
+  <!--票价总价-->
+  <select id="countAllMoney" resultType="java.lang.Integer">
+    SELECT COUNT(sys_train.train_id) FROM sys_train
+    INNER JOIN sys_site ON sys_train.site_id = sys_site.site_id
+    INNER JOIN sys_berth ON sys_train.berth_id = sys_berth.berth_id
+    <where>
+      <if test="minMoney!=null and maxMoney!=null">
+          sys_train.reserve_fares &gt;= #{minMoney,jdbcType=DECIMAL}
+          AND sys_train.reserve_fares &lt;= #{minMoney,jdbcType=DECIMAL}
+      </if>
+    </where>
+  </select>
+
+  <!--查询分页数据-->
+  <select id="selectPageMosize" resultMap="BoasTypeId">
     <!--MyBatis Bind计算分页开始索引-->
     <bind name="startIndex" value="(page-1) * limit"/>
     SELECT
+    sys_train.train_id,
+    sys_train.site_id,
+    sys_train.car_id,
+    sys_train.moment_id,
+    sys_train.train_type_id,
+    sys_train.berth_id,
+    sys_site.site_id,
+    sys_berth.berth_id,
+    sys_car.car_id,
     sys_train.train_out_time,
-    sys_train.reserve_fares,
     sys_train.train_reach_time,
-    sys_train.train_number,
-    sys_site.site_name,
-    sys_berth.berth_place
-    FROM
-    sys_train
-    INNER JOIN sys_site
-    ON sys_train.site_id = sys_site.site_id
-    INNER JOIN sys_train_type
-    ON sys_train.train_type_id = sys_train_type.train_type_id
-    INNER JOIN sys_car
-    ON sys_train.car_id = sys_car.car_id
-    INNER JOIN sys_berth
-    ON sys_train.berth_id = sys_berth.berth_id
+    sys_train.train_number,sys_train.reserve_fares,
+    sys_site.site_name,sys_berth.berth_place
+    FROM sys_train
+    INNER JOIN sys_site ON sys_train.site_id = sys_site.site_id
+    INNER JOIN sys_berth ON sys_train.berth_id = sys_berth.berth_id
+    INNER JOIN sys_reserve ON sys_train.reserve_id = sys_reserve.reserve_id
+    INNER JOIN sys_saddie ON sys_reserve.saddie_id = sys_saddie.saddie_id
+    INNER JOIN sys_car ON sys_train.car_id = sys_car.car_id
     <where>
-      <if test="minMoney!=null and minMoney !='' ">
-        sys_train.reserve_fares &gt;= #{minMoney,jdbcType=INTEGER}
-      </if>
-      <if test="maxMoney!=null and maxMoney !=''">
-        AND sys_train.reserve_fares &lt;= #{maxMoney,jdbcType=INTEGER}
+      <if test="berthId!=null">
+        sys_berth.berth_id = #{berthId,jdbcType=INTEGER}
       </if>
     </where>
     ORDER BY sys_train.train_id
     LIMIT #{startIndex,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
   </select>
 
-  <select id="countAllMon" resultType="java.lang.Integer">
-    SELECT
-    COUNT(sys_train.train_id)
-    FROM
-    sys_train
-    INNER JOIN sys_site
-    ON sys_train.site_id = sys_site.site_id
-    INNER JOIN sys_train_type
-    ON sys_train.train_type_id = sys_train_type.train_type_id
-    INNER JOIN sys_car
-    ON sys_train.car_id = sys_car.car_id
-    INNER JOIN sys_berth
-    ON sys_train.berth_id = sys_berth.berth_id
+  <!--查询分页总条数-->
+  <select id="countAllMosize" resultType="java.lang.Integer">
+    SELECT COUNT(sys_train.train_id)
+    FROM sys_train
+    INNER JOIN sys_site ON sys_train.site_id = sys_site.site_id
+    INNER JOIN sys_berth ON sys_train.berth_id = sys_berth.berth_id
+    INNER JOIN sys_reserve ON sys_train.reserve_id = sys_reserve.reserve_id
+    INNER JOIN sys_saddie ON sys_reserve.saddie_id = sys_saddie.saddie_id
+    INNER JOIN sys_car ON sys_train.car_id = sys_car.car_id
     <where>
-      <if test="minMoney!=null and minMoney !='' ">
-        sys_train.reserve_fares &gt;= #{minMoney,jdbcType=INTEGER}
-      </if>
-      <if test="maxMoney!=null and maxMoney !=''">
-        AND sys_train.reserve_fares &lt;= #{maxMoney,jdbcType=INTEGER}
+      <if test="berthId!=null">
+        sys_berth.berth_id = #{berthId,jdbcType=INTEGER}
       </if>
     </where>
   </select>

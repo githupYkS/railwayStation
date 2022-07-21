@@ -277,6 +277,7 @@
                         form.render('select');//刷新select选择渲染
 
                     });
+
                     //支付方式下拉框
                     createH5Select("reserveTypeId","/home/SysReserveTypeId",{},function(data){
                         form.render('select');//刷新select选择渲染
@@ -326,7 +327,6 @@
                 layer.msg("请选择支付方式",{icon:5});
                 return;
             }
-
             //打开加载层
             let layuiIndex = layer.load();
             $.post('/home/inset',

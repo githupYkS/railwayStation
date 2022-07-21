@@ -186,14 +186,13 @@ public class HomeController {
         }else{
             jsonMsg.setMsg("数据异常");
         }
-
         return jsonMsg;
     }
 
     /**
      * 座位类型下拉框
      */
-    @RequestMapping("/SysSaddieId")
+    @RequestMapping(value = "/SysSaddieId",produces = "application/json;charset=utf-8")
     @ResponseBody
     public Object SysSaddieId(){
         return this.sysReserveService.SysSaddieId();
@@ -251,6 +250,21 @@ public class HomeController {
             jsonMsg.setMsg("请选择座位类型");
         }
         return jsonMsg;
+    }
+
+    /*
+     *用户查询主页面
+     */
+    @RequestMapping("/welcome")
+    private String welcome(Model model,HttpSession session){
+        SysUser user = (SysUser) session.getAttribute(ProjectParameter.SESSION_USER);
+        if (user!=null){
+            SysUser sysUser = this.userService.selectAllByUserId(Integer.valueOf(user.getUserId()));
+            model.addAttribute("sysUser",sysUser);
+        }else {
+            throw new RuntimeException("登录的用户id为空");
+        }
+        return "user/welcome";
     }
 
     /*

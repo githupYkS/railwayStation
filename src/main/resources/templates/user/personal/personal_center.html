@@ -144,15 +144,22 @@
       let tableTranFare = table.render({
         elem:'#tableTranFare',
         id:'tableTranFare',
-        url:'/profile/selectPageListT',
+        url:'/profile/selectMoney',
         page:true,
         cols:[ [
           {type:'numbers'},
           {field:'trainNumber',title:'列车编号',align:'center'},
           {field:'siteName',title:'起点站',align:'center'},
           {field:'berthPlace',title:'终点站',align:'center'},
-          {field:'trainoutTime',title:'发车时间',align:'center'},
-          {field:'trainReachTime',title:'到达时间',align:'center'},
+          {field: 'trainOutTime', title: '发车时间',width:180,align: 'center',templet:function (data){
+              var jc =new Date(data.trainOutTime);
+              return jc.getFullYear() + "-" + ((jc.getMonth() + 1)<10?"0":"")+(jc.getMonth() + 1) + "-" +
+                      (jc.getDate()<10?"0":"")+jc.getDate()+" - "+jc.getHours()+":"+jc.getMinutes()+":"+jc.getSeconds();
+            }},
+          {field:'trainReachTime',title:'到达时间',align:'center',templet:function (data){
+            var ct = new Date(data.trainReachTime);
+            return ct.getFullYear() + "-" + ((ct.getMonth() + 1)<10?"0":"")+(ct.getMonth() + 1) + "-" + (ct.getDate()<10?"0":"")+ct.getDate();
+            }},
           {field:'reserveFares',title:'价格',align:'center'}
         ] ],
         limit:5,
@@ -186,7 +193,6 @@
         },
       });
     });
-
   });
 </script>
 </html>

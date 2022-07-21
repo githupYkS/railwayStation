@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="/lib/layui/css/layui.css">
     <link rel="stylesheet" href="/css/xadmin.css">
     <link rel="stylesheet" href="/css/myUtil.css">
+    <style>
+        .layui-form-select .layui-input{
+            width: 170px;
+        }
+    </style>
 </head>
 <body>
 <!--主容器布局-->
@@ -42,12 +47,54 @@
         </div>
     </div>
 </div>
+<!--模态框-->
+<form class="layui-form" id="formSelect" lay-filter="formSelect" style="display: none;margin: 20px;"autocomplete="off">
+    <div class="formReserv">
+        <!--查询框-->
+        <div class="selectd">
+            <!--隐藏ID-->
+            <input type="text" name="reserveId" hidden><!--订票ID-->
+            <input type="text" name="trainId" hidden><!--列车ID-->
+            <div class="layui-inline layui-show-xs-block" style="margin: -7px 38px 0px -3px">
+                <div class="layui-input-inline layui-show-xs-block">
+                    <select lay-filter="filterbod" name="berthPlace" id="berthId"></select>
+                </div>
+            </div>
+        </div>
+        <!--数据回填-->
+        <div class="inputObject">
+            <div class="layui-inline layui-show-xs-block" style="margin: 10px 0px 0px -22px">
+                <label class="layui-form-label">座位类型:</label>
+                <div class="layui-input-inline layui-show-xs-block">
+                    <select lay-filter="filterID" name="saddieName" id="saddieId"></select>
+                </div>
+            </div>
+            <div class="layui-inline layui-show-xs-block" style="margin:-60px 0px 0px 230px">
+                <label class="layui-form-label">票价:</label>
+                <div class="layui-input-inline layui-show-xs-block" style="width: 190px">
+                    <input type="text" id="reserveFares" name="reserveFares" class="layui-input">
+                </div>
+            </div>
+            <!--操作栏-->
+            <div style="margin-left: 463px">
+                <button type="button" class="layui-btn layui-btn-normal" id="btnUpdate">修改</button>
+            </div>
+        </div>
+        <!--表格-->
+        <div class="tableclass">
+            <div class="layui-card-body">
+                <table class="layui-hide" id="tabMoside" lay-filter="tabMoside"></table>
+            </div>
+        </div>
+    </div>
+</form>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/myUtils.js"></script>
 <script src="/lib/layui/layui.js"></script>
 <script>
+    var $,table,form,layer;
     layui.use(function (){
-        var table = layui.table,
+            table = layui.table,
             form = layui.form,
             tree = layui.tree,
             $ = layui.$,
@@ -63,8 +110,8 @@
             cols:[ [
                 {field: 'reserveId',title: '订票ID',hide:true},
                 {type:"numbers",title:"排序",align: 'center',width:80},
-                {field: 'siteName',title: '起点站',align: 'center',width:160},
-                {field: 'berthPlace', title: '终点站',align: 'center',width:170},
+                {field: 'siteName',title: '起点站',align: 'center',width:100},
+                {field: 'berthPlace', title: '终点站',align: 'center',width:100},
                 {field: 'trainNumber',title: '列车编号',align: 'center',width:160},
                 {field: 'reserveNumber',title: '订票编号',align: 'center',width:160},
                 {field: 'trainOutTime', title: '发车时间',width:180,align: 'center',templet:function (data){
@@ -77,39 +124,44 @@
                         return so.getFullYear() + "-" + ((so.getMonth() + 1)<10?"0":"")+(so.getMonth() + 1) + "-" +
                             (so.getDate()<10?"0":"")+so.getDate()+" - "+so.getHours()+":"+so.getMinutes()+":"+so.getSeconds();
                     }},
-                {field: 'reserveFares', title: '票价',align: 'center',width:180,templet:function (data){
-                    var bad;
-                    for (var i = 0;data.reserveId>i;i++){
-                        var saddieMoney = data.saddieMoney;
-                        console.log(saddieMoney);
-                        var reserveFares = data.reserveFares;
-                        console.log(reserveFares);
-                        console.log(saddieMoney + reserveFares);
-                        bad = saddieMoney + reserveFares;
-                    }
-                    return bad;
+                {field: 'reserveFares', title: '票价',align: 'center',width:100,templet:function (data){
+                        var saddieMoney = data.saddieMoney;//座位
+                        var reserveFares = data.reserveFares;//188
+                        var bad = saddieMoney + reserveFares;
+                        return bad;
                     }},
                 {field: 'saddieName', title: '座位类型',align: 'center',width:180},
-                {title: '查询列车',align: 'center',templet:function (data){
-                        return '<button class="layui-btn layui-btn-xs layui-btn-warm" onclick="queryTrain('+data.trainId+')">改签</button>';
-                    }}
+                {
+                    title: '订单查询', align: 'center', templet: function (data) {
+                        var jc = new Date();
+                        var dd = jc.getFullYear() + "-" + ((jc.getMonth() + 1) < 10 ? "0" : "") + (jc.getMonth() + 1) + "-" + (jc.getDate() < 10 ? "0" : "") + jc.getDate() + " - " + jc.getHours() + ":" + jc.getMinutes() + ":" + jc.getSeconds();
+                        var so = new Date(data.trainOutTime);
+                        var trainOutTime = so.getFullYear() + "-" + ((so.getMonth() + 1) < 10 ? "0" : "") + (so.getMonth() + 1) + "-" + (so.getDate() < 10 ? "0" : "") + so.getDate() + " - " + so.getHours() + ":" + so.getMinutes() + ":" + so.getSeconds();
+                        /*判断发出时间是否大于现在时间*/
+                        if (trainOutTime < dd) {
+                            return '<button class="layui-btn layui-btn-xs">已完成该订单</button>';
+                        } else {
+                            return '<button class="layui-btn layui-btn-xs layui-btn-warm" onclick="changing(' + data.reserveId + ')">改签</button>' + '<button class="layui-btn layui-btn-xs layui-btn-danger" onclick="dishonour(' + data.reserveId + ')">退票</button>';
+                        }
+                    }
+                },
             ] ],
             limit: 10,//每页页数
             limits: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]//定义每页页数选择下拉框
         });
 
         //查询按钮
-        $("#btnSearch").click(()=>{
-           //获取查询数据
-           let reserveNumber = $('#formSearch [name="reserveNumber"]').val();//订票编号
-           let reserveTime = $('#formSearch [name="reserveTime"]').val();//订票时间
+        $("#btnSearch").click(()=> {
+            //获取查询数据
+            let reserveNumber = $('#formSearch [name="reserveNumber"]').val();//订票编号
+            let reserveTime = $('#formSearch [name="reserveTime"]').val();//订票时间
 
-           table.reload('tabFare',{
-                where : {
-                    reserveNumber:reserveNumber,
-                    reserveTime: reserveTime
-                }//设定异步数据接口的额外参数
-            });
+            table.reload('tabFare', {
+                    where: {
+                        reserveNumber: reserveNumber,
+                        reserveTime: reserveTime
+                    }//设定异步数据接口的额外参数
+                });
         });
 
         //订票时间
@@ -117,9 +169,136 @@
             elem:"#reserveTime",//指定元素
             type:"date",
             range:true
-        })
+        });
 
     });
+
+    //改签订单
+    function changing(reserveId){
+
+        //打开模态框
+        layerFormIndex = layer.open({
+            type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+            skin:'layui-layer-molv',
+            area:['800px','530px'],
+            title:'列车信息',
+            content:$("#formSelect"),
+            cancel:function (){
+                layer.closeAll();
+            }
+        });
+
+        //数据回填
+        let id = reserveId;
+        $('#formSelect [name="reserveId"]').val(id);
+        //表格渲染
+        tabMoside = table.render({
+            elem: '#tabMoside',//table元素
+            id: 'tabMoside',
+            url:'/amend/selectTabMoside',
+            page:true,//开启分页
+            cols:[ [
+                {field: 'trainId',title: '订票ID',hide:true},
+                {type:"radio",title:"排序",align: 'center',width:80},
+                {field: 'siteName',title: '起点站',align: 'center',width:85},
+                {field: 'berthPlace', title: '终点站',align: 'center',width:101},
+                {field: 'reserveFares', title: '票价',align: 'center',width:78},
+                {field: 'trainOutTime', title: '出发时间',align: 'center',width:177,templet:function (data){
+                        var jc =new Date(data.trainOutTime);
+                        return jc.getFullYear() + "-" + ((jc.getMonth() + 1)<10?"0":"")+(jc.getMonth() + 1) + "-" +
+                            (jc.getDate()<10?"0":"")+jc.getDate()+" - "+jc.getHours()+":"+jc.getMinutes()+":"+jc.getSeconds();
+                    }},
+            ] ],
+            limit: 5,//每页页数
+            limits: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]//定义每页页数选择下拉框
+        });
+
+        //下拉框
+        createH5Select("berthId","/amend/selectBerthId",{},function(data){
+            form.render('select');//刷新select选择渲染
+
+        });
+
+        //座位类型下拉框
+        createH5Select("saddieId","/home/SysSaddieId",{},function(data){
+            form.render('select');//刷新select选择渲染
+
+        });
+
+        //监听table表格，选中数据，触发数据回填
+        table.on('row(tabMoside)',function (obj){//监听当行
+            var tr = obj.data;//获取渲染表格数据
+            //数据回填
+            var reserveFares = tr.reserveFares;
+            console.log(tr.reserveFares);
+            var saddieMoney = tr.saddieMoney;
+            console.log(tr.saddieMoney);
+            var ddd = reserveFares + saddieMoney;
+            $('#formSelect [name="reserveFares"]').val(ddd);
+            $('#formSelect [name="trainId"]').val(tr.trainId);
+        });
+
+        //监听座位下拉框
+        form.on('select(filterID)',function (data){
+            //获取数据
+            let trainId =$('#formSelect [name="trainId"]').val();
+            let saddieId = $("#saddieId option:selected").val();
+            console.log(saddieId);
+            //判断
+            if (trainId===null || trainId===undefined || trainId===""){
+                layer.msg("请选择选择列车");
+                return;
+            }
+            //提交数据
+            $.post("/amend/SelectSaddieId",{saddieId:saddieId},function (jsonMsg){
+                if (jsonMsg.state){
+                    //监听下拉框，选中座位，根据ID查询票价
+                    var reserveFares = jsonMsg.data.reserveFares;
+                    console.log(jsonMsg.data.reserveFares);
+                    var saddieMoney = jsonMsg.data.saddieMoney;
+                    console.log(saddieMoney);
+                    var ddd = reserveFares + saddieMoney;
+                    //回填票价  座位金额+票价
+                    $('#formSelect [name="reserveFares"]').val(ddd);
+                }else {
+                    $('#formSelect [name="reserveFares"]').val("");
+                }
+            })
+        });
+
+        //修改按钮
+        $("#btnUpdate").click(()=>{
+            //获取数据
+            let reserveId = $('#formSelect [name="reserveId"]').val();
+            let trainId = $('#formSelect [name="trainId"]').val();
+            let saddieId= $('#formSelect [name="saddieName"]').val();
+            let reserveFares= $('#formSelect [name="reserveFares"]').val();
+
+            //打开加载层
+            let layerIndex = layer.load();
+            //发送请求
+            $.post("/amend/update",
+                {
+                    reserveId:reserveId,
+                    trainId:trainId,
+                    saddieId:saddieId,
+                    reserveFares:reserveFares
+                },function (jsonMsg){
+                    layer.close(layerIndex);//关闭加载层
+                    //判断返回数据是否正常
+                    if (jsonMsg.state){
+                        layer.msg(jsonMsg.msg,{icon:6});
+                        layer.closeAll();//关闭全部模态框
+                    }else {
+                        layer.msg(jsonMsg.msg,{icon:5});
+                    }
+                });
+        });
+    }
+
+    //退票按钮
+    function dishonour(reserveId){
+    };
 </script>
 </body>
 </html>

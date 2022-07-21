@@ -11,9 +11,7 @@ import com.gx.railwaystation.service.SysUserService;
 import com.gx.railwaystation.util.MD5Util;
 import com.gx.railwaystation.util.ProjectParameter;
 import com.gx.railwaystation.util.Tools;
-import com.gx.railwaystation.vo.JsonMsg;
-import com.gx.railwaystation.vo.LayuiTableData;
-import com.gx.railwaystation.vo.trainVo;
+import com.gx.railwaystation.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -431,10 +429,13 @@ public class PersonalProfileController {
         return this.sysAccountStatementService.selectByType(limit, page, moneyId, consumerType, limitDays);
     }
 
-    /*查询票价*/
-    @RequestMapping(value = "/selectPageListT",produces = "application/json;charset=utf-8")
+
+    /*
+    *分页查询票价
+    */
+    @RequestMapping(value = "/selectMoney",produces = "application/json;charset=utf-8")
     @ResponseBody
-    public LayuiTableData<trainVo> selectPageListT(int limit,int page,Integer minMoney,Integer maxMoney){
-        return this.sysTrainService.selectByreservFares(limit, page, minMoney, maxMoney);
+    public LayuiTableData<MoneyPlace> selectMoney(Integer limit, Integer page, BigDecimal mimMoney, BigDecimal maxMoney){
+        return this.sysTrainService.selectByMoney(limit, page, mimMoney, maxMoney);
     }
 }

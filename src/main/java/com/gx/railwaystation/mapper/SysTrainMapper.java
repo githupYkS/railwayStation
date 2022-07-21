@@ -2,6 +2,8 @@ package com.gx.railwaystation.mapper;
 
 import com.gx.railwaystation.po.SysTrain;
 import com.gx.railwaystation.po.SysTrainType;
+import com.gx.railwaystation.vo.MoneyPlace;
+import com.gx.railwaystation.vo.MoneyVo;
 import com.gx.railwaystation.vo.trainVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -54,17 +56,31 @@ public interface SysTrainMapper {
     SysTrain SelectAll(Integer trainId);
 
     /*
-    *查询票价
+    *票价查询
     */
-    List<trainVo> selectByreservFares(
-            @Param("page") int page,
-            @Param("limit") int limit,
-            @Param("minMoney") Integer minMoney,
-            @Param("maxMoney") Integer maxMoney);
+    List<MoneyPlace> selectByMoney(
+            @Param("limit") Integer limit,
+            @Param("page") Integer page,
+            @Param("minMoney") BigDecimal minMoney,
+            @Param("maxMoney") BigDecimal maxMoney);
 
-    /*分页查询总数*/
-    Integer countAllMon(
-            @Param("minMoney") Integer minMoney,
-            @Param("maxMoney") Integer maxMoney);
+    /*
+    *查询总条数
+    */
+    Integer countAllMoney(
+            @Param("minMoney") BigDecimal minMoney,
+            @Param("maxMoney")BigDecimal maxMoney);
 
+    /*
+    *form表单查询数据
+    */
+    List<trainVo> selectPageMosize(
+            @Param("limit") Integer limit,
+            @Param("page") Integer page,
+            @Param("berthId") Integer berthId);
+
+    /*
+    *查询总数
+    */
+    Integer countAllMosize(Integer berthId);
 }

@@ -21,4 +21,5 @@
     </set>
     where saddie_id = #{saddieId,jdbcType=INTEGER}
   </update>
+
 </mapper>

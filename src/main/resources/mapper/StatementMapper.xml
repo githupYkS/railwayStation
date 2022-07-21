@@ -42,9 +42,7 @@
         <bind name="startIndex" value="(page-1) * limit"/>
         SELECT money_id,consumer_type,consumer_time,ammount_change from sys_account_statement
         <where>
-            <if test="moneyId!=null">
-                money_id = #{moneyId,jdbcType=INTEGER}
-            </if>
+            money_id = #{moneyId,jdbcType=INTEGER}
             <if test="consumerType!=null">
                 AND consumer_type=#{consumerType,jdbcType=INTEGER}
             </if>

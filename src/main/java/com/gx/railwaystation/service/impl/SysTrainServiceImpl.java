@@ -4,9 +4,7 @@ import com.gx.railwaystation.mapper.SysTrainMapper;
 import com.gx.railwaystation.po.SysTrain;
 import com.gx.railwaystation.po.SysTrainType;
 import com.gx.railwaystation.service.SysTrainService;
-import com.gx.railwaystation.vo.H5SelectVo;
-import com.gx.railwaystation.vo.LayuiTableData;
-import com.gx.railwaystation.vo.trainVo;
+import com.gx.railwaystation.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,9 +51,16 @@ public class SysTrainServiceImpl implements SysTrainService {
     }
 
     @Override
-    public LayuiTableData<trainVo> selectByreservFares(int page, int limit, Integer minMoney, Integer maxMoney) {
-        List<trainVo> trainVos = this.sysTrainMapper.selectByreservFares(page, limit, minMoney, maxMoney);
-        Integer countA = this.sysTrainMapper.countAllMon(minMoney,maxMoney);
-        return new LayuiTableData<>(countA,trainVos);
+    public LayuiTableData<MoneyPlace> selectByMoney(Integer limit, Integer page, BigDecimal minMoney, BigDecimal maxMoney) {
+        List<MoneyPlace> moneyVos = this.sysTrainMapper.selectByMoney(limit, page, minMoney, maxMoney);
+        Integer countA = this.sysTrainMapper.countAllMoney(minMoney, maxMoney);
+        return new LayuiTableData<>(countA,moneyVos);
+    }
+
+    @Override
+    public LayuiTableData<trainVo> selectPageMosize(Integer limit, Integer page, Integer berthId) {
+        List<trainVo> trainVos = this.sysTrainMapper.selectPageMosize(limit, page, berthId);
+        Integer countAllMosize = this.sysTrainMapper.countAllMosize(berthId);
+        return new LayuiTableData<>(countAllMosize,trainVos);
     }
 }

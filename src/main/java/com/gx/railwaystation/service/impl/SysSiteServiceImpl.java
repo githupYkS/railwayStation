@@ -1,8 +1,11 @@
 package com.gx.railwaystation.service.impl;
 
+import com.gx.railwaystation.mapper.SysBerthMapper;
 import com.gx.railwaystation.mapper.SysSiteMapper;
+import com.gx.railwaystation.po.SysBerth;
 import com.gx.railwaystation.po.SysSite;
 import com.gx.railwaystation.service.SysSiteService;
+import com.gx.railwaystation.vo.H5SelectVo;
 import com.gx.railwaystation.vo.LayuiTreeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +16,15 @@ import java.util.List;
 @Service
 public class SysSiteServiceImpl implements SysSiteService {
 
-    @Autowired
     private SysSiteMapper sysSiteMapper;
+
+    private SysBerthMapper sysBerthMapper;
+
+    @Autowired
+    public SysSiteServiceImpl(SysSiteMapper sysSiteMapper, SysBerthMapper sysBerthMapper) {
+        this.sysSiteMapper = sysSiteMapper;
+        this.sysBerthMapper = sysBerthMapper;
+    }
 
     /**
      * 查询车站 for layui tree 无根节点
@@ -24,6 +34,17 @@ public class SysSiteServiceImpl implements SysSiteService {
         //查询车站全部信息
         List<SysSite> sysSites = this.sysSiteMapper.selectAll();
         return LayuiTreeListData(sysSites,0);
+    }
+
+    @Override
+    public List<H5SelectVo> selectAllBreath() {
+        //查询数据
+        List<SysBerth> sysBerths = this.sysBerthMapper.selectAllBreath();
+        List<H5SelectVo> h5SelectVos = new ArrayList<>();
+        for (SysBerth sysberth: sysBerths) {
+            h5SelectVos.add(new H5SelectVo(String.valueOf(sysberth.getBerthId()),sysberth.getBerthPlace()));
+        }
+        return h5SelectVos;
     }
 
     /**

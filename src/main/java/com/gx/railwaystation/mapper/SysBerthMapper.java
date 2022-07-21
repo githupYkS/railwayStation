@@ -1,17 +1,15 @@
 package com.gx.railwaystation.mapper;
 
 import com.gx.railwaystation.po.SysBerth;
-import com.gx.railwaystation.po.SysSite;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface SysSiteMapper {
+public interface SysBerthMapper {
 
-    /**
-     * 查询车站全部信息
+    /*
+     *查询全部停靠站信息
      */
-    List<SysSite> selectAll();
-
+    List<SysBerth> selectAllBreath();
 }

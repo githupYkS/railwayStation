@@ -31,13 +31,13 @@ public class SysTrain implements Serializable {
     /**
      * 出发时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date trainOutTime;
 
     /**
      * 到达时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date trainReachTime;
 
     /**

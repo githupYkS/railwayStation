@@ -2,9 +2,18 @@ package com.gx.railwaystation.vo;
 
 
 import com.gx.railwaystation.po.SysTrain;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class trainVo extends SysTrain implements Serializable {
 
     /**
@@ -52,100 +61,8 @@ public class trainVo extends SysTrain implements Serializable {
      */
     private Integer reserveId;
 
-    @Override
-    public Integer getCarId() {
-        return carId;
-    }
-
-    @Override
-    public void setCarId(Integer carId) {
-        this.carId = carId;
-    }
-
-    public String getCarName() {
-        return carName;
-    }
-
-    public void setCarName(String carName) {
-        this.carName = carName;
-    }
-
-    @Override
-    public Integer getSiteId() {
-        return siteId;
-    }
-
-    @Override
-    public void setSiteId(Integer siteId) {
-        this.siteId = siteId;
-    }
-
-    public String getSiteName() {
-        return siteName;
-    }
-
-    public void setSiteName(String siteName) {
-        this.siteName = siteName;
-    }
-
-    @Override
-    public Integer getTrainTypeId() {
-        return trainTypeId;
-    }
-
-    @Override
-    public void setTrainTypeId(Integer trainTypeId) {
-        this.trainTypeId = trainTypeId;
-    }
-
-    public String getTrainTypeName() {
-        return trainTypeName;
-    }
-
-    public void setTrainTypeName(String trainTypeName) {
-        this.trainTypeName = trainTypeName;
-    }
-
-    @Override
-    public Integer getBerthId() {
-        return berthId;
-    }
-
-    @Override
-    public void setBerthId(Integer berthId) {
-        this.berthId = berthId;
-    }
-
-    public String getBerthPlace() {
-        return berthPlace;
-    }
-
-    public void setBerthPlace(String berthPlace) {
-        this.berthPlace = berthPlace;
-    }
-
-    @Override
-    public Integer getReserveId() {
-        return reserveId;
-    }
-
-    @Override
-    public void setReserveId(Integer reserveId) {
-        this.reserveId = reserveId;
-    }
-
-    @Override
-    public String toString() {
-        return "trainVo{" +
-                "carId=" + carId +
-                ", carName='" + carName + '\'' +
-                ", siteId=" + siteId +
-                ", siteName='" + siteName + '\'' +
-                ", trainTypeId=" + trainTypeId +
-                ", trainTypeName='" + trainTypeName + '\'' +
-                ", berthId=" + berthId +
-                ", berthPlace='" + berthPlace + '\'' +
-                ", reserveId=" + reserveId +
-                '}';
-    }
+    /*
+    *座位表金额
+    */
+    private BigDecimal saddieMoney;
 }

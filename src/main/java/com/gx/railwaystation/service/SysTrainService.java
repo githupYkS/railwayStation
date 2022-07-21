@@ -1,9 +1,7 @@
 package com.gx.railwaystation.service;
 
 import com.gx.railwaystation.po.SysTrain;
-import com.gx.railwaystation.vo.H5SelectVo;
-import com.gx.railwaystation.vo.LayuiTableData;
-import com.gx.railwaystation.vo.trainVo;
+import com.gx.railwaystation.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -19,7 +17,7 @@ public interface SysTrainService {
     /**
      * layui table 渲染数据
      */
-    LayuiTableData<trainVo> selectPageList(Integer page, Integer limit,Integer siteId, String trainNumber,String startDate,String endDate,Integer trainTypeId);
+    LayuiTableData<trainVo> selectPageList(Integer page, Integer limit, Integer siteId, String trainNumber, String startDate, String endDate, Integer trainTypeId);
 
     /**
      * 查询回填数据
@@ -27,8 +25,13 @@ public interface SysTrainService {
     trainVo queryTrain(Integer trainId);
 
     /*
-     *查询票价
+     *票价查询
      */
-    LayuiTableData<trainVo> selectByreservFares(int page,int limit,Integer minMoney,Integer maxMoney);
+    LayuiTableData<MoneyPlace> selectByMoney(Integer limit, Integer page, BigDecimal minMoney, BigDecimal maxMoney);
 
+
+    /*
+    *form弹出层表格
+    */
+    LayuiTableData<trainVo> selectPageMosize(Integer limit,Integer page,Integer berthId);
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.railwaystation.mapper.SysBerthMapper">
+    <resultMap id="AnolMapper" type="com.gx.railwaystation.po.SysBerth">
+        <id column="berth_id" property="berthId" jdbcType="INTEGER"/>
+        <result column="berth_place" property="berthPlace" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询所有的停靠找你信息-->
+    <select id="selectAllBreath" resultMap="AnolMapper">
+        select * from sys_berth
+    </select>
+</mapper>
