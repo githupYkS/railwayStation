@@ -19,4 +19,14 @@ public class SysStaffServiceImpl implements SysStaffService {
     public SysStaff StaffAccount(String account) {
         return this.sysStaffMapper.StaffAccount(account);
     }
+
+    @Override
+    public boolean updateStaff(SysStaff sysStaff) {
+        return this.sysStaffMapper.updateStaff(sysStaff)>0;
+    }
+
+    @Override
+    public SysStaff selectStaff(Integer StaffId) {
+        return this.sysStaffMapper.SelectStaffId(StaffId);
+    }
 }

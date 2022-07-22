@@ -76,7 +76,7 @@
         $.post('/profile/selectUserById',(jsonMsg)=>{
             //数据正常
             if (jsonMsg.state){
-                if (jsonMsg.data.userHead!=undefined && jsonMsg.data.userHead!=null && jsonMsg.data.userHead!=""){
+                if (jsonMsg.data.userHead!=undefined && jsonMsg.data.userHead!=null || jsonMsg.data.userHead!=""){
                     $("#userPicture1").prop("src",'/home/getPortraitImage/'+jsonMsg.data.userHead);
                 }else {
                     $("#userPicture1").prop("src",'/images/uploadImg.png');

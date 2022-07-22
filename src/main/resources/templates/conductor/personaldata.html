@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" href="/lib/layui/css/layui.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/font.css">
+  <link rel="stylesheet" href="/css/user.css">
+  <style>
+    .layui-input-block{
+      line-height: 36px;
+      color: #2D93CA;
+    }
+    .layui-form-item .layui-inline{
+      width: 300px;
+      height: 30px;
+    }
+    .img{
+      margin-top: -18px;
+    }
+    .sex{
+      width: 322px;
+    }
+    .class{
+      border: none;
+      color: cadetblue;
+    }
+    .lun{
+      margin-top: -2px;
+    }
+    .layui-form-item{
+      padding: 9px 15px;
+    }
+  </style>
+</head>
+<body>
+<!--主内容区-->
+<div>
+  <!--主内容区域-->
+  <form class="layui-form" id="formUser" lay-filter="formUser" style="margin: 20px;"
+        autocomplete="off">
+    <div class="layui-container">
+      <div class="layui-row">
+        <div class="layui-col-md3">
+          <img src="/images/uploadImg.png " height="200" width="221" name="staffHead" id="userPicture1"/>
+        </div>
+        <div class="layui-col-md9">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">登录名 ：</label>
+              <div class="layui-input-block">
+                <input type="text" name="staffAccount" lay-verify="userName" class="layui-input class" disabled>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">性别 ：</label>
+              <div class="layui-input-block sex">
+                <input type="text" id="staffSex" class="layui-input class lun" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">手机 ：</label>
+              <div class="layui-input-block">
+                <input type="text" name="staffPhone" lay-verify="phoneNr" class="layui-input class" disabled>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">姓名 ：</label>
+              <div class="layui-input-block">
+                <input type="text" name="staffName" lay-verify="userName" class="layui-input class" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">身份证号 :</label>
+              <div class="layui-input-block">
+                <input type="text" name="staffIdentification" lay-verify="idCard" class="layui-input class" disabled>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">职位 ：</label>
+              <div class="layui-input-block">
+                <input type="text" id="position" lay-verify="userName" class="layui-input class" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item" style="text-align: end;padding-right: 220px">
+      <button type="button" class="layui-btn layui-bg-red" id="btn_log_off">注销</button>
+      <button type="button" class="layui-btn layui-bg-blue" id="updateProfile">修改信息</button>
+    </div>
+  </form>
+</div>
+<!--弹出层-->
+<div>
+  <!--文件选择框-->
+  <div style="display: none" id="upPortraitDiv">
+    <div>
+      <input type="file" hidden th:name="portrait" id="upPortrait"><!--上传文件头像文本框-->
+    </div>
+  </div>
+
+  <form class="layui-form" id="formUpdate" lay-filter="formUpdate" style="display: none;margin: 20px;overflow: hidden"
+        autocomplete="off">
+    <!--存放修改的信息id-->
+    <input type="hidden" name="staffId">
+
+    <div class="layui-container">
+      <div class="layui-row">
+        <div class="layui-col-md3">
+          <img src="/images/uploadImg.png " height="200" width="221" name="userHead" id="userPicture"/>
+        </div>
+        <div class="layui-col-md9">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">登录名：</label>
+              <div class="layui-input-block">
+                <input type="text" name="staffAccount" lay-verify="userName" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">性别：</label>
+              <div class="layui-input-block sex">
+                <input type="radio" name="staffSex" value="0" lay-verify="requiredRadioCheckbox"
+                       title="未知">
+                <input type="radio" name="staffSex" value="1" lay-verify="requiredRadioCheckbox"
+                       title="男">
+                <input type="radio" name="staffSex" value="2" lay-verify="requiredRadioCheckbox"
+                       title="女">
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">手机：</label>
+              <div class="layui-input-block">
+                <input type="text" name="staffPhone" lay-verify="phoneNr" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">姓名：</label>
+              <div class="layui-input-block">
+                <input type="text" name="staffName" lay-verify="userName" class="layui-input">
+              </div>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">身份证号:</label>
+              <div class="layui-input-block">
+                <input type="text" name="staffIdentification" lay-verify="idCard" class="layui-input">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--按钮-->
+    <div class="layui-btn-container" style="text-align: end">
+      <button type="button" class="layui-btn" lay-submit lay-filter="formUserSubmit">提交</button>
+      <button type="reset" class="layui-btn layui-btn-warm">重置</button>
+    </div>
+  </form>
+</div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<script src="/lib/layui/layui.js" charset="utf-8"></script>
+<script src="/js/layuiVerifyExt.js" charset="utf-8"></script>
+<script type="text/javascript">
+  //声明数据源
+  layui.use(()=>{
+    layer = layui.layer;
+    form = layui.form;
+
+    //开始页面回填图片
+    $.post('/conductor/selectStaff',(jsonMsg)=>{
+      //数据正常
+      if (jsonMsg.state){
+        //回填数据
+        form.val('formUser',jsonMsg.data);
+        //回填性别
+        if (jsonMsg.data.staffSex==0){
+          $('#staffSex').val("未知")
+        }else if(jsonMsg.data.staffSex==1){
+          $('#staffSex').val("男")
+        }else{
+          $('#staffSex').val("女")
+        }
+        //回填职位
+        if (jsonMsg.data.positionId==1){
+          $('#position').val("超级管理员");
+        }else {
+          $('#position').val("售票员");
+        }
+        if (jsonMsg.data.staffHead!=undefined && jsonMsg.data.staffHead!=null && jsonMsg.data.staffHead!=""){
+          $("#userPicture1").prop("src",'/home/getPortraitImage/'+jsonMsg.data.staffHead);
+        }else {
+          $("#userPicture1").prop("src",'/images/uploadImg.png');
+        }
+      }else{
+        layer.msg(jsonMsg.msg,{icon:5});
+      }
+    });
+
+    //修改信息弹出层
+    $("#updateProfile").click(()=>{
+      //重置表单
+      $('#formInsert [type="reset"]').click();
+      //清空文件选择框
+      document.getElementById("upPortrait").outerHTML=document.getElementById("upPortrait").outerHTML;
+      //回填数据
+      $.post('/conductor/selectStaff',(jsonMsg)=>{
+        //数据正常
+        if (jsonMsg.state){
+          //回填数据
+          form.val('formUpdate',jsonMsg.data);
+          //回填性别
+          if (jsonMsg.data.staffSex==0){
+            $('#staffSex').val("未知")
+          }else if(jsonMsg.data.staffSex==1){
+            $('#staffSex').val("男")
+          }else{
+            $('#staffSex').val("女")
+          }
+          if (jsonMsg.data.staffHead!=undefined && jsonMsg.data.staffHead!=null && jsonMsg.data.staffHead!=""){
+            $("#userPicture1").prop("src",'/home/getPortraitImage/'+jsonMsg.data.staffHead);
+          }else {
+            $("#userPicture1").prop("src",'/images/uploadImg.png');
+          }
+        }else{
+          layer.msg(jsonMsg.msg,{icon:5});
+        }
+      });
+      //打开修改信息弹出层
+      layuiIndexform = layer.open({
+        type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+        skin:'layui-layer-molv',
+        area: ['1000px', '350px'],
+        anim: 4,
+        title:'修改用户信息',
+        content:$("#formUpdate"),
+        cancel:()=>{
+          layer.closeAll();
+        }
+      })
+    })
+
+    //提交修改后的数据
+    form.on('submit(formUserSubmit)',(fromData)=>{
+      //打印数据
+      console.log(fromData);
+
+      //声明一个变量、
+      let upFormData=new FormData();
+
+      //把layui form返回json格式数据转为 FormData
+      // x是指被循环对象的属性名称
+      //js的数组是特殊对象，x就是 索引 0,1,2,3.....
+
+      for (var x in fromData.field){
+        //append(名称，值) key -value形式
+        upFormData.append(x,fromData.field[x]);
+      }
+
+      //把文件添加到upFormData
+      var file = $("#upPortrait").get(0).files[0];
+      upFormData.append("portraitFile",file);
+
+      //打开加载层
+      var layerLoad = layer.load();
+
+      //提交数据
+      $.ajax({
+        method:"POST",//提交的方式
+        url:'/conductor/updateStaffPassword',
+        data: upFormData,
+        cache:false,
+        processData:false,//禁止jquery对上传的数据进行处理
+        contentType: false,
+        dataType:'json',//上传的文件形式
+        success:(jsonMsg)=>{
+          //关闭加载层
+          layer.close(layerLoad);
+          //修改成功
+          if (jsonMsg.state){
+            layer.msg(jsonMsg.msg,{icon:6});
+            //关闭弹出层
+            layer.close(layuiIndexform);
+            //刷新的页面
+            window.location.reload();
+          }else {
+            layer.msg(jsonMsg.msg,{icon:5});
+          }
+        }
+      })
+      return false;//阻止表单跳转
+    });
+  });
+
+  //图片上传部分
+  //双击图片弹出文件选择框
+  $("#userPicture").dblclick(function () {
+    $("#upPortrait").click();
+  });
+  //图片文件 正则表达式过滤image/jpeg,image/png,image/jpg,image/gif,image/bmp
+  var regexImageFilter = /^(?:image\/bmp|image\/gif|image\/jpg|image\/jpeg|image\/png)$/i;
+  var imgReader = new FileReader();
+
+  //文件读取器读取到文件后的回调事件
+  imgReader.onload = function (event) {
+    //显示图片 base64编码的图片
+    $("#userPicture").attr("src", event.target.result);
+  }
+  //图片选择框
+  $("#upPortraitDiv").on('change','input[type="file"]',function () {
+    //获取出文件选择器中的第一个文件
+    var file = $("#upPortrait").get(0).files[0];
+    //判断文件选择类型
+    if (regexImageFilter.test(file.type)) {
+      //读取文件转换成URL把图片转为Base64编码
+      imgReader.readAsDataURL(file);
+    } else {
+      layer.alert("请选择图片");
+    }
+  });
+</script>
+</html>

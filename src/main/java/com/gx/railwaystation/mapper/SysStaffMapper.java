@@ -22,4 +22,9 @@ public interface SysStaffMapper {
      * 修改工表ID等于1的数据
      */
     boolean update(Integer staffId, BigDecimal staffWallet);
+
+    /**
+     * 修改售票员数据
+     */
+    Integer updateStaff(SysStaff sysStaff);
 }

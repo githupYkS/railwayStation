@@ -186,6 +186,13 @@ public class HomeController {
         return "conductor/Refund.html";
     }
 
+    /**
+     * 售票员个人资料管理页面
+     */
+    @RequestMapping("/personaldata")
+    public String personaldata(){
+        return "conductor/personaldata.html";
+    }
 
     /**
      *  分页查询数据

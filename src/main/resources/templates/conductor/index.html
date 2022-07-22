@@ -40,8 +40,9 @@
             line-height: 40px;
         }
         .logo img{
-            height: 40px;
-            line-height: 40px;
+            height: 30px;
+            width: 30px;
+            top: 5px;
             position: fixed;
         }
         .on{
@@ -64,10 +65,12 @@
 <!--头部内容区-->
 <div class="header">
   <!--管理员头像-->
-  <div class="logo">
-    售票员头像
-    <img/>
-  </div>
+    <div class="logo margin-big-left fadein-top">
+        <!--用户头像-->
+        <h1>
+            <img class="radius-circle" height="50" alt="" id="userPicture1"/>
+        </h1>
+    </div>
   <div class="fr top-link">
     <a target="mainCont" title="DeathGhost"><i class="adminIcon"></i><span>您好！售票员：[[${msg}]]</span></a>
     <a target="mainCont" title="修改密码" id="editpassword"><i class="revisepwdIcon"></i><span>修改密码</span></a>
@@ -82,6 +85,7 @@
         <li class="cno" id="the_ticket_management"><span>售票管理</span></li>
         <li class="cno" id="statistical_information"><span>统计信息</span></li>
         <li class="cno" id="Refund"><span>退票管理</span></li>
+        <li class="cno" id="personal_data"><span>个人资料</span></li>
     </ul>
 </div>
 <!--下方内容区-->
@@ -166,10 +170,29 @@
        $("iframe").attr("src","/home/Refund");
     });
 
+    //售票员退票管理页面
+    $("#personal_data").click(()=>{
+       $("iframe").attr("src","/home/personaldata");
+    });
+
     //声明layui的作用
     layui.use(()=>{
         layer = layui.layer;
         form = layui.form;
+
+        //售票员头像
+        $.post("/conductor/selectStaff",(jsonMsg)=>{
+            if (jsonMsg.state){
+                if (jsonMsg.data.staffHead !=null || jsonMsg.data.staffHead!=undefined || jsonMsg.data.staffHead!=""){
+                    $("#userPicture1").prop("src",'/home/getPortraitImage/'+jsonMsg.data.staffHead);
+                }else {
+                    //数据为空返回指定的图片
+                    $("#userPicture1").prop("src",'/images/uploadImg.png');
+                }
+            }else {
+                layer.msg(jsonMsg.msg,{icon:5});
+            }
+        });
 
 
         //打开修改弹出层
@@ -177,7 +200,7 @@
             layerFormIndex = layer.open({
                 type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                 skin:'layui-layer-molv',
-                area:['475px','400px'],
+                area:['500px','400px'],
                 title:'修改密码',
                 content:$("#formEditPassword"),
                 cancel:function (){
@@ -205,15 +228,15 @@
                 if (jsonMsg.state){
                     if (jsonMsg.code==0){
                         //开启新密码输入框和确认密码输入框
-                        $("#newPassword").removeAttr("disable");
-                        $("#reregpass").removeAttr("disable");
+                        $("#newPassword").removeAttr("disabled");
+                        $("#confirmPassword").removeAttr("disabled");
                         //成功显示绿色文字添加
                         $("#oldTips").text("密码正确");
                         $("#oldTips").removeClass("text-danger").addClass("text-success");
                     }else if (jsonMsg.code==1){
                         //禁用新密码和确认密码
-                        $("#newPassword").attr("disable");
-                        $("#reregpass").attr("disable");
+                        $("#newPassword").attr("disabled");
+                        $("#confirmPassword").attr("disabled");
                         //失败显示红色文字添加
                         $("#oldTips").text("密码错误");
                         $("#oldTips").removeClass("text-success").addClass("text-danger");
@@ -227,10 +250,52 @@
         //提交修改后的数据
         $("#btn_editPassword").click(()=>{
             //获取旧密码
-
+            var oldPassword = $("#oldPassword").val();
+            //获取新密码
+            var newPassword = $("#newPassword").val();
             //获取确认密码
+            var confirmPassword=$("#confirmPassword").val();
+
+            if (oldPassword==null || oldPassword==""|| oldPassword==undefined){
+                layer.msg("请输入新密码")
+                return;
+            }
+
+            if (newPassword==null || newPassword==""|| newPassword==undefined){
+                layer.msg("请输入新密码")
+                return;
+            }
+
+            if (confirmPassword==null || confirmPassword==""|| confirmPassword==undefined){
+                layer.msg("请输入确认密码");
+                return;
+            }
+            if (oldPassword===newPassword){
+                layer.msg("新密码和旧密码相同，不需要修改");
+                return;
+            }
+
+            if (newPassword!=confirmPassword){
+                layer.msg("新密码和确认密码不一致，请重新输入");
+                return;
+            }
+
+            //打开加载层
+            var layerload = layer.load();
+            //提交数据
+            $.post("/conductor/updateStaffPassword",{oldPassword:newPassword},(jsonMsg)=>{
+                //关闭加载层
+                layer.close(layerload);
+                //数据正常
+                if (jsonMsg.state){
+                    layer.msg(jsonMsg.msg,{icon:6});
+                    //关闭弹出层
+                    layer.close(layerFormIndex);
+                }else {
+                    layer.msg(jsonMsg.msg,{icon:5});
+                }
+            });
         });
     });
-
 </script>
 </html>

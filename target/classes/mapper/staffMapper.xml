@@ -46,4 +46,21 @@
     where staff_id = #{staffId,jdbcType=INTEGER}
   </update>
 
+  <!--修改售票员数据-->
+  <update id="updateStaff" parameterType="com.gx.railwaystation.po.SysStaff">
+    update sys_staff
+    <set>
+      <if test="positionId != null">position_id = #{positionId,jdbcType=INTEGER},</if>
+      <if test="staffAccount != null">staff_account = #{staffAccount,jdbcType=VARCHAR},</if>
+      <if test="staffPassword != null">staff_password = #{staffPassword,jdbcType=VARCHAR},</if>
+      <if test="staffSex != null">staff_sex = #{staffSex,jdbcType=TINYINT},</if>
+      <if test="staffSalt != null">staff_salt = #{staffSalt,jdbcType=VARCHAR},</if>
+      <if test="staffName != null">staff_name = #{staffName,jdbcType=VARCHAR},</if>
+      <if test="staffPhone != null">staff_phone = #{staffPhone,jdbcType=VARCHAR},</if>
+      <if test="staffIdentification != null">staff_identification = #{staffIdentification,jdbcType=VARCHAR},</if>
+      <if test="staffHead != null">staff_head = #{staffHead,jdbcType=VARCHAR},</if>
+      <if test="staffWallet != null">staff_wallet = #{staffWallet,jdbcType=NUMERIC}</if>
+    </set>
+    where staff_id = #{staffId,jdbcType=INTEGER}
+  </update>
 </mapper>
