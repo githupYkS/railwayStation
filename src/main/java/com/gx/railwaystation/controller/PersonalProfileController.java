@@ -76,6 +76,7 @@ public class PersonalProfileController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS_");
 
         System.out.println(portraitFile);
+
         //判断文件存放目录是否存在
         File uploadDir = new File(UPLOAD_PATH);
         if (!uploadDir.exists()) {

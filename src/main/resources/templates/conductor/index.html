@@ -72,7 +72,7 @@
         </h1>
     </div>
   <div class="fr top-link">
-    <a target="mainCont" title="DeathGhost"><i class="adminIcon"></i><span>您好！售票员：[[${msg}]]</span></a>
+    <a target="mainCont" title="DeathGhost"><i class="adminIcon"></i><span>您好！售票员：<span id="name"></span></span></a>
     <a target="mainCont" title="修改密码" id="editpassword"><i class="revisepwdIcon"></i><span>修改密码</span></a>
     <a title="安全退出" style="background:rgb(60,60,60);" id="loginOut"><i class="quitIcon"></i><span class="out">安全退出</span></a>
   </div>
@@ -183,6 +183,8 @@
         //售票员头像
         $.post("/conductor/selectStaff",(jsonMsg)=>{
             if (jsonMsg.state){
+
+                $("#name").text(jsonMsg.data.staffName);
                 if (jsonMsg.data.staffHead !=null || jsonMsg.data.staffHead!=undefined || jsonMsg.data.staffHead!=""){
                     $("#userPicture1").prop("src",'/home/getPortraitImage/'+jsonMsg.data.staffHead);
                 }else {

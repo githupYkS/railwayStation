@@ -27,4 +27,9 @@ public interface SysStaffMapper {
      * 修改售票员数据
      */
     Integer updateStaff(SysStaff sysStaff);
+
+    /**
+     * 逻辑删除数据
+     */
+    Integer deleteByStaffId(Integer staffId);
 }

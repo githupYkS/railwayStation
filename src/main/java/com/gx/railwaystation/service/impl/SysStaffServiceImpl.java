@@ -29,4 +29,9 @@ public class SysStaffServiceImpl implements SysStaffService {
     public SysStaff selectStaff(Integer StaffId) {
         return this.sysStaffMapper.SelectStaffId(StaffId);
     }
+
+    @Override
+    public boolean deleteByStaffId(Integer staffId) {
+        return this.sysStaffMapper.deleteByStaffId(staffId)>0;
+    }
 }

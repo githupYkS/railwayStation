@@ -1,6 +1,7 @@
 package com.gx.railwaystation.controller;
 
 import com.gx.railwaystation.po.SysStaff;
+import com.gx.railwaystation.po.SysUser;
 import com.gx.railwaystation.service.SysStaffService;
 import com.gx.railwaystation.util.MD5Util;
 import com.gx.railwaystation.util.ProjectParameter;
@@ -15,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 @RestController
@@ -131,18 +134,18 @@ public class conductorController {
         return jsonMsg;
     }
 
-    /*--------------------------------------------------------修改个人资料------------------------------------------------------------*/
+    /*--------------------------------------------------------售票员个人资料------------------------------------------------------------*/
 
     /**
      * 修改售票员信息
      * @param session
      * @param sysStaff
-     * @param portraitFile
+     * @param portrait
      * @return
      */
     @RequestMapping(value = "/updateStaff",produces = "application/json;charset=utf-8")
     @ResponseBody
-    public JsonMsg updateStaff(HttpSession session, SysStaff sysStaff, MultipartFile portraitFile){
+    public JsonMsg updateStaff(HttpSession session, SysStaff sysStaff, MultipartFile portrait) throws IOException {
         JsonMsg jsonMsg = new JsonMsg();
 
         //时间转换格式
@@ -162,6 +165,93 @@ public class conductorController {
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
-        return null;
+
+        //判断图片名是否为空，不为空保存到硬盘中
+        if (portrait!=null && portrait.getBytes().length>0){
+            String fileName = dateFormat.format(new Date())+System.nanoTime()+Tools.getFileExt(portrait.getOriginalFilename());
+            //存放路径
+            String filePath = UPLOAD_PATH + fileName;
+            File saveFile = new File(filePath);
+            System.err.println(filePath);
+            //保存文件到硬盘
+            portrait.transferTo(saveFile);
+            //把文件名保存到需要新增的对象中
+            sysStaff.setStaffHead(fileName);
+        }
+        if (!Tools.isNotNull(sysStaff.getStaffAccount())){
+            jsonMsg.setMsg("请输入登录的账号");
+            return jsonMsg;
+        }
+        if (!Tools.isNotNull(sysStaff.getStaffName())){
+            jsonMsg.setMsg("请输入姓名");
+            return jsonMsg;
+        }
+        if (!Tools.isNotNull(sysStaff.getStaffIdentification())){
+            jsonMsg.setMsg("请输入身份证件号码");
+            return jsonMsg;
+        }
+        if (!Tools.isNotNull(sysStaff.getStaffSex().toString())){
+            jsonMsg.setMsg("请选择性别");
+            return jsonMsg;
+        }
+
+        //是否有就图片
+        String oldPortraitImageName=null;
+        //是否有新的图片上传，有查询就旧的图片名称
+        if (Tools.isNotNull(sysStaff.getStaffHead())){
+            oldPortraitImageName = staff.getStaffHead();
+        }
+
+        try{
+            boolean isOk = this.sysStaffService.updateStaff(sysStaff);
+            if (isOk){
+                //旧图片存在时删除旧图片
+                if (Tools.isNotNull(oldPortraitImageName)){
+                    File oldImage=new File(UPLOAD_PATH,oldPortraitImageName);
+                    if (oldImage.exists()){
+                        oldImage.delete();
+                    }
+                }
+                jsonMsg.setState(true);
+                jsonMsg.setMsg("修改成功");
+            }else {
+                jsonMsg.setMsg("修改失败");
+            }
+        }catch (RuntimeException e){
+            jsonMsg.setMsg("修改异常");
+        }
+        return jsonMsg;
+    }
+
+
+    /**
+     * 逻辑删除售票员
+     * @return
+     */
+    @RequestMapping(value = "/deleteByStaff",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public JsonMsg deleteByStaff(HttpSession session){
+        JsonMsg jsonMsg = new JsonMsg();
+
+        //从session中获取售票员数据
+        SysStaff sysStaff = (SysStaff) session.getAttribute(ProjectParameter.SESSION_staff);
+        if (sysStaff == null){
+            jsonMsg.setMsg("请登录后再进行操作");
+        }
+        if (sysStaff.getStaffId()==null && sysStaff.getStaffId() <0){
+            jsonMsg.setMsg("您无法注销，请检查");
+        }
+        try{
+            boolean isOk = this.sysStaffService.deleteByStaffId(sysStaff.getStaffId());
+            if (isOk){
+                jsonMsg.setState(true);
+                jsonMsg.setMsg("注销成功");
+            }else {
+                jsonMsg.setMsg("注销失败");
+            }
+        }catch (RuntimeException e){
+            jsonMsg.setMsg("注销异常");
+        }
+        return jsonMsg;
     }
 }

@@ -18,4 +18,10 @@ public interface SysStaffService {
      * 查询当前的登录的信息
      */
     SysStaff selectStaff(Integer StaffId);
+
+
+    /**
+     * 逻辑删除数据
+     */
+    boolean deleteByStaffId(Integer staffId);
 }

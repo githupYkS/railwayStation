@@ -13,6 +13,7 @@
     <result column="staff_identification" jdbcType="VARCHAR" property="staffIdentification" />
     <result column="staff_head" jdbcType="VARCHAR" property="staffHead" />
     <result column="staff_wallet" jdbcType="DECIMAL" property="staffWallet"/>
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete"/>
   </resultMap>
 
   <!--根据页面输入账号查询数据-->
@@ -29,12 +30,12 @@
       sys_staff.staff_identification,
       sys_staff.staff_head
     FROM sys_staff
-    WHERE sys_staff.staff_account = #{staffAccount,jdbcType=VARCHAR}
+    WHERE sys_staff.staff_account = #{staffAccount,jdbcType=VARCHAR} AND is_delete=0
   </select>
 
   <!--查询员工表ID等于1的数据-->
   <select id="SelectStaffId" resultMap="BaseResultMap">
-    select * from sys_staff where staff_id =#{staffId,jdbcType=INTEGER}
+    select * from sys_staff where staff_id =#{staffId,jdbcType=INTEGER} AND is_delete=0
   </select>
 
   <!--修改工表ID等于1的数据-->
@@ -43,7 +44,7 @@
     <set>
       <if test="staffWallet != null">staff_wallet = #{staffWallet,jdbcType=NUMERIC},</if>
     </set>
-    where staff_id = #{staffId,jdbcType=INTEGER}
+    where staff_id = #{staffId,jdbcType=INTEGER} AND is_delete=0
   </update>
 
   <!--修改售票员数据-->
@@ -61,6 +62,10 @@
       <if test="staffHead != null">staff_head = #{staffHead,jdbcType=VARCHAR},</if>
       <if test="staffWallet != null">staff_wallet = #{staffWallet,jdbcType=NUMERIC}</if>
     </set>
-    where staff_id = #{staffId,jdbcType=INTEGER}
+    where staff_id = #{staffId,jdbcType=INTEGER} AND is_delete=0
+  </update>
+
+  <update id="deleteByStaffId" parameterType="com.gx.railwaystation.po.SysStaff">
+    update sys_staff set is_delete = 1 where staff_id = #{staffId,jdbcType=INTEGER}
   </update>
 </mapper>

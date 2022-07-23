@@ -32,6 +32,11 @@
     .layui-form-item{
       padding: 9px 15px;
     }
+    #formUser{
+      position: absolute;
+      top: 160px;
+      left: 300px;
+    }
   </style>
 </head>
 <body>
@@ -105,7 +110,7 @@
       <input type="file" hidden th:name="portrait" id="upPortrait"><!--上传文件头像文本框-->
     </div>
   </div>
-
+  <!--表单-->
   <form class="layui-form" id="formUpdate" lay-filter="formUpdate" style="display: none;margin: 20px;overflow: hidden"
         autocomplete="off">
     <!--存放修改的信息id-->
@@ -198,7 +203,7 @@
         }else {
           $('#position').val("售票员");
         }
-        if (jsonMsg.data.staffHead!=undefined && jsonMsg.data.staffHead!=null && jsonMsg.data.staffHead!=""){
+        if (jsonMsg.data.staffHead!=undefined || jsonMsg.data.staffHead!=null || jsonMsg.data.staffHead!=""){
           $("#userPicture1").prop("src",'/home/getPortraitImage/'+jsonMsg.data.staffHead);
         }else {
           $("#userPicture1").prop("src",'/images/uploadImg.png');
@@ -228,10 +233,10 @@
           }else{
             $('#staffSex').val("女")
           }
-          if (jsonMsg.data.staffHead!=undefined && jsonMsg.data.staffHead!=null && jsonMsg.data.staffHead!=""){
-            $("#userPicture1").prop("src",'/home/getPortraitImage/'+jsonMsg.data.staffHead);
+          if (jsonMsg.data.staffHead !=undefined || jsonMsg.data.staffHead !=null || jsonMsg.data.staffHead !=""){
+              $("#userPicture").prop("src",'/home/getPortraitImage/'+ jsonMsg.data.staffHead);
           }else {
-            $("#userPicture1").prop("src",'/images/uploadImg.png');
+             $("#userPicture").prop("src",'/images/uploadImg.png');
           }
         }else{
           layer.msg(jsonMsg.msg,{icon:5});
@@ -270,7 +275,7 @@
 
       //把文件添加到upFormData
       var file = $("#upPortrait").get(0).files[0];
-      upFormData.append("portraitFile",file);
+      upFormData.append("portrait",file);
 
       //打开加载层
       var layerLoad = layer.load();
@@ -278,7 +283,7 @@
       //提交数据
       $.ajax({
         method:"POST",//提交的方式
-        url:'/conductor/updateStaffPassword',
+        url:'/conductor/updateStaff',
         data: upFormData,
         cache:false,
         processData:false,//禁止jquery对上传的数据进行处理
@@ -301,6 +306,32 @@
       })
       return false;//阻止表单跳转
     });
+
+    //注销(逻辑删除)
+    $("#btn_log_off").click(function () {
+      //获取售票员id
+      let staffId = $('#formUpdate [name="staffId"]').val();
+      //弹出询问框
+      layer.confirm("您确定要注销吗？一旦注销不可撤回", {icon: 3, title: "提示"}, function (index) {
+
+        layer.close(index);//关闭询问框
+        //获取参数
+        var layerIndex = layer.load();//打开加载层
+        $.post("/conductor/deleteByStaff",{staffId:staffId},function (jsonMsg) {
+          layer.close(layerIndex);//关闭加载层
+          if (jsonMsg.state) {
+            layer.msg(jsonMsg.msg, {
+              icon: 6, time: 1000, end: function () {
+                window.location.replace("/login");
+              }
+            });
+          } else {
+            layer.msg(jsonMsg.msg, {icon: 5});
+          }
+        })
+      })
+    })
+
   });
 
   //图片上传部分
