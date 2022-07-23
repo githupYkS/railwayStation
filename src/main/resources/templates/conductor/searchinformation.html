@@ -3,20 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <title>查询信息</title>
+    <link rel="stylesheet" href="/css/myUtil.css">
+    <link rel="stylesheet" href="/css/user.css">
+    <style>
+        .conter{
+            width: 100%;
+            height: 50px;
+            position: absolute;
+            top: 250px;
+            left: 450px;
+        }
+        .con{
+            float: left;
+            padding-left: 40px;
+            width: 100px;
+            height: 50px;
+            background-color: darkseagreen;
+            border-right: 1px solid white;
+            list-style: none;
+            border: 1px solid #6c6c6c;
+        }
+        .conter ul li span{
+            color: black;
+            font-size: smaller;
+            line-height: 50px;
+            text-align: center;
+            display: inline;
+        }
+        .on{
+            background-color: whitesmoke;
+        }
+    </style>
 </head>
 <body style="background-color: whitesmoke">
 <!--主内容区-->
 <div>
-    <div class="fr">
+    <div class="conter">
         <ul>
-            <li>时刻表查询</li>
-            <li>车假查询</li>
-            <li>票价查询</li>
-            <li>票数查询</li>
-            <li>站点查询</li>
+            <li class="con" id="schedule_query"><span>时刻表查询</span></li>
+            <li class="con" id="the_car_query"><span>车价查询</span></li>
+            <li class="con" id="the_fare_query"><span>票价查询</span></li>
+            <li class="con" id="votes_to_query"><span>票数查询</span></li>
+            <li class="con" id="site_query"><span>站点查询</span></li>
         </ul>
-
     </div>
 </div>
+<!--弹出层-->
+<div>
+    <form method="post" id="formSearch" lay-filter="formSearch" style="display: none" autocomplete="off">
+        <!--标识是哪种查询-->
+        <input type="hidden" name="isInsert" value="1"/>
+        <!--刷新按钮-->
+        <button type="reset" hidden="hidden"/>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">发车时间 :</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" id="maintenanceDate" name="maintenanceDate" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-input-inline layui-show-xs-block">
+            <button class="layui-btn" type="button" id="btnSearch">
+                <i class="layui-icon layui-icon-search"></i>
+            </button>
+        </div>
+        <!--表格-->
+        <div class="layui-card-body ">
+            <table class="layui-hide" style="text-align: center" id="tablezzBrId" lay-filter="tablezzBrIdEvent"></table>
+        </div>
+    </form>
+</div>
 </body>
+<script src="/js/jquery.js"></script>
+<script src="/js/myUtils.js"></script>
+<script src="/lib/layui/layui.js"></script>
+<script type="text/javascript">
+    //点击添加高亮效果（li元素）
+    $("li").click(function () {
+        //给当前元素添加高亮效果
+        for (var x in $("li")) {
+            $("li").eq(x).removeClass("on");
+        }
+        $(this).addClass("on");
+    })
+
+    //声明layui
+    layui.use(()=>{
+        layer = layui.layer;
+        laydate = layui.laydate;
+        form = layui.form;
+        table = layui.table;
+
+        //渲染弹出层日期
+        laydate.render({
+            elem:"#maintenanceDate",
+            //开启时间段选择框
+            type: 'datetime',
+            format:'yyyy/MM/dd',
+            btns: ['clear', 'confirm'],
+            done: function(value, date){
+                endMax = end.config.max;
+                end.config.min = date; //最大时间为结束时间的开始值
+                end.config.min.month = date.month -1;
+            }
+        })
+
+        //时刻表查询按钮
+        $("#schedule_query").click(()=>{
+            //重置表单
+            $('#formSearch [name="reset"]').click();
+            //状态为1时刻表查询
+            form.val('formMaintenance',{isInsert : 1});
+            //表单
+            tablezzBrId = table.reload({
+                elem: "#tablezzBrId",
+                id: "tablezzBrId",
+                url:'',
+                page:true,
+                cols:[ [
+                    {}
+                ] ],
+                limit:5,
+                limits:[5,10,15,20,25]
+            })
+
+            //打开弹出层
+            layerFormIndex = layer.open({
+                type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                skin:'layui-layer-molv',
+                area:['500px','400px'],
+                title:"时刻表查询",
+                anim: 4,
+                content:$("#formSearch"),
+                cancel:function (){
+                    layer.closeAll();
+                }
+            });
+        });
+    });
+
+</script>
 </html>
