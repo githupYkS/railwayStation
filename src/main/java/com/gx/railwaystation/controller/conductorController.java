@@ -225,7 +225,7 @@ public class conductorController {
 
 
     /**
-     * 逻辑删除售票员
+     * 逻辑注销售票员
      * @return
      */
     @RequestMapping(value = "/deleteByStaff",produces = "application/json;charset=utf-8")
@@ -254,4 +254,9 @@ public class conductorController {
         }
         return jsonMsg;
     }
+
+
+
+    /*----------------------------------------------------售票员查询信息主页面-----------------------------------------------------------*/
+
 }

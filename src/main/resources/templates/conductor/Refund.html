@@ -3,7 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <title>退票管理</title>
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/xadmin.css">
+    <link rel="stylesheet" href="/css/myUtil.css">
+    <style>
+        .layui-layer-page .layui-layer-content{
+            overflow: hidden;
+        }
+        .iniotu{
+            width: 165px;
+        }
+    </style>
 </head>
 <body>
+<!--主容器布局-->
+<div class="layui-fluid">
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <!--搜索栏-->
+            <div class="layui-card-body">
+                <form class="layui-form layui-col-space5" style="margin:30px 0px 0px 65px" id="formSearch"
+                      lay-filter="formSearch">
+                    <div class="layui-inline layui-show-xs-block">
+                        <label class="layui-form-label">订票编号:</label>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input type="text" name="reserveNumber" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-show-xs-block">
+                        <label class="layui-form-label">订票时间:</label>
+                        <div class="layui-input-inline layui-show-xs-block">
+                            <input type="text" id="reserveTime" name="reserveTime" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-input-inline layui-show-xs-block">
+                        <button class="layui-btn" type="button" id="btnSearch">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!--表格-->
+            <div class="layui-card-body">
+                <table class="layui-hide" id="tabFare" lay-filter="tabFare"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--改签模态框-->
+<div style="overflow: hidden">
+    <form class="layui-form layui-form-pane" id="formUpdate" lay-filter="formUpdate" style="display: none;margin: 20px;" autocomplete="off">
+        <!--存放主键id-->
+        <input type="hidden" name="trainId">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">原票号</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="" class="layui-input">
+            </div>
+
+            <label class="layui-form-label">改签票号</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">原车次</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="trainNumber" class="layui-input">
+            </div>
+
+            <label class="layui-form-label">改签车次</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="trainNumber1" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">原票价</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="" class="layui-input">
+            </div>
+
+            <label class="layui-form-label">改签票价</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">手续费</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="" class="layui-input">
+            </div>
+        </div>
+
+        <!--操作栏-->
+        <div class="layui-btn-container" style="text-align: end">
+            <button type="button" class="layui-btn layui-btn-normal" id="btn_update">修改</button>
+        </div>
+    </form>
+</div>
+<!--退票模态框-->
+<div style="overflow: hidden">
+    <form class="layui-form layui-form-pane" id="formDelete" lay-filter="formDelete" style="display: none;padding: 20px" autocomplete="off">
+        <!--存放主键id-->
+        <input type="hidden" name="trainId">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">原票号</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="reserveNumber" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">原车次</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="trainNumber" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">原票价</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="reserveFares" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">手续费</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <input type="text" name="serviceCharge" class="layui-input">
+            </div>
+        </div>
+
+        <!--操作栏-->
+        <div class="layui-btn-container" style="text-align: end">
+            <button type="button" class="layui-btn layui-btn-normal" id="btnUpdate">退票</button>
+        </div>
+    </form>
+</div>
 </body>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/myUtils.js"></script>
+<script src="/lib/layui/layui.js"></script>
+<script type="text/javascript">
+    var $,table,form,layer;
+
+    //声明表单
+    layui.use(function (){
+        table = layui.table,
+            form = layui.form,
+            tree = layui.tree,
+            $ = layui.$,
+            layer = layui.layer,
+            laydate = layui.laydate;
+
+        //表格渲染
+        tabFare = table.render({
+            elem: '#tabFare',//table元素
+            id: 'tabFare',
+            url:'/amend/selectPageList',
+            page:true,//开启分页
+            cols:[ [
+                {field: 'reserveId',title: '订票ID',hide:true},
+                {type:"numbers",title:"排序",align: 'center',width:80},
+                {field: 'siteName',title: '起点站',align: 'center',width:100},
+                {field: 'berthPlace', title: '终点站',align: 'center',width:100},
+                {field: 'trainNumber',title: '列车编号',align: 'center',width:160},
+                {field: 'reserveNumber',title: '订票编号',align: 'center',width:160},
+                {field: 'trainOutTime', title: '发车时间',width:180,align: 'center',templet:function (data){
+                        var jc =new Date(data.trainOutTime);
+                        return jc.getFullYear() + "-" + ((jc.getMonth() + 1)<10?"0":"")+(jc.getMonth() + 1) + "-" +
+                            (jc.getDate()<10?"0":"")+jc.getDate()+" - "+jc.getHours()+":"+jc.getMinutes()+":"+jc.getSeconds();
+                    }},
+                {field: 'reserveTime', title: '订票时间',width:180,align: 'center',templet:function (data){
+                        var so =new Date(data.reserveTime);
+                        return so.getFullYear() + "-" + ((so.getMonth() + 1)<10?"0":"")+(so.getMonth() + 1) + "-" +
+                            (so.getDate()<10?"0":"")+so.getDate()+" - "+so.getHours()+":"+so.getMinutes()+":"+so.getSeconds();
+                    }},
+                {field: 'reserveFares', title: '票价',align: 'center',width:100,templet:function (data){
+                        var saddieMoney = data.saddieMoney;//座位
+                        var reserveFares = data.reserveFares;//188
+                        var bad = saddieMoney + reserveFares;
+                        return bad;
+                    }},
+                {field: 'saddieName', title: '座位类型',align: 'center',width:180},
+                {
+                    title: '订单查询', align: 'center', templet: function (data) {
+                        var jc = new Date();
+                        var dd = jc.getFullYear() + "-" + ((jc.getMonth() + 1) < 10 ? "0" : "") + (jc.getMonth() + 1) + "-" + (jc.getDate() < 10 ? "0" : "") + jc.getDate() + " - " + jc.getHours() + ":" + jc.getMinutes() + ":" + jc.getSeconds();
+                        var so = new Date(data.trainOutTime);
+                        var trainOutTime = so.getFullYear() + "-" + ((so.getMonth() + 1) < 10 ? "0" : "") + (so.getMonth() + 1) + "-" + (so.getDate() < 10 ? "0" : "") + so.getDate() + " - " + so.getHours() + ":" + so.getMinutes() + ":" + so.getSeconds();
+                        /*判断发出时间是否大于现在时间*/
+                        if (trainOutTime < dd) {
+                            return '<button class="layui-btn layui-btn-xs">该订单已完成</button>';
+                        } else {
+                            return '<button class="layui-btn layui-btn-xs layui-btn-warm" onclick="changing(' + data.reserveId + ')">改签</button>' + '<button class="layui-btn layui-btn-xs layui-btn-danger" onclick="dishonour(' + data.reserveId + ')">退票</button>';
+                        }
+                    }
+                },
+            ] ],
+            limit: 10,//每页页数
+            limits: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]//定义每页页数选择下拉框
+        });
+
+        //查询按钮
+        $("#btnSearch").click(()=> {
+            //获取查询数据
+            let reserveNumber = $('#formSearch [name="reserveNumber"]').val();//订票编号
+            let reserveTime = $('#formSearch [name="reserveTime"]').val();//订票时间
+
+            table.reload('tabFare', {
+                where: {
+                    reserveNumber: reserveNumber,
+                    reserveTime: reserveTime
+                }//设定异步数据接口的额外参数
+            });
+        });
+
+        //订票时间
+        laydate.render({
+            elem:"#reserveTime",//指定元素
+            type:"date",
+            range:true
+        });
+
+    });
+
+    //改签订单
+    function changing(reserveId){
+
+        //打开模态框
+        layerFormIndex = layer.open({
+            type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+            skin:'layui-layer-molv',
+            area:['775px','342px'],
+            title:"改签",
+            anim: 4,
+            content:$("#formUpdate"),
+            cancel:function (){
+                layer.closeAll();
+            }
+        });
+
+        //数据回填
+        let id = reserveId;
+        $('#formSelect [name="reserveId"]').val(id);
+
+    }
+
+    //退票按钮
+    function dishonour(reserveId){
+        //打开弹出层
+        layerFormIndex = layer.open({
+            type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+            skin:'layui-layer-molv',
+            area:['400px','325px'],
+            title:"退票",
+            anim: 4,
+            content:$("#formDelete"),
+            cancel:function (){
+                layer.closeAll();
+            }
+        });
+
+        //数据回填
+        let id = reserveId;
+        $('#formSelect [name="reserveId"]').val(id);
+    };
+</script>
 </html>

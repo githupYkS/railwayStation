@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>查询信息</title>
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
     <link rel="stylesheet" href="/css/myUtil.css">
     <link rel="stylesheet" href="/css/user.css">
+    <link rel="stylesheet" href="/css/home.css">
     <style>
         .conter{
             width: 100%;
@@ -33,6 +35,43 @@
         .on{
             background-color: whitesmoke;
         }
+        .layui-form-label{
+            font-size: 12px;
+            margin-left: 280px;
+        }
+        .layui-input, .layui-textarea{
+            height: 30px;
+            margin-top: 4px;
+            font-size: 12px;
+        }
+        .layui-btn{
+            height: 30px;
+            width: 40px;
+            margin-top: 4px;
+        }
+        .layui-btn .layui-icon{
+            position: absolute;
+            top: 2px;
+            left: 11px;
+        }
+        .cone{
+            display: none;
+        }
+        .layui-form-item .layui-input-inline{
+            float: none;
+        }
+        .tranMinFare{
+            margin-left: 50px;
+        }
+        .tranMaxFare{
+            top: 0px;
+            right: 280px;
+        }
+        .ls{
+            position: absolute;
+            right: 10px;
+            top: -1px;
+        }
     </style>
 </head>
 <body style="background-color: whitesmoke">
@@ -54,20 +93,81 @@
         <!--标识是哪种查询-->
         <input type="hidden" name="isInsert" value="1"/>
         <!--刷新按钮-->
-        <button type="reset" hidden="hidden"/>
+        <button type="reset" hidden="hidden"></button>
 
-        <div class="layui-form-item">
+        <!--时刻查询-->
+        <div class="layui-form-item cone" id="o">
             <label class="layui-form-label">发车时间 :</label>
             <div class="layui-input-inline layui-show-xs-block">
                 <input type="text" id="maintenanceDate" name="maintenanceDate" class="layui-input">
             </div>
+
+            <div class="layui-input-inline layui-show-xs-block">
+                <button class="layui-btn" type="button" id="btnSearch">
+                    <i class="layui-icon layui-icon-search"></i>
+                </button>
+            </div>
         </div>
 
-        <div class="layui-input-inline layui-show-xs-block">
-            <button class="layui-btn" type="button" id="btnSearch">
-                <i class="layui-icon layui-icon-search"></i>
-            </button>
+        <!--车价查询-->
+        <div class="layui-form-item cone" id="o1">
+            <input class="layui-input tranMinFare" name="tranFare" id="tranMinFare" placeholder="请输入最低车价">
+            <span class="inline"></span>
+            <input class="layui-input tranMaxFare" name="tranFare" id="tranMaxFare" placeholder="请输入最高车价">
+
+            <div class="layui-input-inline layui-show-xs-block ls">
+                <button class="layui-btn" type="button" id="btnSearch1">
+                    <i class="layui-icon layui-icon-search"></i>
+                </button>
+            </div>
         </div>
+
+        <!--票价查询-->
+        <div class="layui-form-item cone" id="o2">
+            <input class="layui-input tranMinFare" name="tranFare" id="tranMinFare1" placeholder="请输入最低票价">
+            <span class="inline"></span>
+            <input class="layui-input tranMaxFare" name="tranFare" id="tranMaxFare1" placeholder="请输入最高票价">
+
+            <!--查询按钮-->
+            <div class="layui-input-inline layui-show-xs-block ls">
+                <button class="layui-btn" type="button" id="btnSearch2">
+                    <i class="layui-icon layui-icon-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!--票数查询-->
+        <div class="layui-form-item cone" id="o3">
+            <label class="layui-form-label">列车名称 :</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <select name="realName" class="layui-select layui-input"  lay-filter="demo4" lay-verify="required">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline layui-show-xs-block">
+                <button class="layui-btn" type="button" id="btnSearch3">
+                    <i class="layui-icon layui-icon-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!--站点查询-->
+        <div class="layui-form-item cone" id="o4">
+            <label class="layui-form-label">站点</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <select name="realName" class="layui-select layui-input"  lay-filter="demo4" lay-verify="required">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline layui-show-xs-block">
+                <button class="layui-btn" type="button" id="btnSearch4">
+                    <i class="layui-icon layui-icon-search"></i>
+                </button>
+            </div>
+        </div>
+
         <!--表格-->
         <div class="layui-card-body ">
             <table class="layui-hide" style="text-align: center" id="tablezzBrId" lay-filter="tablezzBrIdEvent"></table>
@@ -99,14 +199,8 @@
         laydate.render({
             elem:"#maintenanceDate",
             //开启时间段选择框
-            type: 'datetime',
-            format:'yyyy/MM/dd',
-            btns: ['clear', 'confirm'],
-            done: function(value, date){
-                endMax = end.config.max;
-                end.config.min = date; //最大时间为结束时间的开始值
-                end.config.min.month = date.month -1;
-            }
+            type: 'date',
+            range: true,//开启日期时间段选择
         })
 
         //时刻表查询按钮
@@ -114,7 +208,14 @@
             //重置表单
             $('#formSearch [name="reset"]').click();
             //状态为1时刻表查询
-            form.val('formMaintenance',{isInsert : 1});
+            form.val('formSearch',{isInsert : 1});
+            //显示时间框
+            $("#o").removeClass("cone")
+            //其它显示隐藏
+            $("#o1").addClass("cone")
+            $("#o2").addClass("cone")
+            $("#o3").addClass("cone")
+            $("#o4").addClass("cone")
             //表单
             tablezzBrId = table.reload({
                 elem: "#tablezzBrId",
@@ -132,12 +233,178 @@
             layerFormIndex = layer.open({
                 type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                 skin:'layui-layer-molv',
-                area:['500px','400px'],
+                area:['1000px','400px'],
                 title:"时刻表查询",
                 anim: 4,
                 content:$("#formSearch"),
                 cancel:function (){
                     layer.closeAll();
+                    $("li").removeClass("on")
+                }
+            });
+        });
+
+        //车价查询按钮
+        $("#the_car_query").click(()=>{
+            //重置表单
+            $('#formSearch [name="reset"]').click();
+            //状态为1时刻表查询
+            form.val('formSearch',{isInsert : 2});
+            //显示车价查询框
+            $("#o1").removeClass("cone");
+            //其它显示隐藏
+            $("#o").addClass("cone")
+            $("#o2").addClass("cone")
+            $("#o3").addClass("cone")
+            $("#o4").addClass("cone")
+            //表单
+            tablezzBrId = table.reload({
+                elem: "#tablezzBrId",
+                id: "tablezzBrId",
+                url:'',
+                page:true,
+                cols:[ [
+                    {}
+                ] ],
+                limit:5,
+                limits:[5,10,15,20,25]
+            })
+
+            //打开弹出层
+            layerFormIndex = layer.open({
+                type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                skin:'layui-layer-molv',
+                area:['1000px','400px'],
+                title:"车价查询",
+                anim: 4,
+                content:$("#formSearch"),
+                cancel:function (){
+                    layer.closeAll();
+                    $("li").removeClass("on")
+                }
+            });
+        });
+
+        //车价查询按钮
+        $("#the_fare_query").click(()=>{
+            //重置表单
+            $('#formSearch [name="reset"]').click();
+            //状态为1时刻表查询
+            form.val('formSearch',{isInsert : 3});
+            //显示车价框
+            $("#o2").removeClass("cone");
+            //其它显示隐藏
+            $("#o1").addClass("cone");
+            $("#o").addClass("cone")
+            $("#o3").addClass("cone")
+            $("#o4").addClass("cone")
+            //表单
+            tablezzBrId = table.reload({
+                elem: "#tablezzBrId",
+                id: "tablezzBrId",
+                url:'',
+                page:true,
+                cols:[ [
+                    {}
+                ] ],
+                limit:5,
+                limits:[5,10,15,20,25]
+            })
+
+            //打开弹出层
+            layerFormIndex = layer.open({
+                type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                skin:'layui-layer-molv',
+                area:['1000px','400px'],
+                title:"票价查询",
+                anim: 4,
+                content:$("#formSearch"),
+                cancel:function (){
+                    layer.closeAll();
+                    $("li").removeClass("on")
+                }
+            });
+        });
+
+        //票数查询
+        $("#votes_to_query").click(()=>{
+            //重置表单
+            $('#formSearch [name="reset"]').click();
+            //状态为1时刻表查询
+            form.val('formSearch',{isInsert : 4});
+            //显示列车查询框
+            $("#o3").removeClass("cone");
+
+            //其它显示隐藏
+            $("#o2").addClass("cone");
+            $("#o1").addClass("cone");
+            $("#o").addClass("cone");
+            $("#o4").addClass("cone");
+            //表单
+            tablezzBrId = table.reload({
+                elem: "#tablezzBrId",
+                id: "tablezzBrId",
+                url:'',
+                page:true,
+                cols:[ [
+                    {}
+                ] ],
+                limit:5,
+                limits:[5,10,15,20,25]
+            })
+
+            //打开弹出层
+            layerFormIndex = layer.open({
+                type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                skin:'layui-layer-molv',
+                area:['1000px','400px'],
+                title:"票数查询",
+                anim: 4,
+                content:$("#formSearch"),
+                cancel:function (){
+                    layer.closeAll();
+                    $("li").removeClass("on")
+                }
+            });
+        });
+
+        //站点查询按钮
+        $("#site_query").click(()=>{
+            //重置表单
+            $('#formSearch [name="reset"]').click();
+            //状态为1时刻表查询
+            form.val('formSearch',{isInsert : 5});
+            //显示站点框
+            $("#o4").removeClass("cone");
+            //其它显示隐藏
+            $("#o3").addClass("cone");
+            $("#o2").addClass("cone");
+            $("#o1").addClass("cone");
+            $("#o").addClass("cone");
+            //表单
+            tablezzBrId = table.reload({
+                elem: "#tablezzBrId",
+                id: "tablezzBrId",
+                url:'',
+                page:true,
+                cols:[ [
+                    {}
+                ] ],
+                limit:5,
+                limits:[5,10,15,20,25]
+            })
+
+            //打开弹出层
+            layerFormIndex = layer.open({
+                type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                skin:'layui-layer-molv',
+                area:['1000px','400px'],
+                title:"站点查询",
+                anim: 4,
+                content:$("#formSearch"),
+                cancel:function (){
+                    layer.closeAll();
+                    $("li").removeClass("on")
                 }
             });
         });

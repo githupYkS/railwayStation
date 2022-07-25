@@ -63,27 +63,16 @@
         </div>
         <!--数据回填-->
         <div class="inputObject">
-            <div class="layui-inline layui-show-xs-block" style="margin: 10px 0px 0px -22px">
-                <label class="layui-form-label">座位类型:</label>
-                <div class="layui-input-inline layui-show-xs-block">
-                    <select lay-filter="filterID" name="saddieName" id="saddieId"></select>
-                </div>
-            </div>
-            <div class="layui-inline layui-show-xs-block" style="margin:-60px 0px 0px 230px">
-                <label class="layui-form-label">票价:</label>
-                <div class="layui-input-inline layui-show-xs-block" style="width: 190px">
-                    <input type="text" id="reserveFares" name="reserveFares" class="layui-input">
-                </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <div class="layui-input-inline layui-show-xs-block">
+                        <input name="">
+                    </div>
+                </label>
             </div>
             <!--操作栏-->
             <div style="margin-left: 463px">
                 <button type="button" class="layui-btn layui-btn-normal" id="btnUpdate">修改</button>
-            </div>
-        </div>
-        <!--表格-->
-        <div class="tableclass">
-            <div class="layui-card-body">
-                <table class="layui-hide" id="tabMoside" lay-filter="tabMoside"></table>
             </div>
         </div>
     </div>
@@ -191,28 +180,6 @@
         //数据回填
         let id = reserveId;
         $('#formSelect [name="reserveId"]').val(id);
-        //表格渲染
-        tabMoside = table.render({
-            elem: '#tabMoside',//table元素
-            id: 'tabMoside',
-            url:'/amend/selectTabMoside',
-            page:true,//开启分页
-            cols:[ [
-                {field: 'trainId',title: '订票ID',hide:true},
-                {type:"radio",title:"排序",align: 'center',width:80},
-                {field: 'siteName',title: '起点站',align: 'center',width:85},
-                {field: 'berthPlace', title: '终点站',align: 'center',width:101},
-                {field: 'reserveFares', title: '票价',align: 'center',width:78},
-                {field: 'trainOutTime', title: '出发时间',align: 'center',width:177,templet:function (data){
-                        var jc =new Date(data.trainOutTime);
-                        return jc.getFullYear() + "-" + ((jc.getMonth() + 1)<10?"0":"")+(jc.getMonth() + 1) + "-" +
-                            (jc.getDate()<10?"0":"")+jc.getDate()+" - "+jc.getHours()+":"+jc.getMinutes()+":"+jc.getSeconds();
-                    }},
-            ] ],
-            limit: 5,//每页页数
-            limits: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]//定义每页页数选择下拉框
-        });
-
         //下拉框
         createH5Select("berthId","/amend/selectBerthId",{},function(data){
             form.render('select');//刷新select选择渲染
@@ -223,19 +190,6 @@
         createH5Select("saddieId","/home/SysSaddieId",{},function(data){
             form.render('select');//刷新select选择渲染
 
-        });
-
-        //监听table表格，选中数据，触发数据回填
-        table.on('row(tabMoside)',function (obj){//监听当行
-            var tr = obj.data;//获取渲染表格数据
-            //数据回填
-            var reserveFares = tr.reserveFares;
-            console.log(tr.reserveFares);
-            var saddieMoney = tr.saddieMoney;
-            console.log(tr.saddieMoney);
-            var ddd = reserveFares + saddieMoney;
-            $('#formSelect [name="reserveFares"]').val(ddd);
-            $('#formSelect [name="trainId"]').val(tr.trainId);
         });
 
         //监听座位下拉框

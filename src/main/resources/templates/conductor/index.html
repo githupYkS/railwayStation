@@ -98,7 +98,8 @@
 <div>
     <form class="layui-form" id="formEditPassword" style="display: none;margin: 20px;" autocomplete="off">
 
-        <input type="reset" hidden>
+        <input type="reset" id="reset" hidden>
+
         <div style="padding: 20px;">
             <label>
                 输 入 原 密 码 ：
@@ -196,16 +197,27 @@
             }
         });
 
-        //打开修改弹出层
-        $("#editpassword").click(()=>{
-            layerFormIndex = layer.open({
-                type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
-                skin:'layui-layer-molv',
-                area:['500px','400px'],
-                title:'修改密码',
-                content:$("#formEditPassword"),
-                cancel:function (){
-                    layer.closeAll();
+        /*打开修改密码弹出层*/
+        $("#updatePassword").click(()=>{
+            $('#formEditPassword [type="reset"]').click();//重置表单
+            //弹出层
+            layerIndexForm = layer.open({
+                type:1,
+                skin: "layui-layer-molv",
+                offset: ['70px','380px'],//弹出垂直水平居中
+                area: ["500px", "400px"],
+                anim: 4,
+                title: "修改密码",
+                content: $("#formEditPassword"),
+                cancel: function () {
+                    $('#formEditPassword [type="reset"]').click();//重置表单
+                    //禁用新密码和确认密码
+                    $("#newPassword").attr("disabled", "disabled");
+                    $("#confirmPassword").attr("disabled", "disabled");
+                },
+                success: function () {
+                    $("#oldTips").text("");
+                    $('#formEditPassword [type="reset"]').click();//重置表单
                 }
             });
         });
