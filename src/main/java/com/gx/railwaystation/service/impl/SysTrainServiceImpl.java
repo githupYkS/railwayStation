@@ -63,4 +63,11 @@ public class SysTrainServiceImpl implements SysTrainService {
         Integer countAllMosize = this.sysTrainMapper.countAllMosize(berthId);
         return new LayuiTableData<>(countAllMosize,trainVos);
     }
+
+    @Override
+    public LayuiTableData<trainVo> selectPageList1(Integer limit, Integer page,String startDate, String endDate) {
+        List<trainVo> trainList = this.sysTrainMapper.selectPageList1(limit,page,endDate,startDate);
+        Integer couneAll1 =  this.sysTrainMapper.countAll1(startDate, endDate);
+        return new LayuiTableData<>(couneAll1,trainList);
+    }
 }

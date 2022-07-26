@@ -1,12 +1,15 @@
 package com.gx.railwaystation.controller;
 
 import com.gx.railwaystation.po.SysStaff;
-import com.gx.railwaystation.po.SysUser;
 import com.gx.railwaystation.service.SysStaffService;
+import com.gx.railwaystation.service.SysTrainService;
+import com.gx.railwaystation.service.SysUpdateFareService;
 import com.gx.railwaystation.util.MD5Util;
 import com.gx.railwaystation.util.ProjectParameter;
 import com.gx.railwaystation.util.Tools;
 import com.gx.railwaystation.vo.JsonMsg;
+import com.gx.railwaystation.vo.LayuiTableData;
+import com.gx.railwaystation.vo.trainVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,12 +34,18 @@ public class conductorController {
 
     private SysStaffService sysStaffService;
 
+    private SysUpdateFareService sysUpdateFareService;
+
+    private SysTrainService sysTrainService;
+
     @Autowired
-    public conductorController(SysStaffService sysStaffService) {
+    public conductorController(SysStaffService sysStaffService,SysUpdateFareService sysUpdateFareService,SysTrainService sysTrainService) {
         this.sysStaffService = sysStaffService;
+        this.sysUpdateFareService = sysUpdateFareService;
+        this.sysTrainService = sysTrainService;
     }
 
-    /*---------------------------------------------------售票主页面----------------------------------------------------------*/
+    /*---------------------------------------------------售票主页面------------------------------------------------------*/
 
     /**
      * 修改售票员密码
@@ -255,8 +264,32 @@ public class conductorController {
         return jsonMsg;
     }
 
-
-
     /*----------------------------------------------------售票员查询信息主页面-----------------------------------------------------------*/
 
+    /**
+     * 时刻表查询
+     * @param page
+     * @param limit
+     * @param reserveTime
+     * @return
+     */
+    @RequestMapping(value = "/selectPageList",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public LayuiTableData<trainVo> selectPageList(int page, int limit, String reserveTime){
+        //开始时间和结束时间   2021-04-22 - 2021-05-22
+        String startDate = null;
+        String endDate = null;
+        if (Tools.isNotNull(reserveTime)) {
+            String[] strDates = reserveTime.split(" - ");
+            if (strDates.length == 2) {
+                if (strDates[0].matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                    startDate = strDates[0];
+                }
+                if (strDates[1].matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                    endDate = strDates[1];
+                }
+            }
+        }
+        return this.sysTrainService.selectPageList1(limit,page,endDate,startDate);
+    }
 }

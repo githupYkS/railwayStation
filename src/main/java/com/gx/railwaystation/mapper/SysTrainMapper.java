@@ -83,4 +83,21 @@ public interface SysTrainMapper {
     *查询总数
     */
     Integer countAllMosize(Integer berthId);
+
+
+    /**
+     *  分页查询数据-->时刻表查询
+     */
+    List<trainVo> selectPageList1(@Param("page") int page,
+                                 @Param("limit") int limit,
+                                 @Param("startDate") String startDate,
+                                 @Param("endDate") String endDate);
+
+    /**
+     * 查询分页总条数
+     */
+    int countAll1( @Param("startDate") String startDate,
+                 @Param("endDate") String endDate);
+
+
 }

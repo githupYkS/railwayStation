@@ -198,13 +198,12 @@
         });
 
         /*打开修改密码弹出层*/
-        $("#updatePassword").click(()=>{
+        $("#editpassword").click(()=>{
             $('#formEditPassword [type="reset"]').click();//重置表单
             //弹出层
             layerIndexForm = layer.open({
                 type:1,
                 skin: "layui-layer-molv",
-                offset: ['70px','380px'],//弹出垂直水平居中
                 area: ["500px", "400px"],
                 anim: 4,
                 title: "修改密码",

@@ -217,13 +217,27 @@
             $("#o3").addClass("cone")
             $("#o4").addClass("cone")
             //表单
-            tablezzBrId = table.reload({
+            tablezzBrId = table.render({
                 elem: "#tablezzBrId",
                 id: "tablezzBrId",
-                url:'',
+                url:'/conductor/selectPageList',
                 page:true,
                 cols:[ [
-                    {}
+                    {type:"numbers",title:"排序",align: 'center'},
+                    {field: 'trainId',title: '订票ID',hide:true},
+                    {field: 'siteName',title: '起点站',align: 'center'},
+                    {field: 'berthPlace', title: '终点站',align: 'center'},
+                    {field: 'trainNumber',title: '列车编号',align: 'center'},
+                    {field: 'trainOutTime', title: '发车时间',align: 'center',templet:function (data){
+                            var jc =new Date(data.trainOutTime);
+                            return jc.getFullYear() + "-" + ((jc.getMonth() + 1)<10?"0":"")+(jc.getMonth() + 1) + "-" +
+                                (jc.getDate()<10?"0":"")+jc.getDate()+" - "+jc.getHours()+":"+jc.getMinutes()+":"+jc.getSeconds();
+                        }},
+                    {field: 'reserveTime', title: '订票时间',align: 'center',templet:function (data){
+                            var so =new Date(data.reserveTime);
+                            return so.getFullYear() + "-" + ((so.getMonth() + 1)<10?"0":"")+(so.getMonth() + 1) + "-" +
+                                (so.getDate()<10?"0":"")+so.getDate()+" - "+so.getHours()+":"+so.getMinutes()+":"+so.getSeconds();
+                        }},
                 ] ],
                 limit:5,
                 limits:[5,10,15,20,25]

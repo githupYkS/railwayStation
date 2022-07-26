@@ -34,4 +34,10 @@ public interface SysTrainService {
     *form弹出层表格
     */
     LayuiTableData<trainVo> selectPageMosize(Integer limit,Integer page,Integer berthId);
+
+    /**
+     * layui table 渲染数据
+     */
+    LayuiTableData<trainVo> selectPageList1(Integer limit, Integer page,String startDate, String endDate);
+
 }
