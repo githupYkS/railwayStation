@@ -80,7 +80,7 @@
     <div class="conter">
         <ul>
             <li class="con" id="schedule_query"><span>时刻表查询</span></li>
-            <li class="con" id="the_car_query"><span>车价查询</span></li>
+            <li class="con" id="the_car_query"><span>状态查询</span></li>
             <li class="con" id="the_fare_query"><span>票价查询</span></li>
             <li class="con" id="votes_to_query"><span>票数查询</span></li>
             <li class="con" id="site_query"><span>站点查询</span></li>
@@ -109,11 +109,14 @@
             </div>
         </div>
 
-        <!--车价查询-->
+        <!--状态查询-->
         <div class="layui-form-item cone" id="o1">
-            <input class="layui-input tranMinFare" name="tranFare" id="tranMinFare" placeholder="请输入最低车价">
-            <span class="inline"></span>
-            <input class="layui-input tranMaxFare" name="tranFare" id="tranMaxFare" placeholder="请输入最高车价">
+            <label class="layui-form-label">状态查询</label>
+            <div class="layui-input-inline layui-show-xs-block">
+                <select name="realName" class="layui-select layui-input"  lay-filter="demo4" lay-verify="required">
+                    <option value="">请选择</option>
+                </select>
+            </div>
 
             <div class="layui-input-inline layui-show-xs-block ls">
                 <button class="layui-btn" type="button" id="btnSearch1">
@@ -169,8 +172,24 @@
         </div>
 
         <!--表格-->
-        <div class="layui-card-body ">
+        <div class="layui-card-body cone" id="b">
             <table class="layui-hide" style="text-align: center" id="tablezzBrId" lay-filter="tablezzBrIdEvent"></table>
+        </div>
+
+        <div class="layui-card-body cone" id="b1">
+            <table class="layui-hide" style="text-align: center" id="tablezzBrId1" lay-filter="tablezzBrIdEvent"></table>
+        </div>
+
+        <div class="layui-card-body cone" id="b2">
+            <table class="layui-hide" style="text-align: center" id="tablezzBrId2" lay-filter="tablezzBrIdEvent"></table>
+        </div>
+
+        <div class="layui-card-body cone" id="b3">
+            <table class="layui-hide" style="text-align: center" id="tablezzBrId3" lay-filter="tablezzBrIdEvent"></table>
+        </div>
+
+        <div class="layui-card-body cone" id="b4">
+            <table class="layui-hide" style="text-align: center" id="tablezzBrId4" lay-filter="tablezzBrIdEvent"></table>
         </div>
     </form>
 </div>
@@ -216,6 +235,14 @@
             $("#o2").addClass("cone")
             $("#o3").addClass("cone")
             $("#o4").addClass("cone")
+
+            //表格隐藏
+            $("#b").removeClass("cone")
+            //其它显示隐藏
+            $("#b1").addClass("cone")
+            $("#b2").addClass("cone")
+            $("#b3").addClass("cone")
+            $("#b4").addClass("cone")
             //表单
             tablezzBrId = table.render({
                 elem: "#tablezzBrId",
@@ -271,10 +298,18 @@
             $("#o2").addClass("cone")
             $("#o3").addClass("cone")
             $("#o4").addClass("cone")
+
+            //表格隐藏
+            $("#b1").removeClass("cone");
+            //其它显示隐藏
+            $("#b").addClass("cone");
+            $("#b2").addClass("cone");
+            $("#b3").addClass("cone");
+            $("#b4").addClass("cone");
             //表单
-            tablezzBrId = table.reload({
-                elem: "#tablezzBrId",
-                id: "tablezzBrId",
+            tablezzBrId2 = table.reload({
+                elem: "#tablezzBrId1",
+                id: "tablezzBrId1",
                 url:'',
                 page:true,
                 cols:[ [
@@ -312,10 +347,17 @@
             $("#o").addClass("cone")
             $("#o3").addClass("cone")
             $("#o4").addClass("cone")
+
+            $("#b2").removeClass("cone");
+            //其它显示隐藏
+            $("#b1").addClass("cone");
+            $("#b").addClass("cone")
+            $("#b3").addClass("cone")
+            $("#b4").addClass("cone")
             //表单
             tablezzBrId = table.reload({
-                elem: "#tablezzBrId",
-                id: "tablezzBrId",
+                elem: "#tablezzBrId2",
+                id: "tablezzBrId2",
                 url:'',
                 page:true,
                 cols:[ [
@@ -354,10 +396,19 @@
             $("#o1").addClass("cone");
             $("#o").addClass("cone");
             $("#o4").addClass("cone");
+
+            //隐藏表格
+            $("#b3").removeClass("cone");
+
+            //其它显示隐藏
+            $("#b2").addClass("cone");
+            $("#b1").addClass("cone");
+            $("#b").addClass("cone");
+            $("#b4").addClass("cone");
             //表单
             tablezzBrId = table.reload({
-                elem: "#tablezzBrId",
-                id: "tablezzBrId",
+                elem: "#tablezzBrId3",
+                id: "tablezzBrId3",
                 url:'',
                 page:true,
                 cols:[ [
@@ -395,10 +446,17 @@
             $("#o2").addClass("cone");
             $("#o1").addClass("cone");
             $("#o").addClass("cone");
+
+            $("#b4").removeClass("cone");
+            //其它显示隐藏
+            $("#b3").addClass("cone");
+            $("#b2").addClass("cone");
+            $("#b1").addClass("cone");
+            $("#b").addClass("cone");
             //表单
             tablezzBrId = table.reload({
-                elem: "#tablezzBrId",
-                id: "tablezzBrId",
+                elem: "#tablezzBrId4",
+                id: "tablezzBrId4",
                 url:'',
                 page:true,
                 cols:[ [

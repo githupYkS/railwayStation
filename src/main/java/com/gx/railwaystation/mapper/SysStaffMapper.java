@@ -1,12 +1,14 @@
 package com.gx.railwaystation.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.gx.railwaystation.po.SysSite;
 import com.gx.railwaystation.po.SysStaff;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 
 @Repository
-public interface SysStaffMapper {
+public interface SysStaffMapper extends BaseMapper<SysStaff> {
 
     /**
      * 根据页面输入账号查询数据

@@ -65,9 +65,10 @@ public class SysTrainServiceImpl implements SysTrainService {
     }
 
     @Override
-    public LayuiTableData<trainVo> selectPageList1(Integer limit, Integer page,String startDate, String endDate) {
-        List<trainVo> trainList = this.sysTrainMapper.selectPageList1(limit,page,endDate,startDate);
-        Integer couneAll1 =  this.sysTrainMapper.countAll1(startDate, endDate);
-        return new LayuiTableData<>(couneAll1,trainList);
+    public LayuiTableData<trainVo> selectPageListCo(Integer page, Integer limit, String startDate, String endDate, Integer trainTypeId, Integer siteId, Integer trainSeat, Integer reserveFares) {
+        List<trainVo> trainVos = this.sysTrainMapper.selectPageListCo(page, limit, startDate, endDate, trainTypeId, siteId, trainSeat, reserveFares);
+        Integer countAll = this.sysTrainMapper.countAllCo(startDate,endDate,trainTypeId,siteId,trainSeat,reserveFares);
+        return new LayuiTableData<>(countAll,trainVos);
     }
+
 }

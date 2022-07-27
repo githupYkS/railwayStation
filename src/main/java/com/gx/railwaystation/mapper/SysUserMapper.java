@@ -1,5 +1,6 @@
 package com.gx.railwaystation.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gx.railwaystation.po.SysUser;
 import com.gx.railwaystation.vo.MoneyVo;
 import org.springframework.stereotype.Repository;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * SysUserMapper继承基类
  */
 @Repository
-public interface SysUserMapper{
+public interface SysUserMapper extends BaseMapper<SysUser> {
 
     /**
      * 根据用户输入账号查询数据

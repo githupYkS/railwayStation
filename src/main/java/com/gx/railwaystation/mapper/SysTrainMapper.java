@@ -1,5 +1,6 @@
 package com.gx.railwaystation.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gx.railwaystation.po.SysTrain;
 import com.gx.railwaystation.po.SysTrainType;
 import com.gx.railwaystation.vo.MoneyPlace;
@@ -13,7 +14,7 @@ import java.util.List;
 
 
 @Repository
-public interface SysTrainMapper {
+public interface SysTrainMapper extends BaseMapper<SysTrainType> {
 
     /**
      * 列车状态下拉框
@@ -84,20 +85,41 @@ public interface SysTrainMapper {
     */
     Integer countAllMosize(Integer berthId);
 
+    /**
+     * 售票员分页的各种查询
+     * @param page
+     * @param limit
+     * @param startDate
+     * @param endDate
+     * @param trainTypeId
+     * @param siteId
+     * @param trainSeat
+     * @return
+     */
+    List<trainVo> selectPageListCo(@Param("page") Integer page,
+                                   @Param("limit") Integer limit,
+                                   @Param("startDate") String startDate,
+                                   @Param("endDate") String endDate,
+                                   @Param("trainTypeId") Integer trainTypeId,
+                                   @Param("siteId") Integer siteId,
+                                   @Param("trainSeat") Integer trainSeat,
+                                   @Param("reserveFares") Integer reserveFares);
 
     /**
-     *  分页查询数据-->时刻表查询
+     *统计售票员查询出来的各种数据
+     * @param startDate
+     * @param endDate
+     * @param trainTypeId
+     * @param siteId
+     * @param trainSeat
+     * @return
      */
-    List<trainVo> selectPageList1(@Param("page") int page,
-                                 @Param("limit") int limit,
-                                 @Param("startDate") String startDate,
-                                 @Param("endDate") String endDate);
-
-    /**
-     * 查询分页总条数
-     */
-    int countAll1( @Param("startDate") String startDate,
-                 @Param("endDate") String endDate);
-
+    Integer countAllCo(
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate,
+            @Param("trainTypeId") Integer trainTypeId,
+            @Param("siteId") Integer siteId,
+            @Param("trainSeat") Integer trainSeat,
+            @Param("reserveFares") Integer reserveFares);
 
 }

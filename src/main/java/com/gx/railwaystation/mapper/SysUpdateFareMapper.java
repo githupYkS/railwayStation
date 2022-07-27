@@ -1,5 +1,6 @@
 package com.gx.railwaystation.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gx.railwaystation.vo.FareVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SysUpdateFareMapper {
+public interface SysUpdateFareMapper extends BaseMapper<FareVo> {
 
     /**
      * 查询分页数据

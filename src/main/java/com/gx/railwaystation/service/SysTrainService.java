@@ -38,6 +38,8 @@ public interface SysTrainService {
     /**
      * layui table 渲染数据
      */
-    LayuiTableData<trainVo> selectPageList1(Integer limit, Integer page,String startDate, String endDate);
+    LayuiTableData<trainVo> selectPageListCo(Integer page,Integer limit,String startDate,String endDate,
+                                             Integer trainTypeId,Integer siteId,Integer trainSeat,Integer reserveFares);
+
 
 }

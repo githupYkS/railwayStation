@@ -247,67 +247,64 @@
     </where>
   </select>
 
-  <!--时刻表查询-->
-  <select id="selectPageList1" resultMap="BoasTypeId">
+
+  <!--售票员查询界面-->
+  <select id="selectPageListCo" resultMap="BoasTypeId">
     <!--MyBatis Bind计算分页开始索引-->
     <bind name="startIndex" value="(page-1) * limit"/>
-    SELECT
-    sys_train.train_id,
-    sys_train.site_id,
-    sys_train.car_id,
-    sys_train.moment_id,
-    sys_train.train_out_time,
-    sys_train.train_reach_time,
-    sys_train.train_seat,
-    sys_train.train_number,
-    sys_train.train_type_id,
-    sys_train.berth_id,
-    sys_site.site_id,
-    sys_site.site_name,
-    sys_train_type.train_type_id,
-    sys_train_type.train_type_name,
-    sys_car.car_id,
-    sys_car.car_name,
-    sys_berth.berth_id,
-    sys_berth.berth_place
-    FROM
-    sys_train
-    INNER JOIN sys_site
-    ON sys_train.site_id = sys_site.site_id
-    INNER JOIN sys_train_type
-    ON sys_train.train_type_id = sys_train_type.train_type_id
-    INNER JOIN sys_car
-    ON sys_train.car_id = sys_car.car_id
-    INNER JOIN sys_berth
-    ON sys_train.berth_id = sys_berth.berth_id
+    SELECT sys_train.*,sys_site.*,sys_car.*,sys_moment.*,sys_train_type.*,sys_berth.*,sys_reserve.* FROM sys_train
+    INNER JOIN sys_site ON sys_train.site_id = sys_site.site_id
+    INNER JOIN sys_car ON sys_train.car_id = sys_car.car_id
+    INNER JOIN sys_moment ON sys_train.moment_id = sys_moment.moment_id
+    INNER JOIN sys_train_type ON sys_train.train_type_id = sys_train_type.train_type_id
+    INNER JOIN sys_berth ON sys_train.berth_id = sys_berth.berth_id
+    INNER JOIN sys_reserve ON sys_train.reserve_id = sys_reserve.reserve_id
     <where>
-      <if test="startDate!=null and endDate!=null">
+      <if test="siteId!=null">
+        sys_site.site_id = #{siteId,jdbcType=INTEGER}
+      </if>
+      <if test="startDate!=null and endDate!=null and startDate!= '' and endDate!= '' ">
         AND sys_train.train_out_time &gt;= CONCAT('',#{startDate})
         AND sys_train.train_out_time &lt;= CONCAT('',#{endDate})
+      </if>
+      <if test="trainTypeId!=null">
+        AND sys_train_type.train_type_id = #{trainTypeId,jdbcType=INTEGER}
+      </if>
+      <if test="reserveFares !=null">
+        AND sys_train.reserve_fares = #{}
+      </if>
+      <if test="trainSeat!=null">
+        AND sys_train.reserve_fares = #{}
       </if>
     </where>
     ORDER BY sys_train.train_id
     LIMIT #{startIndex,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
   </select>
 
-  <!--查询出时刻表总数据-->
-  <select id="countAll1" resultType="java.lang.Integer">
-    SELECT
-    COUNT(sys_train.train_id)
-    FROM
-    sys_train
-    INNER JOIN sys_site
-    ON sys_train.site_id = sys_site.site_id
-    INNER JOIN sys_train_type
-    ON sys_train.train_type_id = sys_train_type.train_type_id
-    INNER JOIN sys_car
-    ON sys_train.car_id = sys_car.car_id
-    INNER JOIN sys_berth
-    ON sys_train.berth_id = sys_berth.berth_id
+  <select id="couneAllCo" parameterType="java.lang.Integer">
+    SELECT COUNT(sys_train.train_id) FROM sys_train
+    INNER JOIN sys_site ON sys_train.site_id = sys_site.site_id
+    INNER JOIN sys_car ON sys_train.car_id = sys_car.car_id
+    INNER JOIN sys_moment ON sys_train.moment_id = sys_moment.moment_id
+    INNER JOIN sys_train_type ON sys_train.train_type_id = sys_train_type.train_type_id
+    INNER JOIN sys_berth ON sys_train.berth_id = sys_berth.berth_id
+    INNER JOIN sys_reserve ON sys_train.reserve_id = sys_reserve.reserve_id
     <where>
+      <if test="siteId!=null">
+        sys_site.site_id = #{siteId,jdbcType=INTEGER}
+      </if>
       <if test="startDate!=null and endDate!=null and startDate!= '' and endDate!= '' ">
         AND sys_train.train_out_time &gt;= CONCAT('',#{startDate})
         AND sys_train.train_out_time &lt;= CONCAT('',#{endDate})
+      </if>
+      <if test="trainTypeId!=null">
+        AND sys_train_type.train_type_id = #{trainTypeId,jdbcType=INTEGER}
+      </if>
+      <if test="reserveFares !=null">
+        AND sys_train.reserve_fares = #{reserveFares,jdbcType=DECIMAL}
+      </if>
+      <if test="trainSeat!=null">
+        AND sys_train.reserve_fares = #{trainSeat,jdbcType=INTEGER}
       </if>
     </where>
   </select>

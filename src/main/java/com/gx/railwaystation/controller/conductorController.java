@@ -267,7 +267,7 @@ public class conductorController {
     /*----------------------------------------------------售票员查询信息主页面-----------------------------------------------------------*/
 
     /**
-     * 时刻表查询
+     * 售票员查询界面-》时刻表查询
      * @param page
      * @param limit
      * @param reserveTime
@@ -277,7 +277,7 @@ public class conductorController {
     @ResponseBody
     public LayuiTableData<trainVo> selectPageList(int page, int limit, String reserveTime){
         //开始时间和结束时间   2021-04-22 - 2021-05-22
-        String startDate = null;
+        /*String startDate = null;
         String endDate = null;
         if (Tools.isNotNull(reserveTime)) {
             String[] strDates = reserveTime.split(" - ");
@@ -289,7 +289,61 @@ public class conductorController {
                     endDate = strDates[1];
                 }
             }
-        }
-        return this.sysTrainService.selectPageList1(limit,page,endDate,startDate);
+        }*/
+        return null;
+    }
+
+    /**
+     * 售票员查询界面-》列车状态查询
+     */
+    @RequestMapping(value = "/selectTypeList",produces = "appliation/json;chatset=utf-8")
+    @ResponseBody
+    public LayuiTableData<trainVo> selectTypeList(Integer page,Integer limit){
+        return null;
+    }
+
+    /**
+     *售票员查询界面-》票价查询
+     * @return
+     */
+    @RequestMapping(value = "/selectMoney",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public LayuiTableData<trainVo> selectMoney(Integer page,Integer limit){
+        return null;
+    }
+
+    /*
+    *售票员查询界面-》票数查询
+    */
+    @RequestMapping(value = "/selectPiaoshu",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public LayuiTableData<trainVo> selectPiaoshu(Integer page,Integer limit){
+        return null;
+    }
+
+    /**
+     * 售票员查询界面-》站点查询
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping(value = "/selectSeat",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public LayuiTableData<trainVo> selectSeat(Integer page,Integer limit){
+        return null;
+    }
+
+
+
+    /*--------------------------------------------------------退票主界面-------------------------------------------------*/
+
+    /**
+     * 售票员退票界面-》查询需要退票的数据
+     * @param reserveId
+     * @return
+     */
+    public JsonMsg selectFrave(Integer reserveId){
+        JsonMsg jsonMsg = new JsonMsg();
+        return jsonMsg;
     }
 }

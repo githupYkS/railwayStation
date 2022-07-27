@@ -112,21 +112,21 @@
         <input type="hidden" name="trainId">
 
         <div class="layui-form-item">
-            <label class="layui-form-label">原票号</label>
+            <label class="layui-form-label">票号</label>
             <div class="layui-input-inline layui-show-xs-block">
                 <input type="text" name="reserveNumber" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">原车次</label>
+            <label class="layui-form-label">车次</label>
             <div class="layui-input-inline layui-show-xs-block">
                 <input type="text" name="trainNumber" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">原票价</label>
+            <label class="layui-form-label">票价</label>
             <div class="layui-input-inline layui-show-xs-block">
                 <input type="text" name="reserveFares" class="layui-input">
             </div>
@@ -248,15 +248,14 @@
                 layer.closeAll();
             }
         });
-
-        //数据回填
-        let id = reserveId;
-        $('#formSelect [name="reserveId"]').val(id);
-
     }
 
     //退票按钮
     function dishonour(reserveId){
+
+        //查询出当前的信息并且回填数据
+
+        $.post("");
         //打开弹出层
         layerFormIndex = layer.open({
             type: 1,//0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
@@ -269,10 +268,15 @@
                 layer.closeAll();
             }
         });
-
         //数据回填
         let id = reserveId;
         $('#formSelect [name="reserveId"]').val(id);
+
+
+
+        //获取数据，传到控制器
+
+
     };
 </script>
 </html>
